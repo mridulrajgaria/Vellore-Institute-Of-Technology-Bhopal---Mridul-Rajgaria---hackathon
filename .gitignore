@@ -1,0 +1,31 @@
+# Environment & Python
+.env
+.venv/
+env/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Data directories & outputs
+data/raw/*
+!data/raw/.gitkeep
+data/signals*
+*.db
+*.sqlite
+
+# Model caches
+.cache/
+hf_cache/
+hub/
+
+# Reference materials
+reference/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,18 @@
+tickers:
+  - AAPL
+  - MSFT
+  - AMZN
+  - GOOGL
+  - META
+  - NVDA
+  - TSLA
+  - JPM
+  - BAC
+  - GS
+  - XOM
+  - JNJ
+  - PG
+  - WMT
+  - KO
+benchmark: SPY
+price_start_date: "2021-01-01"
