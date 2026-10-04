@@ -1,0 +1,75 @@
+companies:
+  AAPL:
+    legal_name: "Apple Inc."
+    aliases:
+      - "Apple"
+  MSFT:
+    legal_name: "Microsoft Corporation"
+    aliases:
+      - "Microsoft"
+  AMZN:
+    legal_name: "Amazon.com Inc."
+    aliases:
+      - "Amazon"
+  GOOGL:
+    legal_name: "Alphabet Inc."
+    aliases:
+      - "Google"
+      - "Alphabet"
+  META:
+    legal_name: "Meta Platforms Inc."
+    aliases:
+      - "Meta"
+      - "Facebook"
+  NVDA:
+    legal_name: "NVIDIA Corporation"
+    aliases:
+      - "Nvidia"
+  TSLA:
+    legal_name: "Tesla Inc."
+    aliases:
+      - "Tesla"
+  JPM:
+    legal_name: "JPMorgan Chase & Co."
+    aliases:
+      - "JPMorgan"
+      - "Chase"
+  BAC:
+    legal_name: "Bank of America Corporation"
+    aliases:
+      - "Bank of America"
+      - "BofA"
+  GS:
+    legal_name: "The Goldman Sachs Group Inc."
+    aliases:
+      - "Goldman Sachs"
+      - "Goldman"
+  XOM:
+    legal_name: "Exxon Mobil Corporation"
+    aliases:
+      - "ExxonMobil"
+      - "Exxon"
+  JNJ:
+    legal_name: "Johnson & Johnson"
+    aliases:
+      - "Johnson & Johnson"
+      - "J&J"
+  PG:
+    legal_name: "The Procter & Gamble Company"
+    aliases:
+      - "Procter & Gamble"
+      - "P&G"
+  WMT:
+    legal_name: "Walmart Inc."
+    aliases:
+      - "Walmart"
+  KO:
+    legal_name: "The Coca-Cola Company"
+    aliases:
+      - "Coca-Cola"
+      - "Coke"
+  SPY:
+    legal_name: "SPDR S&P 500 ETF Trust"
+    aliases:
+      - "S&P 500 ETF"
+      - "SPY"
