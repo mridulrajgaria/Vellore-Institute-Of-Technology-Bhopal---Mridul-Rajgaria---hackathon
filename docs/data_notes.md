@@ -39,3 +39,18 @@ This document lists every data source used by the AI/NLP Risk Engine, where it c
 - [x] `data/raw/newsapi/`
 - [ ] `data/raw/financial_transactions/` (Module B)
 - [ ] `data/raw/salad_money/` (optional)
+
+
+## Final Index Universe (14 Tickers)
+
+The tactical index universe for Module A is restricted to 14 liquid S&P 100 constituent tickers with robust social media and news coverage:
+- **Tickers:** `TSLA`, `AAPL`, `MSFT`, `AMZN`, `META`, `GOOGL`, `NFLX`, `AMD`, `PG`, `KO`, `DIS`, `BA`, `COST`, `PYPL`.
+- *Note:* Historical tweets labeled `GOOG` are canonicalized to `GOOGL`. Non-universe tickers from the raw tweet corpus are excluded from the index universe.
+
+## Committed Sample Datasets (`data/sample/`, <5 MB each)
+
+To allow the entire repository and test suite to run offline without external downloads:
+1. `data/sample/prices.parquet` (1.21 MB): Daily OHLCV price histories from 2021-01-01 to present for all 21 watchlist equities and benchmark SPY.
+2. `data/sample/tweets_sample.parquet` (3.50 MB): 25,454 cleaned tweets covering the 14 universe tickers (up to 3,000 tweets per ticker, distributed evenly across calendar months).
+3. `data/sample/newsapi_sample.parquet` (0.32 MB): 994 deduplicated news articles across the 21 watchlist companies and SPY.
+4. `data/sample/news_labeled_eval_sample.parquet` (0.06 MB): 500 ground-truth labeled financial headlines stratified across sentiment classes (`positive`, `negative`, `neutral`) for offline FinBERT evaluation.
