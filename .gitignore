@@ -12,6 +12,7 @@ htmlcov/
 # Data directories & outputs
 data/raw/*
 !data/raw/.gitkeep
+data/processed/
 data/signals*
 *.db
 *.sqlite

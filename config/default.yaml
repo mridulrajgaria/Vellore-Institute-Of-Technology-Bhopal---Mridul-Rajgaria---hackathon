@@ -14,5 +14,27 @@ tickers:
   - PG
   - WMT
   - KO
+  - AMD
+  - NFLX
+  - PYPL
+  - DIS
+  - BA
+  - COST
 benchmark: SPY
 price_start_date: "2021-01-01"
+
+index_universe:
+  - TSLA
+  - AAPL
+  - MSFT
+  - AMZN
+  - META
+  - GOOGL
+  - NFLX
+  - AMD
+  - PG
+  - KO
+  - DIS
+  - BA
+  - COST
+  - PYPL

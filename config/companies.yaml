@@ -16,6 +16,7 @@ companies:
     aliases:
       - "Google"
       - "Alphabet"
+      - "GOOG"
   META:
     legal_name: "Meta Platforms Inc."
     aliases:
@@ -68,8 +69,35 @@ companies:
     aliases:
       - "Coca-Cola"
       - "Coke"
+  AMD:
+    legal_name: "Advanced Micro Devices, Inc."
+    aliases:
+      - "AMD"
+      - "Advanced Micro Devices"
+  NFLX:
+    legal_name: "Netflix, Inc."
+    aliases:
+      - "Netflix"
+  PYPL:
+    legal_name: "PayPal Holdings, Inc."
+    aliases:
+      - "PayPal"
+  DIS:
+    legal_name: "The Walt Disney Company"
+    aliases:
+      - "Disney"
+      - "Walt Disney"
+  BA:
+    legal_name: "The Boeing Company"
+    aliases:
+      - "Boeing"
+  COST:
+    legal_name: "Costco Wholesale Corporation"
+    aliases:
+      - "Costco"
   SPY:
     legal_name: "SPDR S&P 500 ETF Trust"
     aliases:
       - "S&P 500 ETF"
+      - "S&P 500"
       - "SPY"
