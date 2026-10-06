@@ -1,0 +1,145 @@
+# Engine configuration: Event Classification, Impact Scoring, and Risk Signals
+
+event_classification:
+  precedence:
+    - "Credit Event"
+    - "Geopolitical"
+    - "Merger/Acquisition"
+    - "Regulatory"
+    - "Earnings"
+    - "Product Launch"
+    - "Macroeconomic"
+    - "Other"
+
+  # Base trigger definitions with pattern regex and weight
+  triggers:
+    Credit Event:
+      - pattern: "\\b(?:moody'?s|fitch|s&p|standard\\s+&\\s+poor'?s)\\b.*\\b(?:downgrade[ds]?|downgrading|credit\\s+rating|junk|outlook\\s+(?:negative|revised))\\b"
+        weight: 1.0
+      - pattern: "\\bcredit\\s+rating\\b.*\\b(?:downgrade[ds]?|downgrading|cut|junk|outlook\\s+(?:negative|revised))\\b"
+        weight: 1.0
+      - pattern: "\\b(?:downgrade[ds]?|downgrading|cut)\\b.*\\b(?:to\\s+junk|junk\\s+status|credit\\s+rating|debt\\s+rating)\\b"
+        weight: 1.0
+      - pattern: "\\b(?:junk\\s+status|investment\\s+grade|outlook\\s+(?:negative|revised))\\b"
+        weight: 0.95
+      - pattern: "\\b(?:fil(?:es?|ed|ing)\\s+for\\s+bankruptcy|fil(?:es?|ed|ing)\\s+for\\s+chapter\\s+11|bankruptcy\\s+filing[s]?)\\b"
+        weight: 1.0
+      - pattern: "\\b(?:chapter\\s+11|chapter\\s+7)(?:\\s+bankruptcy|\\s+filing)?\\b"
+        weight: 1.0
+      - pattern: "\\b(?:defaults?\\s+on|defaulted\\s+on|defaulting\\s+on)\\b"
+        weight: 1.0
+      - pattern: "\\b(?:missed|fails?\\s+to\\s+pay)\\b.*\\b(?:bond|debt|coupon|loan|interest)\\s+payment[s]?\\b"
+        weight: 1.0
+      - pattern: "\\b(?:covenant\\s+breach|debt\\s+restructuring|distressed\\s+debt|insolven(?:t|cy))\\b"
+        weight: 0.95
+      - pattern: "\\bcredit\\s+default\\s+swap[s]?\\b.*\\b(?:spread[s]?\\s+widen(?:ed|ing)?|basis\\s+points?|blowout|rating)\\b"
+        weight: 0.95
+      - pattern: "\\b(?:spread[s]?\\s+widen(?:ed|ing)?|basis\\s+points?)\\b.*\\bcredit\\s+default\\s+swap[s]?\\b"
+        weight: 0.95
+
+    Geopolitical:
+      - pattern: "\\b(?:sanction[s]?|embargo[es]?)\\b"
+        weight: 1.0
+      - pattern: "\\b(?:trade\\s+war|tariff\\s+announcement|tariff[s]?|export\\s+controls?)\\b"
+        weight: 0.95
+      - pattern: "\\b(?:invasion|war\\s+declared|military\\s+(?:action|conflict|strike)|missile\\s+strike[s]?|air\\s*strike[s]?)\\b"
+        weight: 0.95
+      - pattern: "\\b(?:foreign\\s+ministry|bilateral\\s+tensions?)\\b"
+        weight: 0.85
+
+    Merger/Acquisition:
+      - pattern: "\\b(?:buyout\\s+bid|buyout|takeover\\s+bid|takeover)\\b"
+        weight: 1.0
+      - pattern: "\\b(?:merger[s]?|merging|merge[ds]?)\\b"
+        weight: 0.95
+      - pattern: "\\b(?:acqui(?:re[ds]?|sition[s]?|ring))\\b"
+        weight: 0.95
+      - pattern: "\\b(?:tender\\s+offer|bids?\\s+to\\s+buy|purchas(?:es?|ing)\\s+stake)\\b"
+        weight: 0.90
+      - pattern: "\\b(?:sues?\\s+to\\s+block.*merger|antitrust.*merger)\\b"
+        weight: 0.95
+
+    Regulatory:
+      - pattern: "\\b(?:lawsuit[s]?|sues?|suing|sued|litigat(?:ion|e[ds]?))\\b"
+        weight: 0.95
+      - pattern: "\\b(?:sec|doj|ftc|cftc|fcc|epa|faa|fda)\\s+(?:probe|investigat(?:ion|es?)|fine[s]?|penalt(?:y|ies)|charges?)\\b"
+        weight: 0.95
+      - pattern: "\\b(?:regulator[s]?|regulatory\\s+(?:scrutiny|probe|action|filing|ruling|approval))\\b"
+        weight: 0.85
+      - pattern: "\\b(?:licen[cs]e\\s+renewal|court\\s+order|subpoena[s]?|injunction|patent\\s+infringement)\\b"
+        weight: 0.85
+      - pattern: "\\b(?:antitrust|monopoly|probe[s]?|investigat(?:ion|ed|ing))\\b"
+        weight: 0.80
+
+    Earnings:
+      - pattern: "\\b(?:reports?\\s+earnings|earnings\\s+report|quarterly\\s+earnings)\\b"
+        weight: 1.0
+      - pattern: "\\b(?:earnings\\s+(?:per\\s+share|beat|miss|results?)|eps)\\b"
+        weight: 0.95
+      - pattern: "\\b(?:quarterly\\s+results?|fiscal\\s+(?:q[1-4]|quarter|results?)|q[1-4]\\s+earnings)\\b"
+        weight: 0.90
+      - pattern: "\\b(?:reports?\\b.*\\b(?:sales|revenue|profit|losses?)\\b.*\\b(?:q[1-4]|quarter|fy\\d{2,4})?\\b)\\b"
+        weight: 0.90
+      - pattern: "\\b(?:revenue|sales)\\s+(?:growth|decline|miss|beat|surged?|fell|drops?)\\b"
+        weight: 0.85
+      - pattern: "\\b(?:profit\\s+warning|guidance\\s+(?:cut|boost|raised|lowered))\\b"
+        weight: 0.85
+      - pattern: "\\b(?:jpmorgan|goldman(?:\\s+sachs)?|barclays|morgan\\s+stanley|citi(?:group)?|bofa|bank\\s+of\\s+america|jefferies|ubs|wells\\s+fargo|bernstein|cowen|oppenheimer|mizuho|piper\\s+sandler|canaccord|evercore|stifel)\\b.*\\b(?:upgrade[ds]?|downgrade[ds]?|reiterat(?:es?|ed)|initiates?\\s+coverage|cuts?|raises?|slashes?|price\\s+target|target\\s+price|pt)\\b"
+        weight: 0.95
+      - pattern: "\\b(?:analyst[s]?|brokerage[s]?)\\b.*\\b(?:upgrade[ds]?|downgrade[ds]?|reiterat(?:es?|ed)|initiates?\\s+coverage|price\\s+target|target\\s+price|pt)\\b"
+        weight: 0.90
+      - pattern: "\\b(?:price\\s+target|target\\s+price|slashes?\\s+pt|raises?\\s+pt|cuts?\\s+pt|boosts?\\s+pt)\\b"
+        weight: 0.90
+      - pattern: "\\b(?:upgraded?|downgraded?)\\s+to\\s+(?:buy|neutral|overweight|underweight|sell|outperform|underperform|hold)\\b"
+        weight: 0.90
+
+    Product Launch:
+      - pattern: "\\b(?:unveil[s]?|unveiled|unveiling)\\b"
+        weight: 0.90
+      - pattern: "\\b(?:launch(?:es|ed|ing)?|roll(?:s|ed|ing)?\\s+out|rollout)\\b"
+        weight: 0.85
+      - pattern: "\\b(?:debut[s]?|debuted|debuting|reveal[s]?|revealed|revealing)\\b"
+        weight: 0.85
+      - pattern: "\\b(?:cybercab|robotaxi|vision\\s+pro|new\\s+(?:feature|model|device|chip|service|product))\\b"
+        weight: 0.85
+
+    Macroeconomic:
+      - pattern: "\\b(?:cpi(?:\\s+report)?|inflation(?:ary)?|consumer\\s+price\\s+index)\\b"
+        weight: 0.95
+      - pattern: "\\b(?:interest\\s+rates?|rate\\s+(?:hikes?|cuts?)|monetary\\s+policy)\\b"
+        weight: 0.95
+      - pattern: "\\b(?:federal\\s+reserve|fed\\s+(?:pauses?|hikes?|cuts?|decision)|fomc)\\b"
+        weight: 0.90
+      - pattern: "\\b(?:treasury\\s+yields?|10-year\\s+yield|yield\\s+curve)\\b"
+        weight: 0.85
+      - pattern: "\\b(?:jobs\\s+report|nonfarm\\s+payrolls?|unemployment\\s+rate|gdp\\s+growth)\\b"
+        weight: 0.85
+
+impact_scoring:
+  weights:
+    w_sev: 0.45
+    w_sent: 0.30
+    w_src: 0.15
+    w_vol: 0.10
+
+  severity:
+    Credit Event: 0.90
+    Geopolitical: 0.85
+    Macroeconomic: 0.70
+    Regulatory: 0.65
+    Merger/Acquisition: 0.60
+    Earnings: 0.50
+    Product Launch: 0.35
+    Other: 0.15
+
+  source_weights:
+    newsapi: 0.9
+    gdelt: 0.7
+    twitter_kaggle: 0.4
+    unknown: 0.5
+
+  volume_parameters:
+    tweet_trailing_days: 30
+    min_history_days: 7
+    fallback_volume_signal: 0.5
+    news_dup_norm_base: 10.0

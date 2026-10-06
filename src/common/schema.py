@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from enum import Enum
+from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -43,3 +44,37 @@ class RiskSignal(BaseModel):
         le=1.0,
         description="Model confidence score bounded between 0.0 and 1.0"
     )
+    event_confidence: Optional[float] = Field(
+        None,
+        ge=0.0,
+        le=1.0,
+        description="Event classification confidence score bounded between 0.0 and 1.0"
+    )
+    secondary_event: Optional[EventType] = Field(
+        None,
+        description="Runner-up event type or None"
+    )
+    attribution_weight: Optional[float] = Field(
+        None,
+        ge=0.0,
+        le=1.0,
+        description="Portfolio attribution weight for multi-ticker or broadcast items (1/n)"
+    )
+    matched_triggers: Optional[List[str]] = Field(
+        None,
+        description="Specific trigger terms or regex patterns matched in the text"
+    )
+    impact_components: Optional[Dict[str, float]] = Field(
+        None,
+        description="Explainable breakdown of impact score contributions"
+    )
+    is_broadcast: Optional[bool] = Field(
+        False,
+        description="Flag indicating whether text was a broadcast item across multiple tickers"
+    )
+    is_analyst_action: Optional[bool] = Field(
+        False,
+        description="Flag indicating whether event was an equity analyst rating or price-target action"
+    )
+
+

@@ -38,13 +38,15 @@ companies:
       - "Microsoft"
       - "Microsoft Corp"
     products:
-      - "Windows"
+      - "Microsoft Windows"
+      - "Windows 11"
+      - "Windows 10"
       - "Azure"
       - "Office 365"
       - "Microsoft 365"
       - "Xbox"
       - "Copilot"
-      - "Teams"
+      - "Microsoft Teams"
       - "Surface"
       - "GitHub"
     executives:

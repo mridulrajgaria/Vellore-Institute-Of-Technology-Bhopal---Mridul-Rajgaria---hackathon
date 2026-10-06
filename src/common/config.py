@@ -22,3 +22,9 @@ def load_default_config(path: str | Path = "config/default.yaml") -> Dict[str, A
 def load_companies_config(path: str | Path = "config/companies.yaml") -> Dict[str, Any]:
     """Load ticker-to-company name mapping and aliases."""
     return load_yaml(path)
+
+
+def load_engine_config(path: str | Path = "config/engine.yaml") -> Dict[str, Any]:
+    """Load risk engine event classification and impact scoring configuration."""
+    return load_yaml(path)
+
