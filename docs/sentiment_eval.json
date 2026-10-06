@@ -1,0 +1,142 @@
+{
+  "dataset": "financial_phrasebank",
+  "n_samples": 4838,
+  "finbert": {
+    "accuracy": 0.8892104175279041,
+    "macro_f1": 0.8821351060520883,
+    "weighted_f1": 0.8904487114141603,
+    "pearson_corr": 0.8716065018318296,
+    "pearson_pvalue": 0.0,
+    "spearman_corr": 0.8202082048200928,
+    "spearman_pvalue": 0.0,
+    "per_class": {
+      "negative": {
+        "precision": 0.801641586867305,
+        "recall": 0.9701986754966887,
+        "f1": 0.8779026217228464,
+        "support": 604
+      },
+      "neutral": {
+        "precision": 0.9620945681906995,
+        "recall": 0.8572423398328691,
+        "f1": 0.9066470263303259,
+        "support": 2872
+      },
+      "positive": {
+        "precision": 0.810077519379845,
+        "recall": 0.920704845814978,
+        "f1": 0.8618556701030928,
+        "support": 1362
+      }
+    },
+    "confusion_matrix": [
+      [
+        586,
+        11,
+        7
+      ],
+      [
+        123,
+        2462,
+        287
+      ],
+      [
+        22,
+        86,
+        1254
+      ]
+    ]
+  },
+  "majority_baseline": {
+    "accuracy": 0.593633732947499,
+    "macro_f1": 0.24833549502810204,
+    "weighted_f1": 0.4422609808106918,
+    "pearson_corr": 0.0,
+    "pearson_pvalue": 1.0,
+    "spearman_corr": 0.0,
+    "spearman_pvalue": 1.0,
+    "per_class": {
+      "negative": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 604
+      },
+      "neutral": {
+        "precision": 0.593633732947499,
+        "recall": 1.0,
+        "f1": 0.7450064850843061,
+        "support": 2872
+      },
+      "positive": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 1362
+      }
+    },
+    "confusion_matrix": [
+      [
+        0,
+        604,
+        0
+      ],
+      [
+        0,
+        2872,
+        0
+      ],
+      [
+        0,
+        1362,
+        0
+      ]
+    ]
+  },
+  "vader_baseline": {
+    "accuracy": 0.5434063662670525,
+    "macro_f1": 0.48893575510941206,
+    "weighted_f1": 0.5493284051158662,
+    "pearson_corr": 0.31613621646504036,
+    "pearson_pvalue": 9.658964216592406e-113,
+    "spearman_corr": 0.30845383266076914,
+    "spearman_pvalue": 3.793716951016082e-107,
+    "per_class": {
+      "negative": {
+        "precision": 0.40816326530612246,
+        "recall": 0.2980132450331126,
+        "f1": 0.3444976076555024,
+        "support": 604
+      },
+      "neutral": {
+        "precision": 0.7420159680638723,
+        "recall": 0.5177576601671309,
+        "f1": 0.6099261689909762,
+        "support": 2872
+      },
+      "positive": {
+        "precision": 0.4020058503969912,
+        "recall": 0.7063142437591777,
+        "f1": 0.5123834886817576,
+        "support": 1362
+      }
+    },
+    "confusion_matrix": [
+      [
+        180,
+        185,
+        239
+      ],
+      [
+        193,
+        1487,
+        1192
+      ],
+      [
+        68,
+        332,
+        962
+      ]
+    ]
+  }
+}

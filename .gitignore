@@ -17,10 +17,15 @@ data/signals*
 *.db
 *.sqlite
 
-# Model caches
+# Model caches & weights
 .cache/
 hf_cache/
 hub/
+models_cache/
+data/cache/
+*.safetensors
+*.bin
+*.pt
 
 # Reference materials
 reference/

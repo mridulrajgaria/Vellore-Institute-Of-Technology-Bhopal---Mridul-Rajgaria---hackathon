@@ -17,6 +17,7 @@ import pandas as pd
 from src.common.config import load_companies_config, load_default_config
 from src.ingestion.fetch_newsapi import sanitize_filename
 from src.nlp.entity_linking import EntityLinker, enrich_dataframe
+from src.nlp.preprocess import fix_token_spacing
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("normalize")
@@ -195,11 +196,11 @@ def normalize_newsapi(
         return pd.DataFrame(columns=["text_id", "ts", "source", "ticker_hint", "title", "text", "url", "author_or_domain", "raw_label", "dup_count"]), {}
 
     df = pd.DataFrame(raw_articles)
-    title_series = df["title"].fillna("").astype(str)
+    title_series = df["title"].fillna("").astype(str).apply(fix_token_spacing)
     desc_series = df["description"].fillna("").astype(str)
 
     char_strip_pat = re.compile(r"\s*\[\+\d+\s+chars\]", re.IGNORECASE)
-    cleaned_desc = [char_strip_pat.sub("", d).strip() for d in desc_series]
+    cleaned_desc = [fix_token_spacing(char_strip_pat.sub("", d).strip()) for d in desc_series]
 
     combined_text = []
     for t, d in zip(title_series, cleaned_desc):
@@ -208,6 +209,7 @@ def normalize_newsapi(
         else:
             combined_text.append(t.strip())
 
+    df["title"] = title_series
     df["text"] = combined_text
 
     is_removed = title_series.str.strip().str.lower() == "[removed]"
@@ -289,8 +291,9 @@ def normalize_gdelt(
         # Parse timestamp: GDELT seendate format: %Y%m%dT%H%M%SZ
         df_file["ts"] = pd.to_datetime(df_file["seendate"], format="%Y%m%dT%H%M%SZ", utc=True, errors="coerce")
 
-        # Drop empty or short titles (< 3 words)
-        title_str = df_file["title"].fillna("").astype(str).str.strip()
+        # Drop empty or short titles (< 3 words) after spacing fixes
+        title_str = df_file["title"].fillna("").astype(str).apply(fix_token_spacing).str.strip()
+        df_file["title"] = title_str
         word_counts = title_str.apply(lambda t: len(t.split()))
         df_file = df_file[word_counts >= 3].copy()
 
@@ -358,7 +361,7 @@ def normalize_financial_news(
 
     df_raw.columns = ["raw_label", "text"]
     df_raw["raw_label"] = df_raw["raw_label"].astype(str).str.strip().str.lower()
-    df_raw["text"] = df_raw["text"].astype(str).str.strip()
+    df_raw["text"] = df_raw["text"].astype(str).apply(fix_token_spacing).str.strip()
 
     dup_counts = df_raw.groupby("text")["raw_label"].transform("count")
     df_raw["dup_count"] = dup_counts
