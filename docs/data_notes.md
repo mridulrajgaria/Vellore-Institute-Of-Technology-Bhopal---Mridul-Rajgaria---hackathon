@@ -8,7 +8,7 @@ This document lists every data source used by the AI/NLP Risk Engine, where it c
 |---|---|---|---|
 | Yahoo Finance via `yfinance` | `fetch_prices.py` | `data/sample/prices.parquet` | Daily OHLCV for the configured tickers plus SPY, from 2021-01-01. Alpha Vantage is a fallback and was not needed. |
 | NewsAPI (newsapi.org) | `fetch_newsapi.py` | `data/raw/newsapi/*.json` | Needs `NEWSAPI_KEY` in `.env`. Free tier returns only recent articles, so it serves as the live-demo feed. |
-| GDELT DOC 2.0 API | `fetch_gdelt.py` | `data/raw/gdelt/` | The fetcher and tests are included, but the API was unreachable from the author's network (connection reset), so no GDELT data is used. An optional reader for local GKG files exists. |
+| GDELT DOC 2.0 API | `fetch_gdelt.py` | `data/raw/gdelt/*.json` | 12 JSON files (~250 articles each) covering key tickers and SPY over 3 months; normalized, deduplicated and entity-linked. |
 
 ## Manual downloads (Kaggle, free account required)
 
@@ -37,6 +37,7 @@ This document lists every data source used by the AI/NLP Risk Engine, where it c
 - [x] `data/raw/financial_news/`
 - [x] `data/raw/tweets/`
 - [x] `data/raw/newsapi/`
+- [x] `data/raw/gdelt/`
 - [ ] `data/raw/financial_transactions/` (Module B)
 - [ ] `data/raw/salad_money/` (optional)
 
@@ -51,6 +52,7 @@ The tactical index universe for Module A is restricted to 14 liquid S&P 100 cons
 
 To allow the entire repository and test suite to run offline without external downloads:
 1. `data/sample/prices.parquet` (1.21 MB): Daily OHLCV price histories from 2021-01-01 to present for all 21 watchlist equities and benchmark SPY.
-2. `data/sample/tweets_sample.parquet` (3.50 MB): 25,454 cleaned tweets covering the 14 universe tickers (up to 3,000 tweets per ticker, distributed evenly across calendar months).
-3. `data/sample/newsapi_sample.parquet` (0.32 MB): 994 deduplicated news articles across the 21 watchlist companies and SPY.
-4. `data/sample/news_labeled_eval_sample.parquet` (0.06 MB): 500 ground-truth labeled financial headlines stratified across sentiment classes (`positive`, `negative`, `neutral`) for offline FinBERT evaluation.
+2. `data/sample/tweets_sample.parquet` (2.48 MB): 22,774 cleaned and entity-linked tweets covering the 14 universe tickers (up to 3,000 tweets per ticker, distributed evenly across calendar months).
+3. `data/sample/newsapi_sample.parquet` (0.15 MB): 457 relevant, deduplicated news articles across the 21 watchlist companies and SPY.
+4. `data/sample/gdelt_sample.parquet` (0.11 MB): 517 relevant, deduplicated global news records from the GDELT DOC API.
+5. `data/sample/news_labeled_eval_sample.parquet` (0.06 MB): 500 ground-truth labeled financial headlines stratified across sentiment classes (`positive`, `negative`, `neutral`) for offline FinBERT evaluation.

@@ -3,101 +3,597 @@ companies:
     legal_name: "Apple Inc."
     aliases:
       - "Apple"
+      - "Apple Inc"
+    products:
+      - "iPhone"
+      - "iPad"
+      - "Mac"
+      - "MacBook"
+      - "iOS"
+      - "macOS"
+      - "Apple Watch"
+      - "AirPods"
+      - "Vision Pro"
+      - "App Store"
+    executives:
+      - "Tim Cook"
+      - "Luca Maestri"
+    context_words:
+      - "Cupertino"
+      - "shares"
+      - "stock"
+      - "gadget"
+      - "silicon"
+      - "M-series"
+      - "M1"
+      - "M2"
+      - "M3"
+      - "M4"
+    is_ambiguous: true
+    ticker_ambiguous: false
+
   MSFT:
     legal_name: "Microsoft Corporation"
     aliases:
       - "Microsoft"
+      - "Microsoft Corp"
+    products:
+      - "Windows"
+      - "Azure"
+      - "Office 365"
+      - "Microsoft 365"
+      - "Xbox"
+      - "Copilot"
+      - "Teams"
+      - "Surface"
+      - "GitHub"
+    executives:
+      - "Satya Nadella"
+      - "Bill Gates"
+      - "Brad Smith"
+    context_words:
+      - "Redmond"
+      - "cloud"
+      - "software"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   AMZN:
     legal_name: "Amazon.com Inc."
     aliases:
       - "Amazon"
+      - "Amazon.com"
+    products:
+      - "AWS"
+      - "Amazon Web Services"
+      - "Prime"
+      - "Kindle"
+      - "Alexa"
+      - "Amazon Prime"
+    executives:
+      - "Jeff Bezos"
+      - "Andy Jassy"
+    context_words:
+      - "e-commerce"
+      - "cloud"
+      - "retail"
+      - "marketplace"
+      - "logistics"
+      - "fulfillment"
+      - "shares"
+      - "stock"
+    is_ambiguous: true
+    ticker_ambiguous: false
+
   GOOGL:
     legal_name: "Alphabet Inc."
     aliases:
-      - "Google"
       - "Alphabet"
+      - "Google"
+      - "Alphabet Inc"
+      - "Google Inc"
       - "GOOG"
+    products:
+      - "Android"
+      - "YouTube"
+      - "Google Cloud"
+      - "Pixel"
+      - "Gemini"
+      - "Chrome"
+      - "Google Search"
+      - "Waymo"
+      - "DeepMind"
+    executives:
+      - "Sundar Pichai"
+      - "Larry Page"
+      - "Sergey Brin"
+      - "Ruth Porat"
+    context_words:
+      - "Mountain View"
+      - "search engine"
+      - "advertising"
+      - "ad revenue"
+      - "shares"
+      - "stock"
+    is_ambiguous: true
+    ticker_ambiguous: false
+
   META:
     legal_name: "Meta Platforms Inc."
     aliases:
+      - "Meta Platforms"
       - "Meta"
       - "Facebook"
+      - "Facebook Inc"
+    products:
+      - "Instagram"
+      - "WhatsApp"
+      - "Oculus"
+      - "Quest"
+      - "Reels"
+      - "Threads"
+      - "Messenger"
+    executives:
+      - "Mark Zuckerberg"
+      - "Sheryl Sandberg"
+    context_words:
+      - "Menlo Park"
+      - "social media"
+      - "virtual reality"
+      - "metaverse"
+      - "ad revenue"
+      - "shares"
+      - "stock"
+    is_ambiguous: true
+    ticker_ambiguous: true
+
   NVDA:
     legal_name: "NVIDIA Corporation"
     aliases:
       - "Nvidia"
+      - "NVIDIA Corp"
+    products:
+      - "GeForce"
+      - "RTX"
+      - "H100"
+      - "B200"
+      - "Blackwell"
+      - "CUDA"
+      - "Hopper"
+      - "A100"
+    executives:
+      - "Jensen Huang"
+    context_words:
+      - "semiconductors"
+      - "GPU"
+      - "AI chips"
+      - "graphics"
+      - "Santa Clara"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   TSLA:
     legal_name: "Tesla Inc."
     aliases:
       - "Tesla"
+      - "Tesla Motors"
+    products:
+      - "Model S"
+      - "Model 3"
+      - "Model X"
+      - "Model Y"
+      - "Cybertruck"
+      - "Autopilot"
+      - "Full Self-Driving"
+      - "FSD"
+      - "Supercharger"
+      - "Megapack"
+      - "Powerwall"
+    executives:
+      - "Elon Musk"
+    context_words:
+      - "electric vehicle"
+      - "EV"
+      - "Gigafactory"
+      - "Austin"
+      - "Fremont"
+      - "shares"
+      - "stock"
+      - "automaker"
+    is_ambiguous: true
+    ticker_ambiguous: false
+
   JPM:
     legal_name: "JPMorgan Chase & Co."
     aliases:
+      - "JPMorgan Chase"
       - "JPMorgan"
+      - "J.P. Morgan"
       - "Chase"
+      - "Chase Bank"
+    products:
+      - "Chase"
+      - "J.P. Morgan Private Bank"
+    executives:
+      - "Jamie Dimon"
+    context_words:
+      - "investment bank"
+      - "Wall Street"
+      - "banking"
+      - "lending"
+      - "deposits"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   BAC:
     legal_name: "Bank of America Corporation"
     aliases:
       - "Bank of America"
       - "BofA"
+    products:
+      - "Merrill Lynch"
+      - "Merrill"
+    executives:
+      - "Brian Moynihan"
+    context_words:
+      - "banking"
+      - "consumer bank"
+      - "wealth management"
+      - "Charlotte"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: true
+
   GS:
     legal_name: "The Goldman Sachs Group Inc."
     aliases:
       - "Goldman Sachs"
       - "Goldman"
+    products:
+      - "Marcus"
+    executives:
+      - "David Solomon"
+    context_words:
+      - "investment banking"
+      - "Wall Street"
+      - "trading desk"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   XOM:
     legal_name: "Exxon Mobil Corporation"
     aliases:
       - "ExxonMobil"
       - "Exxon"
+      - "Mobil"
+    products:
+      - "Mobil 1"
+      - "Esso"
+    executives:
+      - "Darren Woods"
+    context_words:
+      - "oil"
+      - "gas"
+      - "petroleum"
+      - "refinery"
+      - "crude"
+      - "energy"
+      - "drilling"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   JNJ:
     legal_name: "Johnson & Johnson"
     aliases:
       - "Johnson & Johnson"
       - "J&J"
+    products:
+      - "Band-Aid"
+      - "Tylenol"
+      - "Stelara"
+      - "Darzalex"
+    executives:
+      - "Joaquin Duato"
+    context_words:
+      - "pharmaceuticals"
+      - "healthcare"
+      - "medical devices"
+      - "New Brunswick"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   PG:
     legal_name: "The Procter & Gamble Company"
     aliases:
       - "Procter & Gamble"
       - "P&G"
+      - "Procter and Gamble"
+    products:
+      - "Tide"
+      - "Pampers"
+      - "Gillette"
+      - "Oral-B"
+      - "Bounty"
+      - "Charmin"
+      - "Head & Shoulders"
+      - "Dawn"
+      - "Ariel"
+    executives:
+      - "Jon R. Moeller"
+    context_words:
+      - "consumer goods"
+      - "Cincinnati"
+      - "personal care"
+      - "cleaning products"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: true
+
   WMT:
     legal_name: "Walmart Inc."
     aliases:
       - "Walmart"
+      - "Wal-Mart"
+    products:
+      - "Sam's Club"
+      - "Walmart+"
+    executives:
+      - "Doug McMillon"
+    context_words:
+      - "retail"
+      - "supercenter"
+      - "groceries"
+      - "Bentonville"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   KO:
     legal_name: "The Coca-Cola Company"
     aliases:
       - "Coca-Cola"
+      - "Coca Cola"
       - "Coke"
+    products:
+      - "Diet Coke"
+      - "Sprite"
+      - "Fanta"
+      - "Dasani"
+      - "Minute Maid"
+      - "Powerade"
+    executives:
+      - "James Quincey"
+    context_words:
+      - "beverage"
+      - "soft drinks"
+      - "soda"
+      - "Atlanta"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: true
+
   AMD:
     legal_name: "Advanced Micro Devices, Inc."
     aliases:
       - "AMD"
       - "Advanced Micro Devices"
+      - "AMD Inc"
+    products:
+      - "Ryzen"
+      - "Radeon"
+      - "EPYC"
+      - "Instinct"
+      - "MI300"
+      - "Zen 4"
+      - "Zen 5"
+    executives:
+      - "Lisa Su"
+    context_words:
+      - "semiconductors"
+      - "chipmaker"
+      - "processors"
+      - "CPU"
+      - "GPU"
+      - "Santa Clara"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: true
+
   NFLX:
     legal_name: "Netflix, Inc."
     aliases:
       - "Netflix"
+    products:
+      - "Netflix Originals"
+      - "Squid Game"
+      - "Stranger Things"
+    executives:
+      - "Ted Sarandos"
+      - "Greg Peters"
+      - "Reed Hastings"
+    context_words:
+      - "streaming"
+      - "subscribers"
+      - "entertainment"
+      - "Los Gatos"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   PYPL:
     legal_name: "PayPal Holdings, Inc."
     aliases:
+      - "PayPal Holdings"
       - "PayPal"
+    products:
+      - "Venmo"
+      - "Braintree"
+      - "Xoom"
+      - "PayPal Checkout"
+    executives:
+      - "Alex Chriss"
+      - "Dan Schulman"
+    context_words:
+      - "fintech"
+      - "digital payments"
+      - "online payments"
+      - "San Jose"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   DIS:
     legal_name: "The Walt Disney Company"
     aliases:
-      - "Disney"
+      - "The Walt Disney Company"
       - "Walt Disney"
+      - "Disney"
+    products:
+      - "Disney+"
+      - "ESPN"
+      - "Hulu"
+      - "Disneyland"
+      - "Disney World"
+      - "Pixar"
+      - "Marvel"
+      - "Lucasfilm"
+      - "Star Wars"
+    executives:
+      - "Bob Iger"
+    context_words:
+      - "theme parks"
+      - "entertainment"
+      - "streaming"
+      - "Burbank"
+      - "box office"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
   BA:
     legal_name: "The Boeing Company"
     aliases:
+      - "The Boeing Company"
       - "Boeing"
+    products:
+      - "737"
+      - "737 MAX"
+      - "777"
+      - "787"
+      - "Dreamliner"
+      - "Starliner"
+      - "747"
+    executives:
+      - "Kelly Ortberg"
+      - "Dave Calhoun"
+    context_words:
+      - "aerospace"
+      - "aviation"
+      - "aircraft"
+      - "planes"
+      - "defense contractor"
+      - "Arlington"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: true
+
   COST:
     legal_name: "Costco Wholesale Corporation"
     aliases:
+      - "Costco Wholesale"
       - "Costco"
+    products:
+      - "Kirkland Signature"
+      - "Kirkland"
+      - "Costco membership"
+    executives:
+      - "Ron Vachris"
+      - "Craig Jelinek"
+    context_words:
+      - "warehouse club"
+      - "bulk retail"
+      - "wholesale"
+      - "Issaquah"
+      - "shares"
+      - "stock"
+    is_ambiguous: false
+    ticker_ambiguous: true
+
   SPY:
     legal_name: "SPDR S&P 500 ETF Trust"
     aliases:
       - "S&P 500 ETF"
       - "S&P 500"
-      - "SPY"
+      - "SPY ETF"
+      - "SPDR"
+    products: []
+    executives: []
+    context_words:
+      - "S&P 500"
+      - "broad market"
+      - "Wall Street"
+      - "benchmark"
+      - "equities"
+      - "index"
+      - "Federal Reserve"
+      - "Fed"
+      - "FOMC"
+      - "interest rates"
+      - "inflation"
+      - "CPI"
+      - "Treasury yields"
+      - "macro"
+    is_ambiguous: false
+    ticker_ambiguous: false
+
+  MARKET:
+    legal_name: "Macroeconomic Market Indicator"
+    aliases:
+      - "S&P 500"
+      - "broad market"
+      - "US stock market"
+      - "Wall Street"
+      - "Federal Reserve"
+      - "Fed"
+      - "FOMC"
+      - "Treasury"
+    products: []
+    executives:
+      - "Jerome Powell"
+      - "Janet Yellen"
+    context_words:
+      - "inflation"
+      - "CPI"
+      - "interest rates"
+      - "rate hike"
+      - "rate cut"
+      - "basis points"
+      - "Treasury yields"
+      - "macro"
+      - "unemployment"
+      - "GDP"
+      - "central bank"
+      - "monetary policy"
+    is_ambiguous: false
+    ticker_ambiguous: false

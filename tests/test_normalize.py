@@ -10,10 +10,12 @@ from src.ingestion.normalize import (
     compute_text_id,
     normalize_tweets,
     normalize_newsapi,
+    normalize_gdelt,
     normalize_financial_news,
     create_deterministic_monthly_tweet_sample,
     create_deterministic_eval_sample,
 )
+from src.nlp.entity_linking import EntityLinker, enrich_dataframe
 
 
 def test_clean_tweet_text_html_unescape_and_rt_strip():
@@ -191,3 +193,96 @@ def test_deterministic_sampling_idempotence():
 
     pd.testing.assert_frame_equal(sample1, sample2)
     assert len(sample1) == 50
+
+
+def test_normalize_gdelt(tmp_path):
+    """Verify GDELT seendate parsing, prefix ticker hint, URL and syndicated title deduplication."""
+    import json
+    gdelt_dir = tmp_path / "gdelt"
+    gdelt_dir.mkdir()
+
+    # SPY file: SPY should map to MARKET
+    spy_items = [
+        {
+            "url": "https://reuters.com/article/1",
+            "title": "Federal Reserve maintains current interest rate levels",
+            "seendate": "20260714T134500Z",
+            "domain": "reuters.com",
+            "language": "English",
+        },
+        # Duplicate URL of article 1
+        {
+            "url": "https://reuters.com/article/1",
+            "title": "Federal Reserve maintains current interest rate levels (copy)",
+            "seendate": "20260714T140000Z",
+            "domain": "reuters.com",
+            "language": "English",
+        },
+        # Syndicated duplicate title with different URL and punctuation
+        {
+            "url": "https://bloomberg.com/article/2",
+            "title": "Federal Reserve maintains current interest rate levels!",
+            "seendate": "20260714T150000Z",
+            "domain": "bloomberg.com",
+            "language": "English",
+        },
+        # Short title (< 3 words) -> dropped
+        {
+            "url": "https://news.com/short",
+            "title": "Fed rates",
+            "seendate": "20260714T160000Z",
+            "domain": "news.com",
+            "language": "English",
+        },
+    ]
+    spy_file = gdelt_dir / "SPY_20261005_120000.json"
+    spy_file.write_text(json.dumps(spy_items), encoding="utf-8")
+
+    df_gdelt, metrics = normalize_gdelt(gdelt_dir=str(gdelt_dir))
+    assert len(df_gdelt) == 1
+    row = df_gdelt.iloc[0]
+    assert row["source"] == "gdelt"
+    assert row["ticker_hint"] == "MARKET"
+    assert row["ts"].tzinfo is not None
+    assert str(row["ts"]).startswith("2026-07-14 13:45:00")
+    assert row["dup_count"] == 2
+
+
+def test_cross_hint_dedupe_and_hint_resolution(tmp_path):
+    """Verify cross-hint deduplication and ticker_hint resolution from linked_tickers or alphabetical fallback."""
+    csv_file = tmp_path / "cross_hint_tweets.csv"
+    data = [
+        # Fixture 1: Repeated under PG, MSFT, AMZN with $AMZN in text
+        ("2022-01-01 12:00:00+00:00", "Strong quarterly performance reported by $AMZN today", "PG", "Procter & Gamble"),
+        ("2022-01-01 12:00:00+00:00", "Strong quarterly performance reported by $AMZN today", "MSFT", "Microsoft"),
+        ("2022-01-01 12:00:00+00:00", "Strong quarterly performance reported by $AMZN today", "AMZN", "Amazon"),
+        # Fixture 2: Repeated under PG, MSFT, AMZN with no ticker in text
+        ("2022-01-02 12:00:00+00:00", "Market sentiment remains cautious amid macro conditions", "PG", "Procter & Gamble"),
+        ("2022-01-02 12:00:00+00:00", "Market sentiment remains cautious amid macro conditions", "MSFT", "Microsoft"),
+        ("2022-01-02 12:00:00+00:00", "Market sentiment remains cautious amid macro conditions", "AMZN", "Amazon"),
+    ]
+    df_raw = pd.DataFrame(data, columns=["Date", "Tweet", "Stock Name", "Company Name"])
+    df_raw.to_csv(csv_file, index=False)
+
+    universe = ["AMZN", "MSFT", "PG"]
+    df_norm, metrics = normalize_tweets(csv_path=str(csv_file), index_universe=universe)
+
+    assert len(df_norm) == 2
+    assert metrics["dropped_cross_hint_dups"] == 4
+
+    linker = EntityLinker()
+    df_enriched = enrich_dataframe(df_norm, linker)
+
+    # Fixture 1 checks: exactly one row, ticker_hints ['AMZN', 'MSFT', 'PG'], dup_count 3, ticker_hint is AMZN
+    row1 = df_enriched[df_enriched["text"].str.contains("Strong quarterly")].iloc[0]
+    assert row1["ticker_hints"] == ["AMZN", "MSFT", "PG"]
+    assert row1["dup_count"] == 3
+    assert row1["ticker_hint"] == "AMZN"
+    assert "AMZN" in row1["linked_tickers"]
+
+    # Fixture 2 checks: exactly one row, ticker_hints ['AMZN', 'MSFT', 'PG'], dup_count 3, ticker_hint is AMZN (alphabetical fallback)
+    row2 = df_enriched[df_enriched["text"].str.contains("Market sentiment")].iloc[0]
+    assert row2["ticker_hints"] == ["AMZN", "MSFT", "PG"]
+    assert row2["dup_count"] == 3
+    assert row2["ticker_hint"] == "AMZN"
+
