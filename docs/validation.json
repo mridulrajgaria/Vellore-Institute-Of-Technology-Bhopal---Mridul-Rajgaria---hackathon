@@ -1,0 +1,424 @@
+{
+  "metadata": {
+    "generated_at": "2026-10-07T10:24:03.791019",
+    "return_convention": "simple_returns_adj_close",
+    "benchmark": "SPY",
+    "forward_windows": [
+      "AR0",
+      "AR1",
+      "CAR(0, 2)"
+    ]
+  },
+  "audit": {
+    "total_raw_signals": 13893,
+    "broadcast_excluded": 190,
+    "market_excluded": 253,
+    "phrasebank_excluded": 0,
+    "stock_signals_evaluated": 13450,
+    "dropped_missing_fwd_window": 335,
+    "dropped_by_source": {
+      "newsapi": 331,
+      "gdelt": 4
+    },
+    "retained_signals": 13115,
+    "retained_by_source": {
+      "twitter_kaggle": 12715,
+      "gdelt": 353,
+      "newsapi": 47
+    }
+  },
+  "tweets_2021_2022": {
+    "era": "tweets_2021_2022",
+    "n_observations": 2072,
+    "spearman": {
+      "impact_vs_abs_ar0": {
+        "rho": 0.1592393110696121,
+        "p_value": 3.084811734303986e-13,
+        "ci_95": [
+          0.12241208220479519,
+          0.19438058537542927
+        ]
+      },
+      "impact_vs_abs_car02": {
+        "rho": 0.12250954631315791,
+        "p_value": 2.2156648691528857e-08,
+        "ci_95": [
+          0.07663857078220494,
+          0.16555204003361196
+        ]
+      }
+    },
+    "quintiles": {
+      "breakdown": {
+        "Q1": {
+          "count": 415,
+          "mean_impact": 2.7039667469879523,
+          "mean_abs_ar0": 0.012124263024689854,
+          "mean_abs_car02": 0.024599555164328935
+        },
+        "Q2": {
+          "count": 414,
+          "mean_impact": 3.4987647342995167,
+          "mean_abs_ar0": 0.013502174043932454,
+          "mean_abs_car02": 0.02520325644499812
+        },
+        "Q3": {
+          "count": 414,
+          "mean_impact": 4.62888115942029,
+          "mean_abs_ar0": 0.01459153281077332,
+          "mean_abs_car02": 0.028119133364686123
+        },
+        "Q4": {
+          "count": 414,
+          "mean_impact": 5.15092729468599,
+          "mean_abs_ar0": 0.017143788010783104,
+          "mean_abs_car02": 0.031021090045903817
+        },
+        "Q5": {
+          "count": 415,
+          "mean_impact": 6.3585828915662645,
+          "mean_abs_ar0": 0.023610058936423556,
+          "mean_abs_car02": 0.038918387431724606
+        }
+      },
+      "q5_q1_spread": 0.011485795911733702,
+      "ci_95": [
+        0.008093857404171297,
+        0.015739194849883276
+      ]
+    },
+    "sentiment_direction": {
+      "breakdown": {
+        "Negative": {
+          "count": 338,
+          "mean_ar1": -0.0030938194153458417,
+          "mean_car02": -0.011107722649414663,
+          "too_few": false
+        },
+        "Neutral": {
+          "count": 1340,
+          "mean_ar1": 0.00023297578382735785,
+          "mean_car02": -0.00045356719872230385,
+          "too_few": false
+        },
+        "Positive": {
+          "count": 394,
+          "mean_ar1": -0.001267767659429016,
+          "mean_car02": 0.0007548121079681021,
+          "too_few": false
+        }
+      },
+      "long_short_ar1": 0.0018260517559168256,
+      "long_short_ar1_ci_95": [
+        -0.002333525274495762,
+        0.005981323432977706
+      ],
+      "long_short_car02": 0.011862534757382765,
+      "long_short_car02_ci_95": [
+        0.005425876245371229,
+        0.018233777620249404
+      ]
+    },
+    "sentiment_robustness_high_conf": {
+      "n_observations": 1425,
+      "breakdown": {
+        "Negative": {
+          "count": 218,
+          "mean_ar1": -0.0030614312321593407,
+          "mean_car02": -0.014856244152402803,
+          "too_few": false
+        },
+        "Neutral": {
+          "count": 1004,
+          "mean_ar1": 0.0007690076580913858,
+          "mean_car02": 0.0006358143050197486,
+          "too_few": false
+        },
+        "Positive": {
+          "count": 203,
+          "mean_ar1": -0.0003376340512028161,
+          "mean_car02": 0.003150048564329328,
+          "too_few": false
+        }
+      },
+      "long_short_ar1": 0.0027237971809565245,
+      "long_short_ar1_ci_95": [
+        -0.003056235093163297,
+        0.009063874228982223
+      ],
+      "long_short_car02": 0.018006292716732132,
+      "long_short_car02_ci_95": [
+        0.007978893722175395,
+        0.028184438065482858
+      ]
+    },
+    "events": {
+      "Earnings": {
+        "count": 14,
+        "mean_abs_ar0": 0.008367032108510364,
+        "mean_ar0": 0.0026627880137822723,
+        "mean_car02": -0.0006241915953357372,
+        "too_few": true
+      },
+      "Macroeconomic": {
+        "count": 23,
+        "mean_abs_ar0": 0.014217479350600195,
+        "mean_ar0": 0.000753413306687482,
+        "mean_car02": -0.0036562080008063105,
+        "too_few": true
+      },
+      "Merger/Acquisition": {
+        "count": 5,
+        "mean_abs_ar0": 0.011454767231701135,
+        "mean_ar0": -0.011216847076570469,
+        "mean_car02": -0.02201288678531028,
+        "too_few": true
+      },
+      "Other": {
+        "count": 2005,
+        "mean_abs_ar0": 0.016237740905774106,
+        "mean_ar0": -0.0006137751354233209,
+        "mean_car02": -0.0017075135562452666,
+        "too_few": false
+      },
+      "Product Launch": {
+        "count": 18,
+        "mean_abs_ar0": 0.019039933111468635,
+        "mean_ar0": -0.008869068564995605,
+        "mean_car02": -0.013093567460448478,
+        "too_few": true
+      },
+      "Regulatory": {
+        "count": 7,
+        "mean_abs_ar0": 0.02246612362135528,
+        "mean_ar0": 0.0011649818917163848,
+        "mean_car02": -0.028949933772997514,
+        "too_few": true
+      }
+    },
+    "volatility_control": {
+      "raw_spearman": 0.1592393110696121,
+      "partial_spearman_controlling_for_trailing_vol": 0.11605097598058813
+    },
+    "tsla_exclusion": {
+      "n_without_tsla": 1819,
+      "raw_spearman": 0.12143572524656593,
+      "partial_spearman": 0.09636891712846114
+    },
+    "placebo_test": {
+      "n_permutations": 1000,
+      "actual_rho": 0.1592393110696121,
+      "null_rho_mean": 0.027993894416428085,
+      "null_rho_95_upper": 0.06039858144074311,
+      "empirical_p_value": 0.000999000999000999
+    },
+    "too_few_observations": false
+  },
+  "news_2026": {
+    "era": "news_2026",
+    "n_observations": 240,
+    "spearman": {
+      "impact_vs_abs_ar0": {
+        "rho": 0.014188614385666416,
+        "p_value": 0.8269051837356076,
+        "ci_95": [
+          -0.1431574197887697,
+          0.12014928233236626
+        ]
+      },
+      "impact_vs_abs_car02": {
+        "rho": 0.03640775013455094,
+        "p_value": 0.5746149452756933,
+        "ci_95": [
+          -0.1467786801190448,
+          0.18189199861619346
+        ]
+      }
+    },
+    "quintiles": {
+      "breakdown": {
+        "Q1": {
+          "count": 48,
+          "mean_impact": 2.92680625,
+          "mean_abs_ar0": 0.016057665173805014,
+          "mean_abs_car02": 0.023965350705420135
+        },
+        "Q2": {
+          "count": 48,
+          "mean_impact": 3.4752625,
+          "mean_abs_ar0": 0.011849835787630623,
+          "mean_abs_car02": 0.01871725785539693
+        },
+        "Q3": {
+          "count": 48,
+          "mean_impact": 4.8342729166666665,
+          "mean_abs_ar0": 0.017178690112693015,
+          "mean_abs_car02": 0.02923144905603822
+        },
+        "Q4": {
+          "count": 48,
+          "mean_impact": 5.450772916666668,
+          "mean_abs_ar0": 0.01941430638141994,
+          "mean_abs_car02": 0.03341221282503206
+        },
+        "Q5": {
+          "count": 48,
+          "mean_impact": 6.962185416666666,
+          "mean_abs_ar0": 0.02416982586071641,
+          "mean_abs_car02": 0.03279690377458141
+        }
+      },
+      "q5_q1_spread": 0.008112160686911396,
+      "ci_95": [
+        -0.0011465561954433676,
+        0.016358207624821628
+      ]
+    },
+    "sentiment_direction": {
+      "breakdown": {
+        "Negative": {
+          "count": 82,
+          "mean_ar1": -0.0013207600282155742,
+          "mean_car02": -0.004533374260376699,
+          "too_few": false
+        },
+        "Neutral": {
+          "count": 107,
+          "mean_ar1": 0.00211843251056031,
+          "mean_car02": -4.4669174845280814e-05,
+          "too_few": false
+        },
+        "Positive": {
+          "count": 51,
+          "mean_ar1": -0.00035814994464290897,
+          "mean_car02": 0.004302689452882391,
+          "too_few": false
+        }
+      },
+      "long_short_ar1": 0.0009626100835726653,
+      "long_short_ar1_ci_95": [
+        -0.007094255109613485,
+        0.01084177769940904
+      ],
+      "long_short_car02": 0.008836063713259089,
+      "long_short_car02_ci_95": [
+        -0.0075256523641888924,
+        0.027113434586683142
+      ]
+    },
+    "sentiment_robustness_high_conf": {
+      "n_observations": 154,
+      "breakdown": {
+        "Negative": {
+          "count": 47,
+          "mean_ar1": 0.00015628448264691714,
+          "mean_car02": -0.0022449019126400665,
+          "too_few": false
+        },
+        "Neutral": {
+          "count": 81,
+          "mean_ar1": 0.003453808353976189,
+          "mean_car02": 0.0006296544468930308,
+          "too_few": false
+        },
+        "Positive": {
+          "count": 26,
+          "mean_ar1": -0.0029735051978117587,
+          "mean_car02": -0.0043347276775570105,
+          "too_few": true
+        }
+      },
+      "long_short_ar1": -0.003129789680458676,
+      "long_short_ar1_ci_95": [
+        -0.01227870342714253,
+        0.010084586047480401
+      ],
+      "long_short_car02": -0.002089825764916944,
+      "long_short_car02_ci_95": [
+        -0.01550344557357391,
+        0.017562336120704805
+      ]
+    },
+    "events": {
+      "Earnings": {
+        "count": 7,
+        "mean_abs_ar0": 0.008352666231396744,
+        "mean_ar0": -0.004943807674991204,
+        "mean_car02": -0.029828540731171534,
+        "too_few": true
+      },
+      "Geopolitical": {
+        "count": 5,
+        "mean_abs_ar0": 0.051230657860385054,
+        "mean_ar0": 0.013667469496960316,
+        "mean_car02": 0.0242670703807929,
+        "too_few": true
+      },
+      "Macroeconomic": {
+        "count": 4,
+        "mean_abs_ar0": 0.006287063719257635,
+        "mean_ar0": -0.0020231389754813978,
+        "mean_car02": 0.05875870843775516,
+        "too_few": true
+      },
+      "Merger/Acquisition": {
+        "count": 16,
+        "mean_abs_ar0": 0.02743448050195875,
+        "mean_ar0": -0.0004956107977050483,
+        "mean_car02": 0.0064836189561280205,
+        "too_few": true
+      },
+      "Other": {
+        "count": 176,
+        "mean_abs_ar0": 0.017150609413147777,
+        "mean_ar0": 0.00021125959900963697,
+        "mean_car02": -0.003100683318753471,
+        "too_few": false
+      },
+      "Product Launch": {
+        "count": 2,
+        "mean_abs_ar0": 0.006962068199021287,
+        "mean_ar0": 0.006962068199021287,
+        "mean_car02": 1.5710535578528084e-05,
+        "too_few": true
+      },
+      "Regulatory": {
+        "count": 30,
+        "mean_abs_ar0": 0.014834074341286519,
+        "mean_ar0": -0.0016533165957359245,
+        "mean_car02": 0.004576713674409623,
+        "too_few": false
+      }
+    },
+    "volatility_control": {
+      "raw_spearman": 0.014188614385666416,
+      "partial_spearman_controlling_for_trailing_vol": -0.005050719845219639
+    },
+    "tsla_exclusion": {
+      "n_without_tsla": 211,
+      "raw_spearman": -0.0059567455704449355,
+      "partial_spearman": -0.02821762795734778
+    },
+    "placebo_test": {
+      "n_permutations": 1000,
+      "actual_rho": 0.014188614385666416,
+      "null_rho_mean": 0.0025255386378235725,
+      "null_rho_95_upper": 0.10057266619212132,
+      "empirical_p_value": 0.42157842157842157
+    },
+    "too_few_observations": false
+  },
+  "market_macro": {
+    "n_market_days": 61,
+    "n_raw_signals": 253,
+    "impact_vs_abs_spy_ret": {
+      "rho": -0.3303543098889476,
+      "p_value": 0.009316450524746629
+    },
+    "sentiment_vs_spy_ret": {
+      "rho": -0.03035430988894764,
+      "p_value": 0.816364310271708
+    },
+    "too_few_observations": false
+  }
+}
