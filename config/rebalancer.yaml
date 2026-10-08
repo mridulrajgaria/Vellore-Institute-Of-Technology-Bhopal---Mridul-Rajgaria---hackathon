@@ -1,0 +1,37 @@
+# Configuration for Module A: Tactical Index Rebalancer
+# Parameters fixed a priori based on evaluation priors; NOT tuned on backtest results.
+
+universe:
+  - TSLA
+  - AAPL
+  - MSFT
+  - AMZN
+  - META
+  - GOOGL
+  - NFLX
+  - AMD
+  - PG
+  - KO
+  - DIS
+  - BA
+  - COST
+  - PYPL
+
+# Tilt parameters
+k: 1.5                   # Tilt exponent: target_i ~ base_i * exp(k * score_i)
+half_life_days: 2.0      # Trading day EMA decay for daily scores
+deadband: 0.20           # FinBERT sentiment noise threshold (abs(sentiment) < 0.20 -> 0)
+neg_multiplier: 1.25     # Negative sentiment multiplier (prior from FinBERT hand-labeling)
+
+# Portfolio constraints
+min_weight_mult: 0.5     # Minimum weight = 0.5 * base_weight (1/28 ~= 3.57%)
+max_weight_mult: 2.0     # Maximum weight = 2.0 * base_weight (1/7 ~= 14.29%)
+max_turnover: 0.10       # Maximum 10% one-way turnover per daily rebalance
+
+# Transaction costs
+cost_bps_baseline: 5.0   # Baseline transaction cost in basis points (5 bps)
+cost_bps_low: 0.0        # Frictionless reference (0 bps)
+cost_bps_high: 10.0      # Conservative transaction cost (10 bps)
+
+# Execution timing
+timing_cutoff_utc: "21:00"  # Signals at or after 21:00 UTC belong to next trading day
