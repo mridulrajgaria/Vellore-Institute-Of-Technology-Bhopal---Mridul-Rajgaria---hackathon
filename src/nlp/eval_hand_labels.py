@@ -1,5 +1,6 @@
 """Evaluate FinBERT sentiment predictions against human hand labels."""
 
+import json
 import logging
 from pathlib import Path
 from typing import Any, Dict
@@ -109,6 +110,29 @@ True Positive:       {cm[2][0]:<20} {cm[2][1]:<19} {cm[2][2]:<19}
     with open(out_p, "w", encoding="utf-8") as f:
         f.write(md_content)
     logger.info(f"Saved hand label evaluation report to {out_p}")
+
+    # Save structured JSON
+    json_path = out_p.with_suffix(".json")
+    json_data = {
+        "total_evaluated": len(df_valid),
+        "accuracy": acc,
+        "macro_f1": macro_f1,
+        "weighted_f1": weighted_f1,
+        "by_source": by_source_report,
+        "per_class": {
+            cls: {
+                "precision": report[cls]["precision"],
+                "recall": report[cls]["recall"],
+                "f1": report[cls]["f1-score"],
+                "support": report[cls]["support"],
+            }
+            for cls in LABELS
+        },
+        "confusion_matrix": cm,
+    }
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(json_data, f, indent=2)
+    logger.info(f"Saved hand label evaluation JSON to {json_path}")
 
     return {
         "accuracy": acc,

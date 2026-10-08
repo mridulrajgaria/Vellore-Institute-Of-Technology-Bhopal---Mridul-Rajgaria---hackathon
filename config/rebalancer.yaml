@@ -27,6 +27,7 @@ neg_multiplier: 1.25     # Negative sentiment multiplier (prior from FinBERT han
 min_weight_mult: 0.5     # Minimum weight = 0.5 * base_weight (1/28 ~= 3.57%)
 max_weight_mult: 2.0     # Maximum weight = 2.0 * base_weight (1/7 ~= 14.29%)
 max_turnover: 0.10       # Maximum 10% one-way turnover per daily rebalance
+hold_threshold_bps: 10.0 # Weight change threshold in bps to classify ACTION as HOLD vs INCREASE/REDUCE
 
 # Transaction costs
 cost_bps_baseline: 5.0   # Baseline transaction cost in basis points (5 bps)

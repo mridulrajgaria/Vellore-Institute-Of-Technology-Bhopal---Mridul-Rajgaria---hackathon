@@ -1,5 +1,6 @@
 """Evaluates event classification performance against human-annotated event labels."""
 
+import json
 import logging
 from pathlib import Path
 from typing import Any, Dict
@@ -112,6 +113,30 @@ def evaluate_event_labels(
         f.write("\n".join(lines))
 
     logger.info(f"Saved event evaluation report to {out_p}")
+
+    # Save structured JSON
+    json_path = out_p.with_suffix(".json")
+    json_data = {
+        "total_annotated": len(df_valid),
+        "macro_f1": macro_f1,
+        "weighted_f1": weighted_f1,
+        "other_share_by_source": other_share_by_source,
+        "per_class": {
+            cat: {
+                "precision": report[cat]["precision"],
+                "recall": report[cat]["recall"],
+                "f1": report[cat]["f1-score"],
+                "support": report[cat]["support"],
+            }
+            for cat in EVENT_CLASSES
+            if cat in report
+        },
+        "classes": EVENT_CLASSES,
+        "confusion_matrix": cm,
+    }
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(json_data, f, indent=2)
+    logger.info(f"Saved event evaluation JSON to {json_path}")
     return {
         "macro_f1": macro_f1,
         "weighted_f1": weighted_f1,

@@ -1,0 +1,164 @@
+{
+  "total_annotated": 180,
+  "macro_f1": 0.6884157291134035,
+  "weighted_f1": 0.6389356112224329,
+  "other_share_by_source": {
+    "gdelt": {
+      "total": 50,
+      "other_count": 23,
+      "other_pct": 46.0
+    },
+    "newsapi": {
+      "total": 44,
+      "other_count": 39,
+      "other_pct": 88.63636363636364
+    },
+    "twitter_kaggle": {
+      "total": 86,
+      "other_count": 47,
+      "other_pct": 54.65116279069767
+    }
+  },
+  "per_class": {
+    "Geopolitical": {
+      "precision": 0.6363636363636364,
+      "recall": 0.6363636363636364,
+      "f1": 0.6363636363636364,
+      "support": 11.0
+    },
+    "Macroeconomic": {
+      "precision": 0.7857142857142857,
+      "recall": 0.5,
+      "f1": 0.6111111111111112,
+      "support": 22.0
+    },
+    "Credit Event": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 2.0
+    },
+    "Merger/Acquisition": {
+      "precision": 0.8461538461538461,
+      "recall": 0.8461538461538461,
+      "f1": 0.8461538461538461,
+      "support": 13.0
+    },
+    "Product Launch": {
+      "precision": 0.7777777777777778,
+      "recall": 0.4117647058823529,
+      "f1": 0.5384615384615384,
+      "support": 17.0
+    },
+    "Regulatory": {
+      "precision": 1.0,
+      "recall": 0.6818181818181818,
+      "f1": 0.8108108108108109,
+      "support": 22.0
+    },
+    "Earnings": {
+      "precision": 1.0,
+      "recall": 0.23333333333333334,
+      "f1": 0.3783783783783784,
+      "support": 30.0
+    },
+    "Other": {
+      "precision": 0.5412844036697247,
+      "recall": 0.9365079365079365,
+      "f1": 0.686046511627907,
+      "support": 63.0
+    }
+  },
+  "classes": [
+    "Geopolitical",
+    "Macroeconomic",
+    "Credit Event",
+    "Merger/Acquisition",
+    "Product Launch",
+    "Regulatory",
+    "Earnings",
+    "Other"
+  ],
+  "confusion_matrix": [
+    [
+      7,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3
+    ],
+    [
+      0,
+      11,
+      0,
+      0,
+      0,
+      0,
+      0,
+      11
+    ],
+    [
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      11,
+      0,
+      0,
+      0,
+      2
+    ],
+    [
+      2,
+      0,
+      0,
+      0,
+      7,
+      0,
+      0,
+      8
+    ],
+    [
+      2,
+      0,
+      0,
+      0,
+      0,
+      15,
+      0,
+      5
+    ],
+    [
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      7,
+      21
+    ],
+    [
+      0,
+      1,
+      0,
+      1,
+      2,
+      0,
+      0,
+      59
+    ]
+  ]
+}

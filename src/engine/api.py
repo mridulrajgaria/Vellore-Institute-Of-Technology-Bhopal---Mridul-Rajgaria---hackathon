@@ -10,14 +10,20 @@ import asyncio
 import json
 import logging
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import numpy as np
+import pandas as pd
+import yaml
 from fastapi import FastAPI, HTTPException, Query, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from src.engine.store import SignalStore
+from src.modules.rebalancer import project_bounded_weights
 
 logger = logging.getLogger(__name__)
 
@@ -135,6 +141,11 @@ def root() -> Dict[str, Any]:
             "tickers": "/tickers",
             "stats": "/stats",
             "replay_stream": "/replay/stream?speed=20",
+            "portfolio_weights": "/portfolio/weights",
+            "portfolio_nav": "/portfolio/nav",
+            "portfolio_snapshot": "/portfolio/snapshot?date=2021-10-01",
+            "signal_impact": "/signals/{text_id}/impact",
+            "meta_metrics": "/meta/metrics",
         },
     }
 
@@ -295,3 +306,384 @@ async def stream_replay(
             "X-Accel-Buffering": "no",
         },
     )
+
+
+# ---------------------------------------------------------------------------
+# Module A & Portfolio Endpoints
+# ---------------------------------------------------------------------------
+
+_weights_df: Optional[pd.DataFrame] = None
+_nav_df: Optional[pd.DataFrame] = None
+_driving_df: Optional[pd.DataFrame] = None
+
+
+def get_meta_payload() -> Dict[str, Any]:
+    """Uniform metadata describing temporal data sources for UI replay and news."""
+    return {
+        "replay_period": {
+            "start": "2021-10-01",
+            "end": "2022-09-30",
+            "source": "twitter_kaggle",
+        },
+        "news_period": {
+            "start": "2026-07-07",
+            "end": "2026-10-03",
+            "source": "financial_news_2026",
+        },
+    }
+
+
+def get_hold_threshold_bps() -> float:
+    """Read hold threshold from config/rebalancer.yaml, defaulting to 10.0 bps."""
+    cfg_p = Path("config/rebalancer.yaml")
+    if cfg_p.exists():
+        try:
+            with open(cfg_p, "r", encoding="utf-8") as f:
+                cfg = yaml.safe_load(f) or {}
+                return float(cfg.get("hold_threshold_bps", 10.0))
+        except Exception:
+            pass
+    return 10.0
+
+
+def get_weights_df() -> pd.DataFrame:
+    global _weights_df
+    if _weights_df is None:
+        p = Path("data/sample/module_a_weights_sample.parquet")
+        if not p.exists():
+            p = Path("data/processed/module_a_weights.parquet")
+        if not p.exists():
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Portfolio weights dataset not found.",
+            )
+        _weights_df = pd.read_parquet(p)
+    return _weights_df
+
+
+def get_nav_df() -> pd.DataFrame:
+    global _nav_df
+    if _nav_df is None:
+        p = Path("data/sample/module_a_nav_sample.parquet")
+        if not p.exists():
+            p = Path("data/processed/module_a_nav.parquet")
+        if not p.exists():
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Portfolio NAV dataset not found.",
+            )
+        _nav_df = pd.read_parquet(p)
+    return _nav_df
+
+
+def get_driving_df() -> pd.DataFrame:
+    global _driving_df
+    if _driving_df is None:
+        p = Path("data/sample/module_a_driving_signals.parquet")
+        if not p.exists():
+            p = Path("data/processed/module_a_driving_signals.parquet")
+        if p.exists():
+            _driving_df = pd.read_parquet(p)
+        else:
+            _driving_df = pd.DataFrame()
+    return _driving_df
+
+
+@app.get("/portfolio/weights", tags=["Portfolio"])
+def get_portfolio_weights(
+    ticker: Optional[str] = Query(None, description="Optional ticker symbol filter"),
+    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
+) -> Dict[str, Any]:
+    """Historical daily asset weights, tilt scores (smoothed_score), and turnover for the 14-asset universe."""
+    df = get_weights_df().copy()
+    if ticker is not None:
+        df = df[df["ticker"] == ticker.upper()]
+    if start_date is not None:
+        df = df[df["date"] >= start_date]
+    if end_date is not None:
+        df = df[df["date"] <= end_date]
+
+    records = []
+    for _, row in df.iterrows():
+        sc = float(row["score"])
+        records.append({
+            "date": str(row["date"]),
+            "ticker": str(row["ticker"]),
+            "base_weight": float(row["base_weight"]),
+            "weight": float(row["weight"]),
+            "score": sc,
+            "smoothed_score": sc,
+            "turnover": float(row["turnover"]),
+        })
+
+    return {
+        "data": records,
+        "meta": get_meta_payload(),
+    }
+
+
+@app.get("/portfolio/nav", tags=["Portfolio"])
+def get_portfolio_nav(
+    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
+) -> Dict[str, Any]:
+    """Historical NAV trajectories comparing tactical strategy against benchmarks."""
+    df = get_nav_df().copy()
+    if start_date is not None:
+        df = df[df["date"] >= start_date]
+    if end_date is not None:
+        df = df[df["date"] <= end_date]
+
+    records = []
+    for _, row in df.iterrows():
+        records.append({
+            "date": str(row["date"]),
+            "strategy_gross": float(row["strategy_gross"]),
+            "strategy_5bps": float(row["strategy_5bps"]),
+            "strategy_10bps": float(row["strategy_10bps"]),
+            "equal_weight_5bps": float(row["equal_weight_5bps"]),
+            "equal_weight_buy_hold": float(row["equal_weight_buy_hold"]),
+            "spy": float(row["spy"]),
+            "strat_ret_5bps": float(row["strat_ret_5bps"]),
+            "ew_ret_5bps": float(row["ew_ret_5bps"]),
+            "spy_ret": float(row["spy_ret"]),
+            "turnover": float(row["turnover"]),
+        })
+
+    return {
+        "data": records,
+        "meta": get_meta_payload(),
+    }
+
+
+@app.get("/portfolio/snapshot", tags=["Portfolio"])
+def get_portfolio_snapshot(
+    date: str = Query(..., description="Trading date YYYY-MM-DD"),
+) -> Dict[str, Any]:
+    """Single-day portfolio snapshot with target weights, actions (HOLD/INCREASE/REDUCE), constraints, and top driving signals."""
+    weights_df = get_weights_df()
+    unique_dates = sorted(weights_df["date"].unique())
+    if date not in unique_dates:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No portfolio data found for date '{date}'. Replay range is {unique_dates[0]} to {unique_dates[-1]}.",
+        )
+
+    date_idx = unique_dates.index(date)
+    df_curr = weights_df[weights_df["date"] == date]
+    universe = df_curr["ticker"].tolist()
+    n_assets = len(universe)
+    base_w = 1.0 / n_assets
+    min_w = 0.5 * base_w
+    max_w = 2.0 * base_w
+
+    if date_idx == 0:
+        prev_w_map = {tk: base_w for tk in universe}
+    else:
+        prev_date = unique_dates[date_idx - 1]
+        df_prev = weights_df[weights_df["date"] == prev_date]
+        prev_w_map = dict(zip(df_prev["ticker"], df_prev["weight"]))
+
+    hold_threshold = get_hold_threshold_bps()
+    driving_df = get_driving_df()
+    driving_for_date = driving_df[driving_df["date"] == date] if not driving_df.empty else pd.DataFrame()
+
+    # Scores and target weights
+    scores_dict = dict(zip(df_curr["ticker"], df_curr["score"]))
+    exp_tilts = np.array([np.exp(1.5 * scores_dict[tk]) for tk in universe])
+    raw_targets = exp_tilts / np.sum(exp_tilts)
+    bounded_targets = project_bounded_weights(raw_targets, min_weight=min_w, max_weight=max_w)
+    target_map = dict(zip(universe, bounded_targets))
+
+    # Constraints diagnostics
+    bounds_bound_today = bool(np.any(raw_targets < min_w - 1e-6) or np.any(raw_targets > max_w + 1e-6))
+    prev_w_vec = np.array([prev_w_map.get(tk, base_w) for tk in universe])
+    needed_turnover = 0.5 * float(np.sum(np.abs(bounded_targets - prev_w_vec)))
+    turnover_bound_today = bool(needed_turnover > 0.10 + 1e-6)
+
+    day_turnover = float(df_curr["turnover"].iloc[0])
+
+    positions = []
+    for idx_tk, tk in enumerate(universe):
+        curr_w = float(df_curr[df_curr["ticker"] == tk]["weight"].iloc[0])
+        prev_w = float(prev_w_map.get(tk, base_w))
+        target_w = float(target_map[tk])
+        sc = float(scores_dict[tk])
+
+        diff_bps = (curr_w - prev_w) * 10000.0
+        if diff_bps > hold_threshold:
+            action = "INCREASE"
+        elif diff_bps < -hold_threshold:
+            action = "REDUCE"
+        else:
+            action = "HOLD"
+
+        tk_bounds_constrained = bool(raw_targets[idx_tk] < min_w - 1e-6 or raw_targets[idx_tk] > max_w + 1e-6)
+
+        # Driving signals for this ticker
+        top_signals = []
+        raw_score = 0.0
+        if not driving_for_date.empty:
+            tk_sigs = driving_for_date[driving_for_date["ticker"] == tk]
+            if not tk_sigs.empty:
+                raw_score = float(tk_sigs["contribution"].sum())
+                top_3 = tk_sigs.sort_values("rank").head(3)
+                for _, r in top_3.iterrows():
+                    top_signals.append({
+                        "rank": int(r["rank"]),
+                        "text_id": str(r["text_id"]),
+                        "headline": str(r["headline"]),
+                        "source": str(r["source"]),
+                        "event_type": str(r["event_type"]),
+                        "sentiment_score": float(r["sentiment_score"]),
+                        "impact_score": float(r["impact_score"]),
+                        "event_confidence": float(r["event_confidence"]),
+                        "attribution_weight": float(r["attribution_weight"]),
+                        "adj_sentiment": float(r["adj_sentiment"]),
+                        "weight_w": float(r["weight_w"]),
+                        "contribution": float(r["contribution"]),
+                        "filtered_by_deadband": bool(r["filtered_by_deadband"]),
+                    })
+
+        positions.append({
+            "ticker": tk,
+            "base_weight": base_w,
+            "prev_weight": prev_w,
+            "weight": curr_w,
+            "target_weight": target_w,
+            "weight_change_bps": round(diff_bps, 2),
+            "action": action,
+            "score": sc,
+            "smoothed_score": sc,
+            "raw_score": raw_score,
+            "bounds_constrained": tk_bounds_constrained,
+            "top_driving_signals": top_signals,
+        })
+
+    return {
+        "date": date,
+        "turnover": day_turnover,
+        "turnover_constrained": turnover_bound_today,
+        "bounds_constrained": bounds_bound_today,
+        "hold_threshold_bps": hold_threshold,
+        "positions": positions,
+        "meta": get_meta_payload(),
+    }
+
+
+@app.get("/signals/{text_id}/impact", tags=["Signals"])
+def get_signal_impact_explanation(
+    text_id: str,
+) -> Dict[str, Any]:
+    """Explainability decomposition for a risk signal: FinBERT deadband, negative multiplier, attribution weight, and raw contribution."""
+    store = get_store()
+    sig = store.get_by_id(text_id)
+
+    driving_df = get_driving_df()
+    driving_match = driving_df[driving_df["text_id"] == text_id] if not driving_df.empty else pd.DataFrame()
+
+    if sig is None and driving_match.empty:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Signal with text_id '{text_id}' not found.",
+        )
+
+    if sig is not None:
+        ticker = sig.get("ticker", "")
+        headline = sig.get("headline", "")
+        source = sig.get("source", "")
+        event_type = sig.get("event_type", "Other")
+        sentiment_score = float(sig.get("sentiment_score", 0.0))
+        impact_score = float(sig.get("impact_score", 5.0))
+        event_confidence = float(sig.get("event_confidence", 0.0))
+        attribution_weight = float(sig.get("attribution_weight", 1.0))
+        ts = sig.get("ts", "")
+    else:
+        row = driving_match.iloc[0]
+        ticker = str(row["ticker"])
+        headline = str(row["headline"])
+        source = str(row["source"])
+        event_type = str(row["event_type"])
+        sentiment_score = float(row["sentiment_score"])
+        impact_score = float(row["impact_score"])
+        event_confidence = float(row["event_confidence"])
+        attribution_weight = float(row["attribution_weight"])
+        ts = ""
+
+    deadband = 0.20
+    neg_multiplier = 1.25
+    filtered_by_deadband = abs(sentiment_score) < deadband
+
+    if filtered_by_deadband:
+        adj_sentiment = 0.0
+        reason = f"Sentiment score ({sentiment_score:+.2f}) lies within deadband [-0.20, +0.20] and was suppressed to 0.0 to eliminate mild FinBERT noise."
+    elif sentiment_score < 0.0:
+        adj_sentiment = sentiment_score * neg_multiplier
+        reason = f"Negative sentiment ({sentiment_score:+.2f}) was scaled by {neg_multiplier}x prior to {adj_sentiment:+.2f} (human hand-eval prior: FinBERT negative predictions exhibit higher reliability)."
+    else:
+        adj_sentiment = sentiment_score
+        reason = f"Positive sentiment ({sentiment_score:+.2f}) was retained unscaled."
+
+    weight_w = max(0.0, attribution_weight * (impact_score / 10.0))
+
+    driving_details = None
+    if not driving_match.empty:
+        dm_row = driving_match.iloc[0]
+        driving_details = {
+            "rebalance_date": str(dm_row["date"]),
+            "rank": int(dm_row["rank"]),
+            "contribution": float(dm_row["contribution"]),
+        }
+
+    return {
+        "text_id": text_id,
+        "ticker": ticker,
+        "headline": headline,
+        "source": source,
+        "event_type": event_type,
+        "ts": ts,
+        "sentiment_score": sentiment_score,
+        "impact_score": impact_score,
+        "event_confidence": event_confidence,
+        "attribution_weight": attribution_weight,
+        "deadband_threshold": deadband,
+        "filtered_by_deadband": filtered_by_deadband,
+        "neg_multiplier": neg_multiplier,
+        "adj_sentiment": round(adj_sentiment, 4),
+        "weight_w": round(weight_w, 4),
+        "explanation": reason,
+        "driving_signal_details": driving_details,
+        "meta": get_meta_payload(),
+    }
+
+
+@app.get("/meta/metrics", tags=["Metadata"])
+def get_meta_metrics() -> Dict[str, Any]:
+    """Comprehensive evaluation metrics loaded dynamically from structured JSON documents without hardcoded values."""
+    docs_dir = Path("docs")
+
+    def load_json(name: str) -> Optional[Dict[str, Any]]:
+        p = docs_dir / name
+        if p.exists():
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception as e:
+                logger.warning(f"Error loading {p}: {e}")
+        return None
+
+    return {
+        "validation": load_json("validation.json"),
+        "sentiment_eval": load_json("sentiment_eval.json"),
+        "sentiment_hand_eval": load_json("sentiment_hand_eval.json"),
+        "event_eval": load_json("event_eval.json"),
+        "module_a": load_json("module_a.json"),
+        "meta": get_meta_payload(),
+    }
+
+
+# Static file serving for built dashboard assets (if frontend/dist exists)
+dist_dir = Path("frontend/dist")
+if dist_dir.is_dir():
+    app.mount("/", StaticFiles(directory=str(dist_dir), html=True), name="frontend")

@@ -7,6 +7,7 @@ TSLA exclusion, split periods, pre-declared variants, and parameter sensitivity.
 
 from __future__ import annotations
 
+import json
 import logging
 from dataclasses import asdict
 from datetime import datetime
@@ -484,8 +485,9 @@ def export_backtest_datasets(
     universe: List[str],
     processed_dir: Path,
     sample_dir: Path,
+    runner: Optional[Any] = None,
 ) -> None:
-    """Save processed and sample parquet files for weights and NAV."""
+    """Save processed and sample parquet files for weights, NAV, and driving signals."""
     processed_dir.mkdir(parents=True, exist_ok=True)
     sample_dir.mkdir(parents=True, exist_ok=True)
 
@@ -526,6 +528,87 @@ def export_backtest_datasets(
     nav_df.to_parquet(processed_dir / "module_a_nav.parquet", index=False)
     nav_df.to_parquet(sample_dir / "module_a_nav_sample.parquet", index=False)
 
+    # 3. Driving Signals Parquet
+    if runner is not None:
+        driving_records = []
+        deadband = runner.deadband
+        neg_mult = runner.neg_multiplier
+        for i in range(len(dates)):
+            d = dates[i]
+            reb_d = runner.rebalance_dates[i]
+            sigs_for_day = runner.signals_by_date.get(reb_d, [])
+
+            by_ticker = {tk: [] for tk in universe}
+            for s in sigs_for_day:
+                if s.get("is_broadcast", False):
+                    continue
+                tk = s.get("ticker")
+                if tk in by_ticker:
+                    by_ticker[tk].append(s)
+
+            for tk in universe:
+                tk_sigs = by_ticker[tk]
+                if not tk_sigs:
+                    continue
+
+                items = []
+                w_list = []
+                for s in tk_sigs:
+                    sent = float(s.get("sentiment_score", 0.0))
+                    filt = abs(sent) < deadband
+                    if filt:
+                        adj_s = 0.0
+                    elif sent < 0.0:
+                        adj_s = sent * neg_mult
+                    else:
+                        adj_s = sent
+                    attr_w = float(s.get("attribution_weight", 1.0))
+                    imp = float(s.get("impact_score", 5.0))
+                    w = max(0.0, attr_w * (imp / 10.0))
+                    w_list.append(w)
+                    items.append({
+                        "text_id": str(s.get("text_id", "")),
+                        "headline": str(s.get("headline", "")),
+                        "source": str(s.get("source", "")),
+                        "event_type": str(s.get("event_type", "Other")),
+                        "sentiment_score": float(sent),
+                        "impact_score": float(imp),
+                        "event_confidence": float(s.get("event_confidence", 0.0)),
+                        "attribution_weight": float(attr_w),
+                        "adj_sentiment": float(adj_s),
+                        "weight_w": float(w),
+                        "filtered_by_deadband": bool(filt),
+                    })
+
+                sum_w = sum(w_list)
+                for item in items:
+                    contrib = (item["adj_sentiment"] * item["weight_w"] / sum_w) if sum_w > 0 else 0.0
+                    item["contribution"] = contrib
+
+                items.sort(key=lambda x: (abs(x["contribution"]), x["impact_score"]), reverse=True)
+                for rank, item in enumerate(items, start=1):
+                    driving_records.append({
+                        "date": d,
+                        "ticker": tk,
+                        "rank": rank,
+                        "text_id": item["text_id"],
+                        "headline": item["headline"],
+                        "source": item["source"],
+                        "event_type": item["event_type"],
+                        "sentiment_score": item["sentiment_score"],
+                        "impact_score": item["impact_score"],
+                        "event_confidence": item["event_confidence"],
+                        "attribution_weight": item["attribution_weight"],
+                        "adj_sentiment": item["adj_sentiment"],
+                        "weight_w": item["weight_w"],
+                        "contribution": item["contribution"],
+                        "filtered_by_deadband": item["filtered_by_deadband"],
+                    })
+
+        driving_df = pd.DataFrame(driving_records)
+        driving_df.to_parquet(processed_dir / "module_a_driving_signals.parquet", index=False)
+        driving_df.to_parquet(sample_dir / "module_a_driving_signals.parquet", index=False)
+
 
 def write_module_a_documentation(
     sim: Dict[str, Any],
@@ -536,7 +619,7 @@ def write_module_a_documentation(
     sens: Dict[str, Any],
     output_dir: Path,
 ) -> None:
-    """Generate docs/module_a.md with honest design, tables, and caveats."""
+    """Generate docs/module_a.md and docs/module_a.json with honest design, tables, and caveats."""
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Performance summary dicts
@@ -548,6 +631,48 @@ def write_module_a_documentation(
     m_ew_10 = compute_metrics(sim["ew_10bps"])
     m_bh = compute_metrics(sim["bh_rets"])
     m_spy = compute_metrics(sim["spy_rets"])
+
+    avg_turnover = float(np.mean(sim["turnovers"]))
+    active_days = int(np.sum(np.array(sim["turnovers"]) > 1e-6))
+
+    # Save structured JSON without regex-parsing
+    module_a_json_data = {
+        "summary": {
+            "strat_gross": m_gross,
+            "strat_5bps": m_5bps,
+            "strat_10bps": m_10bps,
+            "ew_gross": m_ew_0,
+            "ew_5bps": m_ew_5,
+            "ew_10bps": m_ew_10,
+            "ew_buy_hold": m_bh,
+            "spy": m_spy,
+            "avg_daily_turnover": avg_turnover,
+            "active_rebalance_days": active_days,
+            "total_rebalance_days": len(sim["dates"]),
+        },
+        "placebo": {
+            "actual_sharpe": float(placebo["actual_sharpe"]),
+            "null_sharpe_mean": float(placebo["null_sharpe_mean"]),
+            "null_sharpe_std": float(placebo["null_sharpe_std"]),
+            "sharpe_percentile": float(placebo["sharpe_percentile"]),
+            "n_permutations": int(placebo.get("n_permutations", 200)),
+        },
+        "tsla_exclusion": {
+            "cum_ret": float(tsla_ex["cum_ret"]),
+            "sharpe": float(tsla_ex["sharpe"]),
+            "max_dd": float(tsla_ex["max_dd"]),
+        },
+        "split_period": {
+            "H1_dates": split["H1_dates"],
+            "H1": split["H1"],
+            "H2_dates": split["H2_dates"],
+            "H2": split["H2"],
+        },
+        "variants": variants,
+        "sensitivity": sens,
+    }
+    with open(output_dir / "module_a.json", "w", encoding="utf-8") as f:
+        json.dump(module_a_json_data, f, indent=2)
 
     avg_turnover = float(np.mean(sim["turnovers"]))
     active_days = int(np.sum(np.array(sim["turnovers"]) > 1e-6))
@@ -716,7 +841,7 @@ def main() -> None:
     processed_dir = Path("data/processed")
     sample_dir = Path("data/sample")
     print(f"Exporting weights and NAV parquet datasets to {processed_dir} and {sample_dir}...")
-    export_backtest_datasets(sim, runner.universe, processed_dir, sample_dir)
+    export_backtest_datasets(sim, runner.universe, processed_dir, sample_dir, runner=runner)
 
     # Write documentation
     print(f"Writing {docs_dir / 'module_a.md'}...")
