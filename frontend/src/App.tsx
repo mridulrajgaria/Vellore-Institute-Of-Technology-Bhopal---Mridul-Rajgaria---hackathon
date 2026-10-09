@@ -23,6 +23,7 @@ import { PortfolioReactionColumn } from './components/PortfolioReactionColumn';
 import { PerformanceSection } from './components/PerformanceSection';
 import { KpiLine } from './components/KpiLine';
 import { CollapsibleHoldingsTable } from './components/CollapsibleHoldingsTable';
+import { MethodologyPage } from './components/MethodologyPage';
 
 export const App: React.FC = () => {
   const [weightsData, setWeightsData] = useState<PortfolioWeight[]>([]);
@@ -35,9 +36,25 @@ export const App: React.FC = () => {
   const [highlightedTicker, setHighlightedTicker] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [view, setView] = useState<'dashboard' | 'methodology'>(() => {
+    return window.location.hash === '#/methodology' ? 'methodology' : 'dashboard';
+  });
 
   // Active fetch request ID to cancel stale async snapshot requests
   const activeFetchIdRef = useRef<number>(0);
+
+  // Sync hash routing
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === '#/methodology') {
+        setView('methodology');
+      } else {
+        setView('dashboard');
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   // Available trading dates with fallback between weights and nav
   const availableDates = useMemo(() => {
@@ -152,6 +169,12 @@ export const App: React.FC = () => {
     return all.sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution));
   }, [snapshot]);
 
+  // Position for the selected signal's ticker
+  const selectedTickerPosition = useMemo(() => {
+    if (!snapshot || !selectedSignal?.ticker) return null;
+    return snapshot.positions.find((p) => p.ticker === selectedSignal.ticker) || null;
+  }, [snapshot, selectedSignal?.ticker]);
+
   // Handle signal selection
   const handleSelectSignal = (sig: DrivingSignal) => {
     setSelectedSignal(sig);
@@ -160,23 +183,32 @@ export const App: React.FC = () => {
     }
   };
 
-  // Handle ticker selection in reaction column
+  // Handle ticker selection from portfolio reaction column
   const handleSelectTicker = (ticker: string) => {
-    if (highlightedTicker === ticker) {
-      setHighlightedTicker(null);
-    } else {
-      setHighlightedTicker(ticker);
-      // If today has a signal for this ticker, select it
-      const match = currentSignals.find((s) => s.ticker === ticker);
-      if (match) setSelectedSignal(match);
+    setHighlightedTicker(ticker);
+    const match = currentSignals.find((s) => s.ticker === ticker);
+    if (match) {
+      setSelectedSignal(match);
     }
   };
 
+  if (view === 'methodology') {
+    return (
+      <MethodologyPage
+        metrics={metrics}
+        onBack={() => {
+          window.location.hash = '#/';
+          setView('dashboard');
+        }}
+      />
+    );
+  }
+
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-background text-accent">
+      <div className="min-h-screen bg-background text-text-primary flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+          <div className="h-6 w-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
           <span className="text-xs font-mono text-text-secondary">Loading Rebalance Engine & Historical Data...</span>
         </div>
       </div>
@@ -185,7 +217,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background text-text-primary flex flex-col selection:bg-accent selection:text-background font-sans">
-      {/* a. Slim Header */}
+      {/* a. Slim Header with Glossary popover */}
       <SlimHeader meta={metrics?.meta} />
 
       {/* b. Replay Timeline Scrubber */}
@@ -198,7 +230,7 @@ export const App: React.FC = () => {
         highImpactDays={highImpactDays}
       />
 
-      {/* c. Day Story (real dynamic sentence + max tilt numeral) */}
+      {/* c. Day Story (natural prose, no truncation, company names) */}
       <DayStory snapshot={snapshot} />
 
       {/* Main Container */}
@@ -216,7 +248,10 @@ export const App: React.FC = () => {
 
           {/* Column 2: SIGNAL (4 cols) */}
           <div className="lg:col-span-4">
-            <SignalColumn signal={selectedSignal} />
+            <SignalColumn
+              signal={selectedSignal}
+              position={selectedTickerPosition}
+            />
           </div>
 
           {/* Column 3: PORTFOLIO REACTION (4 cols) */}
@@ -240,15 +275,27 @@ export const App: React.FC = () => {
         {/* Collapsible Full Holdings Table */}
         <CollapsibleHoldingsTable
           snapshot={snapshot}
-          onSelectTickerSignals={(ticker) => {
+          onSelectTickerSignals={(ticker, signals) => {
             setHighlightedTicker(ticker);
-            const match = currentSignals.find((s) => s.ticker === ticker);
-            if (match) setSelectedSignal(match);
+            const topSig = signals?.[0] ?? currentSignals.find((s) => s.ticker === ticker) ?? null;
+            if (topSig) {
+              setSelectedSignal(topSig);
+            }
+            const signalCol = document.getElementById('signal-column');
+            if (signalCol) {
+              signalCol.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
           }}
         />
 
-        {/* f. KPIs Quiet Line */}
-        <KpiLine metrics={metrics} />
+        {/* f. KPIs Quiet Line with wired Methodology Link */}
+        <KpiLine
+          metrics={metrics}
+          onOpenMethodology={() => {
+            window.location.hash = '#/methodology';
+            setView('methodology');
+          }}
+        />
       </main>
     </div>
   );

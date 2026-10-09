@@ -182,13 +182,20 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
                     {hasSignals ? (
                       <button
                         onClick={() => onSelectTickerSignals(pos.ticker, pos.top_driving_signals)}
-                        className="inline-flex items-center gap-1.5 rounded border border-accent/20 bg-accent/5 px-2 py-1 text-[11px] font-medium text-accent hover:bg-accent/15 transition-colors"
+                        data-testid={`signals-btn-${pos.ticker}`}
+                        className="inline-flex items-center gap-1.5 rounded border border-accent/20 bg-accent/5 px-2 py-1 text-[11px] font-medium text-accent hover:bg-accent/15 transition-colors cursor-pointer"
                       >
                         <Eye className="h-3 w-3" />
                         <span>{pos.top_driving_signals.length} Signals</span>
                       </button>
                     ) : (
-                      <span className="text-[11px] text-text-secondary/50 font-mono">None</span>
+                      <button
+                        disabled
+                        data-testid={`signals-btn-${pos.ticker}`}
+                        className="inline-flex items-center gap-1.5 rounded border border-border/30 bg-surface-secondary/20 px-2 py-1 text-[11px] font-mono text-text-secondary/40 cursor-not-allowed"
+                      >
+                        <span>no signals</span>
+                      </button>
                     )}
                   </td>
                 </tr>

@@ -3,9 +3,10 @@ import { MetaMetricsResponse } from '../types';
 
 interface KpiLineProps {
   metrics?: MetaMetricsResponse | null;
+  onOpenMethodology?: () => void;
 }
 
-export const KpiLine: React.FC<KpiLineProps> = ({ metrics }) => {
+export const KpiLine: React.FC<KpiLineProps> = ({ metrics, onOpenMethodology }) => {
   const modA = metrics?.module_a?.summary;
   const strat = modA?.strat_5bps;
   const ew = modA?.ew_5bps;
@@ -28,9 +29,13 @@ export const KpiLine: React.FC<KpiLineProps> = ({ metrics }) => {
         Avg Daily Turnover <span className="text-text-primary font-medium">{avgTurnover}</span>
       </div>
 
-      <div className="text-[10px] text-accent/80 hover:text-accent cursor-pointer underline">
+      <button
+        onClick={onOpenMethodology}
+        data-testid="see-methodology-btn"
+        className="text-[10px] text-accent/80 hover:text-accent cursor-pointer underline bg-transparent border-none p-0 font-mono"
+      >
         See Methodology & Empirical Validation →
-      </div>
+      </button>
     </div>
   );
 };

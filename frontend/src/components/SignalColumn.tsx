@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { DrivingSignal, SignalImpactResponse } from '../types';
+import { DrivingSignal, SignalImpactResponse, PositionSnapshot } from '../types';
 import { fetchSignalImpact } from '../api/client';
-import { AlertCircle, ArrowRight } from 'lucide-react';
+import { AlertCircle, ArrowRight, ChevronDown, ChevronUp, Calculator } from 'lucide-react';
 
 interface SignalColumnProps {
   signal: DrivingSignal | null;
+  position?: PositionSnapshot | null;
 }
 
-export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
+export const SignalColumn: React.FC<SignalColumnProps> = ({ signal, position }) => {
   const [impactDetail, setImpactDetail] = useState<SignalImpactResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showMath, setShowMath] = useState<boolean>(false);
 
   useEffect(() => {
     if (!signal?.text_id) {
@@ -39,17 +41,17 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
 
   if (!signal) {
     return (
-      <div className="flex flex-col h-[520px] px-5 border-r border-border/30">
+      <div id="signal-column" className="flex flex-col h-[520px] px-5 border-r border-border/30">
         <div className="pb-2 mb-2 border-b border-border/30">
           <span className="text-xs font-semibold text-text-secondary tracking-wider uppercase font-sans">
-            2. Signal & Arithmetic Chain
+            2 Signal
           </span>
           <div className="text-[11px] text-text-secondary mt-0.5 font-sans">
-            Model scoring & explainability decomposition
+            What the AI understood
           </div>
         </div>
         <div className="flex-1 flex items-center justify-center text-xs text-text-secondary font-sans italic text-center p-6">
-          Select a headline from the stream to inspect the model's classification, impact breakdown, and arithmetic chain.
+          Select a headline from the stream to inspect the model's classification, plain-English takeaway, and arithmetic chain.
         </div>
       </div>
     );
@@ -72,16 +74,41 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
   const finalContrib = signal.contribution;
   const sumWeights = signal.sum_weights_for_ticker ?? impactDetail?.sum_weights_for_ticker ?? weightW;
 
+  // Build plain-English summary from real values
+  const intensity = Math.abs(rawSent) >= 0.6 ? 'strongly' : 'mildly';
+  const sentimentWord = rawSent >= 0 ? 'positive' : 'negative';
+  const scoreFormatted = rawSent > 0 ? `+${rawSent.toFixed(2)}` : rawSent.toFixed(2);
+  const strengthClause = deadbandPassed
+    ? 'It was strong enough to count (the cut-off is ±0.20)'
+    : 'It was too weak to count (the cut-off is ±0.20)';
+
+  let weightActionClause = '';
+  if (position) {
+    const prevPct = (position.prev_weight * 100).toFixed(2);
+    const currPct = (position.weight * 100).toFixed(2);
+    if (position.weight > position.prev_weight) {
+      weightActionClause = `${signal.ticker}'s weight was raised from ${prevPct}% to ${currPct}%`;
+    } else if (position.weight < position.prev_weight) {
+      weightActionClause = `${signal.ticker}'s weight was lowered from ${prevPct}% to ${currPct}%`;
+    } else {
+      weightActionClause = `${signal.ticker}'s weight stayed at ${currPct}%`;
+    }
+  } else {
+    weightActionClause = `${signal.ticker}'s weight was updated based on this signal`;
+  }
+
+  const plainEnglishSummary = `The AI read this post as ${intensity} ${sentimentWord} (${scoreFormatted}). ${strengthClause}, so ${weightActionClause}.`;
+
   return (
-    <div className="flex flex-col h-[520px] px-5 border-r border-border/30 overflow-y-auto">
-      {/* Column Header: Quieter small-caps label in secondary text colour */}
+    <div id="signal-column" className="flex flex-col h-[520px] px-5 border-r border-border/30 overflow-y-auto">
+      {/* Column Header: 2 Signal + plain caption */}
       <div className="flex items-baseline justify-between pb-2 mb-2 border-b border-border/30">
         <div>
           <span className="text-xs font-semibold text-text-secondary tracking-wider uppercase font-sans">
-            2. Signal & Arithmetic Chain
+            2 Signal
           </span>
           <div className="text-[11px] text-text-secondary mt-0.5 font-sans">
-            FinBERT sentiment & event attribution decomposition
+            What the AI understood
           </div>
         </div>
         {loading && (
@@ -91,7 +118,7 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
         )}
       </div>
 
-      <div className="space-y-3.5 text-xs">
+      <div className="space-y-3 text-xs">
         {/* Headline & Source: Inter font for headline */}
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -107,6 +134,13 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
           </p>
         </div>
 
+        {/* Plain-English summary card (first thing viewer sees) */}
+        <div className="p-2.5 rounded bg-surface-secondary/40 border border-border/50 text-xs font-sans text-text-primary leading-relaxed">
+          <p className="text-text-primary">
+            {plainEnglishSummary}
+          </p>
+        </div>
+
         {/* Model Classification & Confidence (Event vs Sentiment) */}
         <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border/20">
           <div>
@@ -115,7 +149,7 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
               {signal.event_type}
             </span>
             <span className="text-[10px] font-mono text-text-secondary">
-              Confidence: {eventConfPct}%
+              Event Confidence: {eventConfPct}%
             </span>
           </div>
 
@@ -126,7 +160,7 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
             </span>
             {sentConfPct != null ? (
               <span className="text-[10px] font-mono text-accent">
-                Confidence: {sentConfPct}%
+                Sentiment Confidence: {sentConfPct}%
               </span>
             ) : (
               <span className="text-[10px] font-mono text-text-secondary/60">
@@ -168,81 +202,92 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
           </div>
         </div>
 
-        {/* Arithmetic Chain: Sentiment -> Deadband -> 1.25x Multiplier -> Attribution -> Normalization -> Contribution */}
+        {/* "Show the math" Toggle (closed by default) */}
         <div className="pt-2 border-t border-border/20">
-          <span className="text-[10px] uppercase font-sans text-text-secondary font-semibold tracking-wider block mb-2">
-            Arithmetic Signal Propagation Chain
-          </span>
-          <div className="space-y-1.5 font-mono text-[11px]">
-            {/* Step 1: Raw Sentiment */}
-            <div className="flex items-center justify-between p-1.5 rounded bg-surface-secondary/30">
-              <span className="text-text-secondary font-sans text-[11px]">1. FinBERT Sentiment</span>
-              <span className={`font-semibold ${rawSent < 0 ? 'text-negative' : 'text-positive'}`}>
-                {rawSent > 0 ? '+' : ''}{rawSent.toFixed(4)}
-              </span>
+          <button
+            onClick={() => setShowMath(!showMath)}
+            className="w-full flex items-center justify-between p-2 rounded bg-surface-secondary/40 hover:bg-surface-secondary text-xs text-text-secondary hover:text-text-primary transition-colors border border-border/40 font-mono"
+          >
+            <div className="flex items-center gap-1.5">
+              <Calculator className="h-3.5 w-3.5 text-accent" />
+              <span className="font-medium text-text-primary">Show the math</span>
+              <span className="text-[10px] text-text-secondary/70">(5-step propagation chain)</span>
             </div>
+            {showMath ? <ChevronUp className="h-3.5 w-3.5 text-accent" /> : <ChevronDown className="h-3.5 w-3.5 text-accent" />}
+          </button>
 
-            {/* Step 2: Deadband Check */}
-            <div className="flex items-center justify-between p-1.5 rounded bg-surface-secondary/30">
-              <span className="text-text-secondary font-sans text-[11px]">2. Deadband Check (±0.20)</span>
-              <span className={deadbandPassed ? 'text-positive font-semibold' : 'text-text-secondary font-semibold'}>
-                {deadbandPassed ? 'Passed (|s| ≥ 0.20)' : 'Filtered (|s| < 0.20 → 0.0)'}
-              </span>
-            </div>
-
-            {/* Step 3: Asymmetry Multiplier */}
-            <div className="flex items-center justify-between p-1.5 rounded bg-surface-secondary/30">
-              <span className="text-text-secondary font-sans text-[11px]">3. Negative Weighting</span>
-              <span className="text-text-primary">
-                {isNegative && deadbandPassed ? '1.25x applied' : '1.0x (unscaled)'}
-                <span className="text-text-secondary ml-1">→ {adjSent > 0 ? '+' : ''}{adjSent.toFixed(4)}</span>
-              </span>
-            </div>
-
-            {/* Step 4: Attribution Weight */}
-            <div className="flex items-center justify-between p-1.5 rounded bg-surface-secondary/30">
-              <span className="text-text-secondary font-sans text-[11px]">4. Weight (Attr × Imp/10)</span>
-              <span className="text-text-primary">
-                {weightW.toFixed(4)}
-              </span>
-            </div>
-
-            {/* Step 5: Share of day's signal weight for this ticker */}
-            <div className="p-2 rounded bg-surface-secondary/30 space-y-1">
-              <div className="flex items-baseline justify-between">
-                <span className="text-text-secondary font-sans text-[11px] leading-tight font-medium">
-                  5. Share of the day's signal weight for this ticker:
-                </span>
-                <span className="font-mono text-text-primary text-[11px] font-semibold">
-                  {sumWeights > 0 ? `${((weightW / sumWeights) * 100).toFixed(1)}%` : '0.0%'}
+          {showMath && (
+            <div className="space-y-1.5 font-mono text-[11px] mt-2 pt-2 border-t border-border/20">
+              {/* Step 1: Raw Sentiment */}
+              <div className="flex items-center justify-between p-1.5 rounded bg-surface-secondary/30">
+                <span className="text-text-secondary font-sans text-[11px]">1. FinBERT Sentiment</span>
+                <span className={`font-semibold ${rawSent < 0 ? 'text-negative' : 'text-positive'}`}>
+                  {rawSent > 0 ? '+' : ''}{rawSent.toFixed(4)}
                 </span>
               </div>
-              <div className="text-[10px] text-text-secondary/80 font-sans leading-tight">
-                contribution = adj_sentiment × weight / sum of weights for {signal.ticker || 'TICKER'} that day
-              </div>
-              <div className="flex items-center justify-between text-[11px] pt-1 border-t border-border/20 font-mono text-text-secondary">
-                <span>
-                  ({adjSent > 0 ? '+' : ''}{adjSent.toFixed(4)} × {weightW.toFixed(4)}) / <strong className="text-text-primary font-mono">{sumWeights.toFixed(4)}</strong>
-                </span>
-                <span className="text-text-primary font-semibold">
-                  = {sumWeights > 0 ? ((adjSent * weightW) / sumWeights).toFixed(4) : '0.0000'}
-                </span>
-              </div>
-            </div>
 
-            {/* Final Contribution */}
-            <div className="flex items-center justify-between p-2 rounded bg-surface-secondary border border-border/50">
-              <span className="font-semibold text-text-primary font-sans text-xs flex items-center gap-1">
-                <ArrowRight className="h-3 w-3 text-accent" />
-                Final Contribution
-              </span>
-              <span className={`text-xs font-bold ${
-                finalContrib > 0 ? 'text-positive' : finalContrib < 0 ? 'text-negative' : 'text-text-secondary'
-              }`}>
-                {finalContrib > 0 ? '+' : ''}{finalContrib.toFixed(4)}
-              </span>
+              {/* Step 2: Deadband Check */}
+              <div className="flex items-center justify-between p-1.5 rounded bg-surface-secondary/30">
+                <span className="text-text-secondary font-sans text-[11px]">2. Deadband Check (±0.20)</span>
+                <span className={deadbandPassed ? 'text-positive font-semibold' : 'text-text-secondary font-semibold'}>
+                  {deadbandPassed ? 'Passed (|s| ≥ 0.20)' : 'Filtered (|s| < 0.20 → 0.0)'}
+                </span>
+              </div>
+
+              {/* Step 3: Asymmetry Multiplier */}
+              <div className="flex items-center justify-between p-1.5 rounded bg-surface-secondary/30">
+                <span className="text-text-secondary font-sans text-[11px]">3. Negative Weighting</span>
+                <span className="text-text-primary">
+                  {isNegative && deadbandPassed ? '1.25x applied' : '1.0x (unscaled)'}
+                  <span className="text-text-secondary ml-1">→ {adjSent > 0 ? '+' : ''}{adjSent.toFixed(4)}</span>
+                </span>
+              </div>
+
+              {/* Step 4: Attribution Weight */}
+              <div className="flex items-center justify-between p-1.5 rounded bg-surface-secondary/30">
+                <span className="text-text-secondary font-sans text-[11px]">4. Weight (Attr × Imp/10)</span>
+                <span className="text-text-primary">
+                  {weightW.toFixed(4)}
+                </span>
+              </div>
+
+              {/* Step 5: Share of day's signal weight for this ticker */}
+              <div className="p-2 rounded bg-surface-secondary/30 space-y-1">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-text-secondary font-sans text-[11px] leading-tight font-medium">
+                    5. Share of the day's signal weight for this ticker:
+                  </span>
+                  <span className="font-mono text-text-primary text-[11px] font-semibold">
+                    {sumWeights > 0 ? `${((weightW / sumWeights) * 100).toFixed(1)}%` : '0.0%'}
+                  </span>
+                </div>
+                <div className="text-[10px] text-text-secondary/80 font-sans leading-tight">
+                  contribution = adj_sentiment × weight / sum of weights for {signal.ticker || 'TICKER'} that day
+                </div>
+                <div className="flex items-center justify-between text-[11px] pt-1 border-t border-border/20 font-mono text-text-secondary">
+                  <span>
+                    ({adjSent > 0 ? '+' : ''}{adjSent.toFixed(4)} × {weightW.toFixed(4)}) / <strong className="text-text-primary font-mono">{sumWeights.toFixed(4)}</strong>
+                  </span>
+                  <span className="text-text-primary font-semibold">
+                    = {sumWeights > 0 ? ((adjSent * weightW) / sumWeights).toFixed(4) : '0.0000'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Final Contribution */}
+              <div className="flex items-center justify-between p-2 rounded bg-surface-secondary border border-border/50">
+                <span className="font-semibold text-text-primary font-sans text-xs flex items-center gap-1">
+                  <ArrowRight className="h-3 w-3 text-accent" />
+                  Final Contribution
+                </span>
+                <span className={`text-xs font-bold ${
+                  finalContrib > 0 ? 'text-positive' : finalContrib < 0 ? 'text-negative' : 'text-text-secondary'
+                }`}>
+                  {finalContrib > 0 ? '+' : ''}{finalContrib.toFixed(4)}
+                </span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Plain language explanation from impact route */}

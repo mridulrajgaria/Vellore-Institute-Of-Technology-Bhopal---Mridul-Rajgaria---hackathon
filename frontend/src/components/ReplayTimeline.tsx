@@ -111,7 +111,7 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
           <div className="flex items-center gap-1.5 text-xs">
             <span className="text-[11px] text-text-secondary flex items-center gap-1 font-mono">
               <Zap className="h-3 w-3 text-accent" />
-              Top events:
+              Biggest days:
             </span>
             <div className="flex flex-wrap items-center gap-1.5">
               {top5Days.map((chip) => {
@@ -125,7 +125,7 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
                         ? 'border-accent bg-accent/15 text-accent font-semibold'
                         : 'border-border/60 bg-surface hover:bg-surface-secondary text-text-secondary hover:text-text-primary'
                     }`}
-                    title={`${chip.date}: ${chip.ticker} (${chip.event_type}) - ${chip.headline}`}
+                    title={`${chip.date} • ${chip.ticker} • Impact: ${chip.impact_score.toFixed(1)}/10`}
                   >
                     <span>{chip.date.slice(5)}</span>
                     <span className="ml-1 text-[10px] text-accent/80 font-semibold">{chip.ticker}</span>
@@ -156,7 +156,7 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
                 }}
                 className="absolute top-0 -translate-x-1/2 pointer-events-auto group focus:outline-none"
                 style={{ left: `${pct}%` }}
-                title={`Jump to ${d.date}: ${d.ticker} (Impact ${d.impact_score.toFixed(1)}/10)`}
+                title={`${d.date} • ${d.ticker} • Impact: ${d.impact_score.toFixed(1)}/10`}
               >
                 <div
                   className={`w-1.5 h-2.5 rounded-full transition-all ${

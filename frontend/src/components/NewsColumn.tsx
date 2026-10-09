@@ -14,6 +14,7 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
   onSelectSignal,
 }) => {
   const [showIgnored, setShowIgnored] = useState<boolean>(false);
+  const [showAllDriving, setShowAllDriving] = useState<boolean>(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const selectedCardRef = React.useRef<HTMLDivElement>(null);
 
@@ -67,6 +68,9 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
     return { drivingSignals: driving, ignoredSignals: ignored };
   }, [signals]);
 
+  const visibleDrivingSignals = showAllDriving ? drivingSignals : drivingSignals.slice(0, 3);
+  const hiddenDrivingCount = Math.max(0, drivingSignals.length - 3);
+
   const renderCard = (sig: DrivingSignal, isIgnored: boolean = false) => {
     const isSelected = selectedSignal?.text_id === sig.text_id;
     const isNeg = sig.sentiment_score < 0;
@@ -100,7 +104,7 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
           <div className="flex items-center gap-1 font-mono text-[10px]">
             {isIgnored ? (
               <span className="text-text-secondary/60 flex items-center gap-0.5">
-                <Minus className="h-3 w-3" /> deadband
+                <Minus className="h-3 w-3" /> too weak
               </span>
             ) : isNeg ? (
               <span className="text-negative flex items-center font-medium">
@@ -135,14 +139,14 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
 
   return (
     <div className="flex flex-col h-[520px] border-r border-border/30 pr-5">
-      {/* Column Header: Quieter small-caps label in secondary text colour */}
+      {/* Column Header: 1 News + plain caption */}
       <div className="flex items-baseline justify-between pb-2 mb-2 border-b border-border/30">
         <div>
           <span className="text-xs font-semibold text-text-secondary tracking-wider uppercase font-sans">
-            1. News & Social Stream
+            1 News
           </span>
           <div className="text-[11px] text-text-secondary mt-0.5 font-sans">
-            Pre-21:00 UTC ingested items
+            What people were saying today
           </div>
         </div>
         <span className="text-xs font-mono text-text-secondary">
@@ -168,10 +172,32 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
                 All headlines today fell below the ±0.20 deadband.
               </div>
             ) : (
-              drivingSignals.map((sig) => renderCard(sig, false))
+              visibleDrivingSignals.map((sig) => renderCard(sig, false))
             )}
 
-            {/* Ignored below deadband accordion */}
+            {/* Expander for remaining driving signals */}
+            {hiddenDrivingCount > 0 && (
+              <div className="pt-1">
+                <button
+                  onClick={() => setShowAllDriving(!showAllDriving)}
+                  className="w-full py-1.5 px-2 rounded text-xs font-mono text-accent hover:bg-accent/10 border border-accent/20 transition-colors flex items-center justify-center gap-1"
+                >
+                  {showAllDriving ? (
+                    <>
+                      <ChevronDown className="h-3 w-3 rotate-180" />
+                      <span>Show top 3 only</span>
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="h-3 w-3" />
+                      <span>Show {hiddenDrivingCount} more</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+
+            {/* Ignored (too weak to count) accordion */}
             {ignoredSignals.length > 0 && (
               <div className="pt-2">
                 <button
@@ -180,7 +206,7 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
                 >
                   <div className="flex items-center gap-1.5 font-mono text-[11px]">
                     {showIgnored ? <ChevronDown className="h-3.5 w-3.5 text-accent" /> : <ChevronRight className="h-3.5 w-3.5" />}
-                    <span>Ignored (below deadband): {ignoredSignals.length}</span>
+                    <span>Ignored (too weak to count): {ignoredSignals.length}</span>
                   </div>
                   <span className="text-[10px] text-text-secondary/60 font-sans">
                     {showIgnored ? 'Collapse' : 'Expand'}

@@ -5,6 +5,35 @@ interface DayStoryProps {
   snapshot?: PortfolioSnapshot | null;
 }
 
+const COMPANY_NAMES: Record<string, string> = {
+  AAPL: 'Apple',
+  AMD: 'Advanced Micro Devices',
+  AMZN: 'Amazon',
+  BAC: 'Bank of America',
+  DIS: 'Walt Disney',
+  GOOGL: 'Alphabet (Google)',
+  INTC: 'Intel',
+  JPM: 'JPMorgan Chase',
+  META: 'Meta Platforms',
+  MSFT: 'Microsoft',
+  NFLX: 'Netflix',
+  NVDA: 'NVIDIA',
+  TSLA: 'Tesla',
+  XOM: 'ExxonMobil',
+};
+
+function formatHeadlineQuote(raw: string, maxLen = 80): string {
+  // Strip leading ticker tag like $AMD or $TSLA if present
+  const cleaned = raw.replace(/^\$[A-Z0-9_]+\s+/i, '').trim();
+  if (cleaned.length <= maxLen) {
+    return `"${cleaned}"`;
+  }
+  const slice = cleaned.slice(0, maxLen);
+  const lastSpace = slice.lastIndexOf(' ');
+  const cut = lastSpace > 25 ? slice.slice(0, lastSpace) : slice;
+  return `"${cut}..."`;
+}
+
 export const DayStory: React.FC<DayStoryProps> = ({ snapshot }) => {
   if (!snapshot) {
     return (
@@ -37,9 +66,9 @@ export const DayStory: React.FC<DayStoryProps> = ({ snapshot }) => {
     }
   });
 
-  const deltaBps = maxPos.weight_change_bps;
   const oldPct = (maxPos.prev_weight * 100).toFixed(2);
   const newPct = (maxPos.weight * 100).toFixed(2);
+  const company = COMPANY_NAMES[maxPos.ticker] || maxPos.ticker;
 
   // Find top driving signal for the largest mover that actually drove weights
   const moverActiveSignals = (maxPos.top_driving_signals || []).filter(
@@ -47,98 +76,49 @@ export const DayStory: React.FC<DayStoryProps> = ({ snapshot }) => {
   );
   const topSig: DrivingSignal | null = moverActiveSignals.length > 0 ? moverActiveSignals[0] : null;
 
-  // Construct story sentence: Inter for prose, IBM Plex Mono only for numbers
-  let storyContent: React.ReactNode;
+  let sentence: React.ReactNode;
 
-  if (maxAbsBps < 1.0 || (!topSig && activeDrivingSignals === 0)) {
-    // Days where no new driving signals arrived
-    storyContent = (
-      <span className="font-sans text-text-secondary">
-        No new driving signals arrived for today's movers; portfolio weights followed half-life EMA decay toward benchmark.
+  if (maxAbsBps < 1.0 && totalSignals === 0) {
+    sentence = (
+      <span>
+        Today the system read <span className="font-mono font-semibold text-text-primary">0</span> posts. Portfolio weights followed half-life EMA decay toward benchmark.
       </span>
     );
   } else if (!topSig) {
-    // Mover shifted without its own direct signal (due to universe re-normalization)
-    const isIncrease = deltaBps > 0;
-    storyContent = (
-      <span className="font-sans">
-        <span className="font-mono font-semibold text-text-primary">{totalSignals}</span> signals arrived across the index;{' '}
-        <span className="font-mono font-semibold text-text-primary">{maxPos.ticker}</span> saw the largest reallocation with a{' '}
-        <span className={`font-mono font-semibold ${isIncrease ? 'text-positive' : 'text-negative'}`}>
-          {isIncrease ? '+' : ''}{deltaBps.toFixed(1)} bps
-        </span>{' '}
-        shift (<span className="font-mono text-text-secondary">{oldPct}% → {newPct}%</span>) through universe re-normalization, with no direct signal of its own today.
+    sentence = (
+      <span>
+        Today the system read <span className="font-mono font-semibold text-text-primary">{totalSignals}</span> posts{' '}
+        (<span className="font-mono text-text-primary">{activeDrivingSignals}</span> strong enough to count). The biggest change:{' '}
+        <strong className="text-text-primary">{company} ({maxPos.ticker})</strong> went from{' '}
+        <span className="font-mono text-text-primary">{oldPct}%</span> to{' '}
+        <span className="font-mono text-text-primary">{newPct}%</span> of the portfolio, moved as earlier signals faded and weights re-balanced.
       </span>
     );
   } else {
-    // Active movement with direct signal
-    const isIncrease = deltaBps > 0;
     const isNeg = topSig.sentiment_score < 0;
-    const sentAdj = isNeg ? 'negative' : 'positive';
-    const sentFormatted = `${topSig.sentiment_score > 0 ? '+' : ''}${topSig.sentiment_score.toFixed(2)}`;
+    const sentWord = isNeg ? 'negative' : 'positive';
+    const quote = formatHeadlineQuote(topSig.headline, 80);
 
-    let eventDescription: React.ReactNode;
-    if (topSig.event_type && topSig.event_type !== 'Other') {
-      eventDescription = (
-        <span>
-          {sentAdj} (<span className="font-mono">{sentFormatted}</span>) <span className="font-medium text-text-primary">{topSig.event_type}</span> event
-        </span>
-      );
-    } else {
-      // Event type is "Other": do not write "Other event"; write a descriptive post snippet or plain signal
-      let topicSnippet = '';
-      if (topSig.headline) {
-        // Strip leading $TICKER references
-        const cleaned = topSig.headline.replace(/^\$[A-Z]+\s+/i, '').trim();
-        if (cleaned.length > 15) {
-          topicSnippet = ` about "${cleaned.slice(0, 48).trim()}..."`;
-        }
-      }
-
-      eventDescription = (
-        <span>
-          {sentAdj} (<span className="font-mono">{sentFormatted}</span>) post{topicSnippet || ' signal'}
-        </span>
-      );
-    }
-
-    storyContent = (
-      <span className="font-sans">
-        <span className="font-mono font-semibold text-text-primary">{totalSignals}</span> signals arrived;{' '}
-        <span className="font-mono font-semibold text-text-primary">{maxPos.ticker}</span> saw the largest reallocation with a{' '}
-        <span className={`font-mono font-semibold ${isIncrease ? 'text-positive' : 'text-negative'}`}>
-          {isIncrease ? '+' : ''}{deltaBps.toFixed(1)} bps
-        </span>{' '}
-        delta (<span className="font-mono text-text-secondary">{oldPct}% → {newPct}%</span>) driven by a {eventDescription}.
+    sentence = (
+      <span>
+        Today the system read <span className="font-mono font-semibold text-text-primary">{totalSignals}</span> posts{' '}
+        (<span className="font-mono text-text-primary">{activeDrivingSignals}</span> strong enough to count). The biggest change:{' '}
+        <strong className="text-text-primary">{company} ({maxPos.ticker})</strong> went from{' '}
+        <span className="font-mono text-text-primary">{oldPct}%</span> to{' '}
+        <span className="font-mono text-text-primary">{newPct}%</span> of the portfolio, mostly because of a{' '}
+        <span className={isNeg ? 'text-negative font-medium' : 'text-positive font-medium'}>{sentWord}</span> post about{' '}
+        <span className="font-sans italic text-text-primary">{quote}</span>.
       </span>
     );
   }
 
   return (
     <div className="py-3 px-6 max-w-[1600px] mx-auto border-t border-b border-border/40 bg-surface/40">
-      <div className="flex flex-wrap items-baseline justify-between gap-4">
-        {/* Visual Anchor: Inter prose, IBM Plex Mono numbers, larger type */}
-        <div className="text-sm font-sans leading-relaxed text-text-secondary max-w-4xl">
-          <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary mr-2 font-sans">
-            Day Summary:
-          </span>
-          {storyContent}
-        </div>
-
-        {/* Large numeral strictly for the largest weight change */}
-        {maxAbsBps >= 1.0 && (
-          <div className="flex items-baseline gap-2 font-mono">
-            <span className="text-[11px] text-text-secondary">Max Tilt:</span>
-            <span
-              className={`text-xl font-bold tracking-tight ${
-                deltaBps > 0 ? 'text-positive' : 'text-negative'
-              }`}
-            >
-              {deltaBps > 0 ? `+${deltaBps.toFixed(1)}` : deltaBps.toFixed(1)} bps
-            </span>
-            <span className="text-xs text-text-secondary">({maxPos.ticker})</span>
-          </div>
-        )}
+      <div className="text-sm font-sans leading-relaxed text-text-secondary max-w-5xl">
+        <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary mr-2 font-sans">
+          Day Summary:
+        </span>
+        {sentence}
       </div>
     </div>
   );
