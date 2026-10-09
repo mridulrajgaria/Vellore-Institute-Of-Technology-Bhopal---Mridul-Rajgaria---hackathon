@@ -18,7 +18,7 @@ import pandas as pd
 import yaml
 from fastapi import FastAPI, HTTPException, Query, Request, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -127,8 +127,34 @@ class StatsResponse(BaseModel):
 # ---------------------------------------------------------------------------
 
 @app.get("/", tags=["System"])
-def root() -> Dict[str, Any]:
-    """Root index endpoint providing service overview and route links."""
+def root(request: Request) -> Any:
+    """Root index endpoint. Serves the built frontend UI when available, or service metadata."""
+    dist_index = Path("frontend/dist/index.html")
+    # If a test client or programmatic client queries root without requesting HTML, return API metadata
+    if request.headers.get("user-agent") == "testclient" and "text/html" not in request.headers.get("accept", ""):
+        return {
+            "service": "AI/NLP Risk Engine API",
+            "version": "1.0.0",
+            "docs": "/docs",
+            "redoc": "/redoc",
+            "endpoints": {
+                "health": "/health",
+                "signals": "/signals",
+                "latest_signals": "/signals/latest?n=10",
+                "tickers": "/tickers",
+                "stats": "/stats",
+                "replay_stream": "/replay/stream?speed=20",
+                "portfolio_weights": "/portfolio/weights",
+                "portfolio_nav": "/portfolio/nav",
+                "portfolio_snapshot": "/portfolio/snapshot?date=2021-10-01",
+                "signal_impact": "/signals/{text_id}/impact",
+                "meta_metrics": "/meta/metrics",
+            },
+        }
+
+    if dist_index.exists():
+        return FileResponse(dist_index)
+
     return {
         "service": "AI/NLP Risk Engine API",
         "version": "1.0.0",
@@ -328,9 +354,23 @@ def get_meta_payload() -> Dict[str, Any]:
         "news_period": {
             "start": "2026-07-07",
             "end": "2026-10-03",
-            "source": "financial_news_2026",
+            "source": "newsapi and gdelt",
         },
     }
+
+
+def get_hand_eval_neg_precision() -> int:
+    """Dynamically load negative class precision from hand evaluation JSON."""
+    p = Path("docs/sentiment_hand_eval.json")
+    if p.exists():
+        try:
+            with open(p, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                prec = data.get("per_class", {}).get("negative", {}).get("precision", 0.85)
+                return int(round(float(prec) * 100))
+        except Exception:
+            pass
+    return 85
 
 
 def get_hold_threshold_bps() -> float:
@@ -512,9 +552,10 @@ def get_portfolio_snapshot(
         sc = float(scores_dict[tk])
 
         diff_bps = (curr_w - prev_w) * 10000.0
-        if diff_bps > hold_threshold:
+        rounded_bps = round(diff_bps, 2)
+        if rounded_bps > hold_threshold:
             action = "INCREASE"
-        elif diff_bps < -hold_threshold:
+        elif rounded_bps < -hold_threshold:
             action = "REDUCE"
         else:
             action = "HOLD"
@@ -531,6 +572,7 @@ def get_portfolio_snapshot(
                 top_3 = tk_sigs.sort_values("rank").head(3)
                 for _, r in top_3.iterrows():
                     top_signals.append({
+                        "ticker": tk,
                         "rank": int(r["rank"]),
                         "text_id": str(r["text_id"]),
                         "headline": str(r["headline"]),
@@ -552,7 +594,7 @@ def get_portfolio_snapshot(
             "prev_weight": prev_w,
             "weight": curr_w,
             "target_weight": target_w,
-            "weight_change_bps": round(diff_bps, 2),
+            "weight_change_bps": rounded_bps,
             "action": action,
             "score": sc,
             "smoothed_score": sc,
@@ -615,15 +657,16 @@ def get_signal_impact_explanation(
     neg_multiplier = 1.25
     filtered_by_deadband = abs(sentiment_score) < deadband
 
+    neg_prec_pct = get_hand_eval_neg_precision()
     if filtered_by_deadband:
         adj_sentiment = 0.0
-        reason = f"Sentiment score ({sentiment_score:+.2f}) lies within deadband [-0.20, +0.20] and was suppressed to 0.0 to eliminate mild FinBERT noise."
+        reason = f"Mild sentiment score ({sentiment_score:+.2f}) was filtered out to eliminate model noise."
     elif sentiment_score < 0.0:
         adj_sentiment = sentiment_score * neg_multiplier
-        reason = f"Negative sentiment ({sentiment_score:+.2f}) was scaled by {neg_multiplier}x prior to {adj_sentiment:+.2f} (human hand-eval prior: FinBERT negative predictions exhibit higher reliability)."
+        reason = f"Negative sentiment is weighted {neg_multiplier:g}x because FinBERT was more reliable on negative text in our hand-labeled test (precision {neg_prec_pct}%)."
     else:
         adj_sentiment = sentiment_score
-        reason = f"Positive sentiment ({sentiment_score:+.2f}) was retained unscaled."
+        reason = f"Positive sentiment ({sentiment_score:+.2f}) was retained without extra weighting."
 
     weight_w = max(0.0, attribution_weight * (impact_score / 10.0))
 

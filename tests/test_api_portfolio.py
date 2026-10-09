@@ -146,6 +146,71 @@ def test_portfolio_snapshot_route(client: TestClient):
     assert res_bad.status_code == 404
 
 
+def test_portfolio_snapshot_action_and_weight_change_consistency(client: TestClient):
+    """Verify that across 5 dates, ACTION and weight_change_bps are mathematically rigorous:
+    1. weight_change_bps == round((weight - prev_weight) * 10000, 2)
+    2. INCREASE implies weight_change_bps > threshold
+    3. REDUCE implies weight_change_bps < -threshold
+    4. HOLD implies -threshold <= weight_change_bps <= threshold
+    5. On the first day, prev_weight is base_weight (1/14).
+    6. On subsequent days, prev_weight matches the previous trading day's executed weight.
+    """
+    weights_df = pd.read_parquet(WEIGHTS_SAMPLE_PATH)
+    unique_dates = sorted(weights_df["date"].unique())
+
+    test_dates = ["2021-10-01", "2021-10-11", "2022-01-20", "2022-04-14", "2022-09-30"]
+    threshold = 10.0  # hold_threshold_bps
+
+    for d in test_dates:
+        assert d in unique_dates, f"Test date {d} not in unique_dates"
+        d_idx = unique_dates.index(d)
+        res = client.get(f"/portfolio/snapshot?date={d}")
+        assert res.status_code == 200
+        snap = res.json()
+        assert snap["hold_threshold_bps"] == threshold
+
+        for pos in snap["positions"]:
+            tk = pos["ticker"]
+            w = pos["weight"]
+            pw = pos["prev_weight"]
+            chg = pos["weight_change_bps"]
+            act = pos["action"]
+
+            # 1. Exact arithmetic verification within rounding
+            expected_chg = round((w - pw) * 10000.0, 2)
+            assert np.isclose(chg, expected_chg, atol=1e-2), (
+                f"On {d} for {tk}: weight_change_bps {chg} != expected {expected_chg}"
+            )
+
+            # 2. Strict ACTION derivation verification
+            if act == "INCREASE":
+                assert chg > threshold, (
+                    f"On {d} for {tk}: action INCREASE requires chg > {threshold}, got {chg}"
+                )
+            elif act == "REDUCE":
+                assert chg < -threshold, (
+                    f"On {d} for {tk}: action REDUCE requires chg < -{threshold}, got {chg}"
+                )
+            elif act == "HOLD":
+                assert -threshold <= chg <= threshold, (
+                    f"On {d} for {tk}: action HOLD requires -{threshold} <= chg <= {threshold}, got {chg}"
+                )
+            else:
+                pytest.fail(f"Invalid action {act}")
+
+            # 3. Verify previous weight source
+            if d_idx == 0:
+                assert np.isclose(pw, 1.0 / 14.0), f"On day 0 {d}, prev_weight should be base weight"
+            else:
+                prev_day = unique_dates[d_idx - 1]
+                expected_prev_w = float(
+                    weights_df[(weights_df["date"] == prev_day) & (weights_df["ticker"] == tk)]["weight"].iloc[0]
+                )
+                assert np.isclose(pw, expected_prev_w), (
+                    f"On {d} for {tk}: prev_weight {pw} does not match previous trading day {prev_day} ({expected_prev_w})"
+                )
+
+
 def test_driving_signals_reproduce_raw_score(client: TestClient):
     """Verify that the sum of contributions reproduces raw_score for every ticker-day in the driving signals file."""
     assert DRIVING_SAMPLE_PATH.exists()
