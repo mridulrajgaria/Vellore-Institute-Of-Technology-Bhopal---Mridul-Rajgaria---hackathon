@@ -497,6 +497,38 @@ def get_portfolio_nav(
     }
 
 
+@app.get("/portfolio/high-impact-days", tags=["Portfolio"])
+def get_high_impact_days(
+    limit: int = Query(10, ge=1, le=50, description="Number of top impact trading days to return"),
+) -> List[Dict[str, Any]]:
+    """Return trading days with highest-impact driving signals for timeline navigation."""
+    driving_df = get_driving_df()
+    if driving_df.empty:
+        return []
+
+    # Find highest impact signal for each trading date
+    top_per_date = (
+        driving_df.sort_values("impact_score", ascending=False)
+        .groupby("date")
+        .first()
+    )
+    top_days = top_per_date.sort_values("impact_score", ascending=False).head(limit)
+
+    results = []
+    for d, row in top_days.iterrows():
+        results.append({
+            "date": str(d),
+            "impact_score": float(row["impact_score"]),
+            "ticker": str(row["ticker"]),
+            "headline": str(row["headline"]),
+            "event_type": str(row["event_type"]),
+            "sentiment_score": float(row["sentiment_score"]),
+            "contribution": float(row["contribution"]),
+            "filtered_by_deadband": bool(row["filtered_by_deadband"]),
+        })
+    return results
+
+
 @app.get("/portfolio/snapshot", tags=["Portfolio"])
 def get_portfolio_snapshot(
     date: str = Query(..., description="Trading date YYYY-MM-DD"),
@@ -640,6 +672,7 @@ def get_signal_impact_explanation(
         impact_score = float(sig.get("impact_score", 5.0))
         event_confidence = float(sig.get("event_confidence", 0.0))
         attribution_weight = float(sig.get("attribution_weight", 1.0))
+        sentiment_confidence = float(sig.get("confidence")) if sig.get("confidence") is not None else None
         ts = sig.get("ts", "")
     else:
         row = driving_match.iloc[0]
@@ -651,6 +684,7 @@ def get_signal_impact_explanation(
         impact_score = float(row["impact_score"])
         event_confidence = float(row["event_confidence"])
         attribution_weight = float(row["attribution_weight"])
+        sentiment_confidence = None
         ts = ""
 
     deadband = 0.20
@@ -689,6 +723,7 @@ def get_signal_impact_explanation(
         "sentiment_score": sentiment_score,
         "impact_score": impact_score,
         "event_confidence": event_confidence,
+        "sentiment_confidence": sentiment_confidence,
         "attribution_weight": attribution_weight,
         "deadband_threshold": deadband,
         "filtered_by_deadband": filtered_by_deadband,

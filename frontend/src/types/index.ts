@@ -87,6 +87,7 @@ export interface SignalImpactResponse {
   sentiment_score: number;
   impact_score: number;
   event_confidence: number;
+  sentiment_confidence?: number | null;
   attribution_weight: number;
   deadband_threshold: number;
   filtered_by_deadband: boolean;
@@ -123,4 +124,15 @@ export interface MetaMetricsResponse {
   event_eval: any;
   module_a: any;
   meta: MetaPayload;
+}
+
+export interface HighImpactDay {
+  date: string;
+  impact_score: number;
+  ticker: string;
+  headline: string;
+  event_type: string;
+  sentiment_score: number;
+  contribution: number;
+  filtered_by_deadband: boolean;
 }

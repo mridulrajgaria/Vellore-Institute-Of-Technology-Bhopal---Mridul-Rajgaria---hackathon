@@ -195,11 +195,29 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
     };
   }, [navData]);
 
-  // Synchronize tooltip highlight when selectedDate changes
+  // Synchronize vertical playhead markLine and tooltip highlight when selectedDate changes
   useEffect(() => {
     if (!chartInstance.current || !selectedDate || navData.length === 0) return;
     const dateIdx = navData.findIndex((d) => d.date === selectedDate);
     if (dateIdx >= 0) {
+      chartInstance.current.setOption({
+        series: [
+          {
+            name: 'Sentiment Strategy (5 bps)',
+            markLine: {
+              symbol: ['none', 'none'],
+              animation: false,
+              lineStyle: {
+                color: '#38BDF8',
+                width: 1.5,
+                type: 'solid',
+              },
+              data: [{ xAxis: selectedDate }],
+              label: { show: false },
+            },
+          },
+        ],
+      });
       chartInstance.current.dispatchAction({
         type: 'showTip',
         seriesIndex: 0,

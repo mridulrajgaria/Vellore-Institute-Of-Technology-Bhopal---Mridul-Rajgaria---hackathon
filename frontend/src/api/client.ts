@@ -63,3 +63,9 @@ export async function fetchLatestSignals(n: number = 20): Promise<RiskSignal[]> 
   if (!res.ok) throw new Error(`Failed to load latest signals: ${res.statusText}`);
   return res.json();
 }
+
+export async function fetchHighImpactDays(limit: number = 10): Promise<import('../types').HighImpactDay[]> {
+  const res = await fetch(`${API_BASE}/portfolio/high-impact-days?limit=${limit}`);
+  if (!res.ok) throw new Error(`Failed to load high impact days: ${res.statusText}`);
+  return res.json();
+}

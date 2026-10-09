@@ -287,3 +287,38 @@ def test_meta_metrics_route(client: TestClient):
 
     assert "meta" in data
     assert data["meta"]["replay_period"]["start"] == "2021-10-01"
+
+
+def test_portfolio_high_impact_days_route(client: TestClient):
+    """Test /portfolio/high-impact-days returns descending ordered trading dates by impact."""
+    res = client.get("/portfolio/high-impact-days?limit=10")
+    assert res.status_code == 200
+    days = res.json()
+    assert len(days) == 10
+    # Assert descending order of impact_score
+    impacts = [d["impact_score"] for d in days]
+    assert impacts == sorted(impacts, reverse=True)
+    # Check required fields
+    for d in days:
+        assert "date" in d
+        assert "impact_score" in d
+        assert "ticker" in d
+        assert "headline" in d
+
+
+def test_total_trading_days_is_252(client: TestClient):
+    """Regression test: verify all routes provide exactly 252 distinct trading days."""
+    w_res = client.get("/portfolio/weights")
+    assert w_res.status_code == 200
+    weights_dates = set(r["date"] for r in w_res.json()["data"])
+    assert len(weights_dates) == 252, f"Expected 252 trading days in weights, got {len(weights_dates)}"
+
+    n_res = client.get("/portfolio/nav")
+    assert n_res.status_code == 200
+    nav_dates = [r["date"] for r in n_res.json()["data"]]
+    assert len(nav_dates) == 252, f"Expected 252 trading days in nav, got {len(nav_dates)}"
+
+    m_res = client.get("/meta/metrics")
+    assert m_res.status_code == 200
+    metrics_days = m_res.json()["module_a"]["summary"]["total_rebalance_days"]
+    assert metrics_days == 252, f"Expected 252 total_rebalance_days in metrics, got {metrics_days}"

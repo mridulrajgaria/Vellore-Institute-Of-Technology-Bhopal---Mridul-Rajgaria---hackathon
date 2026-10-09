@@ -237,11 +237,29 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
     };
   }, [weightsData, dates]);
 
-  // Synchronize tooltip highlight using the exact index in the dates array (length 252)
+  // Synchronize vertical playhead markLine and tooltip highlight using the exact index in the dates array (length 252)
   useEffect(() => {
     if (!chartInstance.current || !selectedDate || dates.length === 0) return;
     const dateIdx = dates.indexOf(selectedDate);
     if (dateIdx >= 0) {
+      chartInstance.current.setOption({
+        series: [
+          {
+            name: ORDERED_TICKERS[0],
+            markLine: {
+              symbol: ['none', 'none'],
+              animation: false,
+              lineStyle: {
+                color: '#38BDF8',
+                width: 1.5,
+                type: 'solid',
+              },
+              data: [{ xAxis: selectedDate }],
+              label: { show: false },
+            },
+          },
+        ],
+      });
       chartInstance.current.dispatchAction({
         type: 'showTip',
         seriesIndex: 0,
