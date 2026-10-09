@@ -14,6 +14,39 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
   onSelectSignal,
 }) => {
   const [showIgnored, setShowIgnored] = useState<boolean>(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const selectedCardRef = React.useRef<HTMLDivElement>(null);
+
+  // Auto-expand ignored section if selected signal is filtered by deadband
+  React.useEffect(() => {
+    if (selectedSignal?.filtered_by_deadband) {
+      setShowIgnored(true);
+    }
+  }, [selectedSignal?.filtered_by_deadband]);
+
+  // Scroll selected card fully into view on selection and on date change with padding
+  React.useEffect(() => {
+    if (selectedCardRef.current && containerRef.current) {
+      const card = selectedCardRef.current;
+      const container = containerRef.current;
+      const cardRect = card.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const topPadding = 12;
+      const bottomPadding = 12;
+
+      if (cardRect.top < containerRect.top + topPadding) {
+        container.scrollTo({
+          top: Math.max(0, container.scrollTop + (cardRect.top - containerRect.top) - topPadding),
+          behavior: 'smooth',
+        });
+      } else if (cardRect.bottom > containerRect.bottom - bottomPadding) {
+        container.scrollTo({
+          top: container.scrollTop + (cardRect.bottom - containerRect.bottom) + bottomPadding,
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, [selectedSignal?.text_id, signals]);
 
   // Partition signals into driving signals and deadband-ignored signals
   const { drivingSignals, ignoredSignals } = useMemo(() => {
@@ -41,8 +74,9 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
     return (
       <div
         key={`${sig.text_id}-${sig.rank}`}
+        ref={isSelected ? selectedCardRef : undefined}
         onClick={() => onSelectSignal(sig)}
-        className={`py-2 px-2.5 rounded transition-all cursor-pointer border ${
+        className={`py-2 px-2.5 rounded transition-all cursor-pointer border scroll-mt-3 ${
           isSelected
             ? 'border-accent bg-accent/10 shadow-sm'
             : isIgnored
@@ -118,7 +152,10 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
       </div>
 
       {/* Stream list */}
-      <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 divide-y divide-border/20">
+      <div
+        ref={containerRef}
+        className="flex-1 overflow-y-auto space-y-1.5 pr-1 pt-2 pb-2"
+      >
         {signals.length === 0 ? (
           <div className="p-8 text-center text-xs text-text-secondary font-sans italic">
             No headlines ingested for this trading day.

@@ -70,6 +70,7 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
   const adjSent = signal.adj_sentiment;
   const weightW = signal.weight_w;
   const finalContrib = signal.contribution;
+  const sumWeights = signal.sum_weights_for_ticker ?? impactDetail?.sum_weights_for_ticker ?? weightW;
 
   return (
     <div className="flex flex-col h-[520px] px-5 border-r border-border/30 overflow-y-auto">
@@ -167,7 +168,7 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
           </div>
         </div>
 
-        {/* Arithmetic Chain: Sentiment -> Deadband -> 1.25x Multiplier -> Contribution */}
+        {/* Arithmetic Chain: Sentiment -> Deadband -> 1.25x Multiplier -> Attribution -> Normalization -> Contribution */}
         <div className="pt-2 border-t border-border/20">
           <span className="text-[10px] uppercase font-sans text-text-secondary font-semibold tracking-wider block mb-2">
             Arithmetic Signal Propagation Chain
@@ -206,7 +207,30 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal }) => {
               </span>
             </div>
 
-            {/* Step 5: Final Contribution */}
+            {/* Step 5: Share of day's signal weight for this ticker */}
+            <div className="p-2 rounded bg-surface-secondary/30 space-y-1">
+              <div className="flex items-baseline justify-between">
+                <span className="text-text-secondary font-sans text-[11px] leading-tight font-medium">
+                  5. Share of the day's signal weight for this ticker:
+                </span>
+                <span className="font-mono text-text-primary text-[11px] font-semibold">
+                  {sumWeights > 0 ? `${((weightW / sumWeights) * 100).toFixed(1)}%` : '0.0%'}
+                </span>
+              </div>
+              <div className="text-[10px] text-text-secondary/80 font-sans leading-tight">
+                contribution = adj_sentiment × weight / sum of weights for {signal.ticker || 'TICKER'} that day
+              </div>
+              <div className="flex items-center justify-between text-[11px] pt-1 border-t border-border/20 font-mono text-text-secondary">
+                <span>
+                  ({adjSent > 0 ? '+' : ''}{adjSent.toFixed(4)} × {weightW.toFixed(4)}) / <strong className="text-text-primary font-mono">{sumWeights.toFixed(4)}</strong>
+                </span>
+                <span className="text-text-primary font-semibold">
+                  = {sumWeights > 0 ? ((adjSent * weightW) / sumWeights).toFixed(4) : '0.0000'}
+                </span>
+              </div>
+            </div>
+
+            {/* Final Contribution */}
             <div className="flex items-center justify-between p-2 rounded bg-surface-secondary border border-border/50">
               <span className="font-semibold text-text-primary font-sans text-xs flex items-center gap-1">
                 <ArrowRight className="h-3 w-3 text-accent" />

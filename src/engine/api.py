@@ -601,8 +601,11 @@ def get_portfolio_snapshot(
             tk_sigs = driving_for_date[driving_for_date["ticker"] == tk]
             if not tk_sigs.empty:
                 raw_score = float(tk_sigs["contribution"].sum())
+                sum_weight_w = float(tk_sigs["weight_w"].sum())
                 top_3 = tk_sigs.sort_values("rank").head(3)
                 for _, r in top_3.iterrows():
+                    w_val = float(r["weight_w"])
+                    w_share = (w_val / sum_weight_w) if sum_weight_w > 0 else 0.0
                     top_signals.append({
                         "ticker": tk,
                         "rank": int(r["rank"]),
@@ -615,7 +618,9 @@ def get_portfolio_snapshot(
                         "event_confidence": float(r["event_confidence"]),
                         "attribution_weight": float(r["attribution_weight"]),
                         "adj_sentiment": float(r["adj_sentiment"]),
-                        "weight_w": float(r["weight_w"]),
+                        "weight_w": w_val,
+                        "sum_weights_for_ticker": sum_weight_w,
+                        "weight_share": w_share,
                         "contribution": float(r["contribution"]),
                         "filtered_by_deadband": bool(r["filtered_by_deadband"]),
                     })
@@ -705,12 +710,23 @@ def get_signal_impact_explanation(
     weight_w = max(0.0, attribution_weight * (impact_score / 10.0))
 
     driving_details = None
+    sum_weights_for_ticker = weight_w
+    weight_share = 1.0
     if not driving_match.empty:
         dm_row = driving_match.iloc[0]
+        dm_date = str(dm_row["date"])
+        dm_tk = str(dm_row["ticker"])
+        dm_weight_w = float(dm_row["weight_w"])
+        weight_w = dm_weight_w
+        tk_sigs = driving_df[(driving_df["date"] == dm_date) & (driving_df["ticker"] == dm_tk)]
+        sum_weights_for_ticker = float(tk_sigs["weight_w"].sum()) if not tk_sigs.empty else weight_w
+        weight_share = (weight_w / sum_weights_for_ticker) if sum_weights_for_ticker > 0 else 0.0
         driving_details = {
-            "rebalance_date": str(dm_row["date"]),
+            "rebalance_date": dm_date,
             "rank": int(dm_row["rank"]),
             "contribution": float(dm_row["contribution"]),
+            "sum_weights_for_ticker": sum_weights_for_ticker,
+            "weight_share": weight_share,
         }
 
     return {
@@ -728,8 +744,10 @@ def get_signal_impact_explanation(
         "deadband_threshold": deadband,
         "filtered_by_deadband": filtered_by_deadband,
         "neg_multiplier": neg_multiplier,
-        "adj_sentiment": round(adj_sentiment, 4),
-        "weight_w": round(weight_w, 4),
+        "adj_sentiment": float(adj_sentiment),
+        "weight_w": float(weight_w),
+        "sum_weights_for_ticker": sum_weights_for_ticker,
+        "weight_share": weight_share,
         "explanation": reason,
         "driving_signal_details": driving_details,
         "meta": get_meta_payload(),

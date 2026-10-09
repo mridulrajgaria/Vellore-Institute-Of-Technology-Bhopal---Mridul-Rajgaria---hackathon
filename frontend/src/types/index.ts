@@ -46,6 +46,8 @@ export interface DrivingSignal {
   attribution_weight: number;
   adj_sentiment: number;
   weight_w: number;
+  sum_weights_for_ticker?: number;
+  weight_share?: number;
   contribution: number;
   filtered_by_deadband: boolean;
 }
@@ -94,11 +96,15 @@ export interface SignalImpactResponse {
   neg_multiplier: number;
   adj_sentiment: number;
   weight_w: number;
+  sum_weights_for_ticker?: number;
+  weight_share?: number;
   explanation: string;
   driving_signal_details?: {
     rebalance_date: string;
     rank: number;
     contribution: number;
+    sum_weights_for_ticker?: number;
+    weight_share?: number;
   } | null;
   meta: MetaPayload;
 }

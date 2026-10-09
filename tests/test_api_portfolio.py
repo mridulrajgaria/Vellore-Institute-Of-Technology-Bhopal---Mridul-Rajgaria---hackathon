@@ -322,3 +322,35 @@ def test_total_trading_days_is_252(client: TestClient):
     assert m_res.status_code == 200
     metrics_days = m_res.json()["module_a"]["summary"]["total_rebalance_days"]
     assert metrics_days == 252, f"Expected 252 total_rebalance_days in metrics, got {metrics_days}"
+
+
+def test_signal_arithmetic_chain_normalization_reproduces_contribution(client: TestClient):
+    """Verify that the displayed arithmetic chain (adj_sentiment * weight_w / sum_weights_for_ticker)
+    reproduces the exact signal contribution for 3 dates across all driving signals."""
+    test_dates = ["2021-10-01", "2021-10-08", "2022-04-22"]
+    for d in test_dates:
+        res = client.get(f"/portfolio/snapshot?date={d}")
+        assert res.status_code == 200
+        snap = res.json()
+        for pos in snap["positions"]:
+            for sig in pos["top_driving_signals"]:
+                adj_sent = sig["adj_sentiment"]
+                w_w = sig["weight_w"]
+                sum_w = sig["sum_weights_for_ticker"]
+                contrib = sig["contribution"]
+
+                # Chain step 5: contribution = adj_sentiment * weight / sum_weights_for_ticker
+                expected_contrib = (adj_sent * w_w / sum_w) if sum_w > 0 else 0.0
+                assert np.isclose(contrib, expected_contrib, atol=1e-5), (
+                    f"On {d} for {sig['ticker']} ({sig['text_id']}): "
+                    f"chain ({adj_sent} * {w_w} / {sum_w} = {expected_contrib}) != {contrib}"
+                )
+
+                # Also verify /signals/{text_id}/impact endpoint reproduces the exact chain
+                imp_res = client.get(f"/signals/{sig['text_id']}/impact")
+                assert imp_res.status_code == 200
+                imp = imp_res.json()
+                assert np.isclose(imp["sum_weights_for_ticker"], sum_w, atol=1e-5)
+                imp_expected = (imp["adj_sentiment"] * imp["weight_w"] / imp["sum_weights_for_ticker"]) if imp["sum_weights_for_ticker"] > 0 else 0.0
+                assert np.isclose(imp["driving_signal_details"]["contribution"], imp_expected, atol=1e-5)
+
