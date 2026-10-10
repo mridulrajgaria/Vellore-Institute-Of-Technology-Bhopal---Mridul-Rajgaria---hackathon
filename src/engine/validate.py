@@ -18,12 +18,20 @@ from datetime import datetime, time, timedelta
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy import stats
+
+try:
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+except ImportError:
+    plt = None
+
+try:
+    from scipy import stats
+except ImportError:
+    stats = None
 
 logger = logging.getLogger(__name__)
 
