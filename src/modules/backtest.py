@@ -802,9 +802,15 @@ def write_module_a_documentation(
 
 def main() -> None:
     """Run full Module A backtest, honesty diagnostics, and generate all artifacts."""
+    import argparse
     import sys
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
+
+    parser = argparse.ArgumentParser(
+        description="Run Module A: Tactical Index Rebalancer backtest and honesty diagnostics suite."
+    )
+    parser.parse_args()
 
     print("=" * 80)
     print("RUNNING MODULE A: TACTICAL INDEX REBALANCER BACKTEST & HONESTY SUITE")

@@ -1,0 +1,46 @@
+flowchart LR
+  subgraph SRC["Data sources"]
+    T["Kaggle stock tweets<br/>2021-10 to 2022-09"]
+    N["NewsAPI<br/>recent headlines"]
+    G["GDELT DOC API<br/>12 companies"]
+    P["yfinance<br/>daily prices"]
+    PB["Kaggle Financial PhraseBank<br/>labeled headlines<br/>(evaluation only)"]
+  end
+
+  subgraph NLP["NLP risk engine"]
+    NORM["Normalize and deduplicate<br/>one text schema"]
+    LINK["Entity linking<br/>cashtags, aliases, relevance filter,<br/>broadcast handling"]
+    SENT["FinBERT sentiment<br/>score from -1 to +1"]
+    EVT["Event classifier<br/>8 classes, rule based"]
+    IMP["Impact score 1 to 10<br/>explainable components"]
+  end
+
+  SIG[("Risk signals<br/>parquet and JSONL")]
+
+  subgraph MODA["Module A: tactical index rebalancer"]
+    RB["Daily score per stock<br/>deadband, EMA, tilt,<br/>weight bounds, turnover cap"]
+    OUT[("Weights, NAV and<br/>driving signals")]
+  end
+
+  VAL["Validation<br/>abnormal-return event study"]
+  EVAL["Evaluation<br/>benchmark and hand labels"]
+  API["FastAPI<br/>signals, replay stream,<br/>portfolio, metrics"]
+  UI["React dashboard<br/>news - signal - portfolio reaction"]
+
+  T --> NORM
+  N --> NORM
+  G --> NORM
+  NORM --> LINK --> SENT --> EVT --> IMP --> SIG
+  SIG --> RB
+  P --> RB
+  RB --> OUT
+  SIG --> VAL
+  P --> VAL
+  PB --> EVAL
+  SENT --> EVAL
+  EVT --> EVAL
+  SIG --> API
+  OUT --> API
+  VAL --> API
+  EVAL --> API
+  API --> UI

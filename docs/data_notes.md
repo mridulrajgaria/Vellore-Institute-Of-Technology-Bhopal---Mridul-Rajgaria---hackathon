@@ -17,6 +17,7 @@ This document lists every data source used by the AI/NLP Risk Engine, where it c
 - Location: `data/raw/financial_news/all-data.csv`
 - Content: 4,846 financial news headlines with a sentiment label (positive / negative / neutral), no dates or tickers. The file is not UTF-8 and must be read with `latin-1` encoding.
 - Use: evaluating the sentiment model (FinBERT) against human labels.
+- License: CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/). Attribution: Ankur Sinha (Kaggle), derived from the FinancialPhraseBank (Malo et al., 2014). Changes: 500-row stratified sample, deduplicated and cleaned. The committed sample stays under the same license.
 
 ### 2. Stock Tweets for Sentiment Analysis and Prediction
 - Kaggle dataset by Hanna Yukhymenko (CC0: Public Domain): https://www.kaggle.com/datasets/equinxx/stock-tweets-for-sentiment-analysis-and-prediction

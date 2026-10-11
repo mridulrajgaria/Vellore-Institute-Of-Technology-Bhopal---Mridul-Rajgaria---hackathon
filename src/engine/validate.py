@@ -850,9 +850,15 @@ def write_reports(
 
 def main() -> None:
     """Run full validation pipeline, print console report, and generate artifacts."""
+    import argparse
     import sys
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
+
+    parser = argparse.ArgumentParser(
+        description="Run risk engine signal validation pipeline against historical price returns."
+    )
+    parser.parse_args()
 
     prices_path = Path("data/sample/prices.parquet")
     signals_path = Path("data/processed/signals.parquet")

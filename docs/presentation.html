@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI/NLP Risk Engine: From Financial News to Portfolio Signals</title>
+<style>
+  @page {
+    size: 1920px 1080px;
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    padding: 80px 100px;
+    background: #0f172a;
+    position: relative;
+    overflow: hidden;
+  }
+  .slide::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(90deg, #2563eb, #38bdf8, #10b981);
+  }
+  .slide-header {
+    margin-bottom: 40px;
+  }
+  .slide-tag {
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #38bdf8;
+    margin-bottom: 12px;
+  }
+  .slide-title {
+    font-size: 48px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+  }
+  .slide-subtitle {
+    font-size: 24px;
+    color: #94a3b8;
+    margin-top: 10px;
+  }
+  .slide-content {
+    flex: 1;
+    display: flex;
+    gap: 50px;
+  }
+  .col-1 { flex: 1; }
+  .col-2 { flex: 2; }
+  .card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .card-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  p, li {
+    font-size: 20px;
+    line-height: 1.6;
+    color: #cbd5e1;
+  }
+  ul {
+    list-style-type: none;
+  }
+  li {
+    margin-bottom: 14px;
+    position: relative;
+    padding-left: 28px;
+  }
+  li::before {
+    content: "•";
+    position: absolute;
+    left: 8px;
+    color: #38bdf8;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+  .highlight {
+    color: #f8fafc;
+    font-weight: 600;
+  }
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .badge-blue { background: rgba(37, 99, 235, 0.2); color: #60a5fa; border: 1px solid #2563eb; }
+  .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+  .badge-amber { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+  .metric-box {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+  }
+  .metric-card {
+    flex: 1;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  .metric-value {
+    font-size: 40px;
+    font-weight: 800;
+    color: #38bdf8;
+    font-family: monospace;
+  }
+  .metric-label {
+    font-size: 16px;
+    color: #94a3b8;
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .img-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .img-card img {
+    max-width: 100%;
+    max-height: 600px;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+  .slide-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    color: #64748b;
+    border-top: 1px solid #334155;
+    padding-top: 20px;
+    margin-top: auto;
+  }
+
+  /* Cover Slide */
+  .cover {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+  }
+  .cover-title {
+    font-size: 64px;
+    font-weight: 900;
+    color: #ffffff;
+    margin-bottom: 24px;
+    letter-spacing: -1px;
+    max-width: 1400px;
+  }
+  .cover-sub {
+    font-size: 32px;
+    color: #38bdf8;
+    margin-bottom: 60px;
+    font-weight: 600;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 40px;
+    background: rgba(30, 41, 59, 0.7);
+    padding: 30px 60px;
+    border-radius: 20px;
+    border: 1px solid #334155;
+  }
+  .cover-meta-item {
+    text-align: left;
+  }
+  .cover-meta-label {
+    font-size: 16px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .cover-meta-value {
+    font-size: 22px;
+    color: #ffffff;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+  }
+  th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+    font-size: 18px;
+  }
+  th {
+    color: #38bdf8;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+  td {
+    color: #cbd5e1;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: COVER -->
+<div class="slide cover">
+  <div class="badge badge-blue" style="margin-bottom: 24px; font-size: 20px; padding: 10px 24px;">S&P Global & CRISIL Campus Hackathon 2026</div>
+  <div class="cover-title">AI/NLP Risk Engine: From Financial News to Portfolio Signals</div>
+  <div class="cover-sub">End-to-End Tactical Index Rebalancing with Transparent Explainability</div>
+  
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Candidate Name</div>
+      <div class="cover-meta-value">Mridul Rajgaria</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Campus / College</div>
+      <div class="cover-meta-value">Vellore Institute of Technology, Bhopal</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Email ID</div>
+      <div class="cover-meta-value">iammridul222@gmail.com</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Downstream Application</div>
+      <div class="cover-meta-value">Module A (Tactical Index Rebalancer)</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: PROBLEM & APPROACH -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-tag">Problem Statement & Scope</div>
+    <div class="slide-title">Turning Unstructured Financial Noise into Machine Signals</div>
+    <div class="slide-subtitle">Bridging financial NLP directly into systematic risk management and portfolio decisions</div>
+  </div>
+  <div class="slide-content">
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">The Industry Challenge</div>
+        <ul>
+          <li><span class="highlight">Information Overload:</span> Thousands of headlines, SEC filings, and tweets are generated daily; humans cannot digest them in time.</li>
+          <li><span class="highlight">Black-Box Dilemma:</span> Quantitative risk desks reject raw LLM/transformer outputs without explainable decomposition.</li>
+          <li><span class="highlight">Execution Latency:</span> Portfolio adjustments must be systematically disciplined by deadbands, bounds, and turnover caps.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Core Approach in Four Pillars</div>
+        <ul>
+          <li><span class="highlight">Explainable by Design:</span> Impact score (1–10) is a weighted sum of 4 named components.</li>
+          <li><span class="highlight">Measured, Not Assumed:</span> Evaluated on 4,838 PhraseBank headlines and 180 hand-labeled texts.</li>
+          <li><span class="highlight">Empirically Validated:</span> Backtested against actual stock price returns using event studies.</li>
+          <li><span class="highlight">100% Offline Reproducibility:</span> Bundled deterministic sample datasets require zero API keys.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-1">
+      <div class="card" style="height: 100%;">
+        <div class="card-title">Signal Specification Output</div>
+        <p style="margin-bottom: 20px;">Every processed news article or tweet emits a structured <span class="highlight">RiskSignal</span>:</p>
+        <div class="metric-box" style="flex-direction: column; gap: 16px;">
+          <div class="metric-card" style="text-align: left; padding: 20px;">
+            <div style="color: #38bdf8; font-weight: 700; font-size: 20px;">1. Sentiment Score [-1.0, +1.0]</div>
+            <div style="color: #94a3b8; font-size: 16px; margin-top: 6px;">Domain-tuned FinBERT inference with confidence score</div>
+          </div>
+          <div class="metric-card" style="text-align: left; padding: 20px;">
+            <div style="color: #10b981; font-weight: 700; font-size: 20px;">2. Event Classification (8 Classes)</div>
+            <div style="color: #94a3b8; font-size: 16px; margin-top: 6px;">Geopolitical, Macro, Credit, M&A, Product, Regulatory, Earnings, Other</div>
+          </div>
+          <div class="metric-card" style="text-align: left; padding: 20px;">
+            <div style="color: #fbbf24; font-weight: 700; font-size: 20px;">3. Severity Impact Score [1 to 10]</div>
+            <div style="color: #94a3b8; font-size: 16px; margin-top: 6px;">Event severity (35%) + Sentiment strength (30%) + Source credibility (20%) + Volume (15%)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>Slide 2 of 8</div>
+  </div>
+</div>
+
+<!-- SLIDE 3: SYSTEM ARCHITECTURE -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-tag">Architecture & Data Flow</div>
+    <div class="slide-title">End-to-End System Architecture</div>
+    <div class="slide-subtitle">From multi-source ingestion to FastAPI replay and interactive React dashboard</div>
+  </div>
+  <div class="slide-content">
+    <div class="col-2 img-card" style="background: #111827;">
+      <img src="architecture.png" alt="Architecture Diagram" style="width: 100%; max-height: 640px;">
+    </div>
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">Pipeline Architecture</div>
+        <ul>
+          <li><span class="highlight">Ingestion:</span> Twitter Kaggle (2021–22), NewsAPI (2026), GDELT 2.0, yfinance daily prices.</li>
+          <li><span class="highlight">Core NLP Engine:</span> Normalization, deduplication, cashtag entity linking, FinBERT, event classification.</li>
+          <li><span class="highlight">Downstream Module A:</span> Daily EMA aggregation, conviction tilt, turnover cap, weight boundaries.</li>
+          <li><span class="highlight">FastAPI & SSE Replay:</span> Asynchronous event-driven streaming with chronological ordering.</li>
+          <li><span class="highlight">Vite + React UI:</span> 3-column workspace (News Stream, Signal Inspector, Portfolio Reaction).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>Slide 3 of 8</div>
+  </div>
+</div>
+
+<!-- SLIDE 4: NLP RISK PIPELINE -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-tag">NLP Risk Pipeline Details</div>
+    <div class="slide-title">Entity Linking, Sentiment & Explainable Impact Scoring</div>
+    <div class="slide-subtitle">Strict entity resolution, domain FinBERT, and auditable linear impact scoring</div>
+  </div>
+  <div class="slide-content">
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">Entity Linking & Attribution</div>
+        <ul>
+          <li><span class="highlight">Cashtag & Alias Matching:</span> Disambiguates symbols (e.g. $DIS, $AAPL) and company aliases.</li>
+          <li><span class="highlight">Cross-Label Deduplication:</span> Resolves scraped duplicate tweets across tickers (preserving clean attribution).</li>
+          <li><span class="highlight">Broadcast Tweet Handling:</span> Identifies multi-ticker tweets and scales impact proportionally.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">FinBERT Sentiment Analysis</div>
+        <ul>
+          <li>Pretrained <span class="highlight">ProsusAI/finbert</span> fine-tuned on financial phraseology.</li>
+          <li>Generates signed score $s \in [-1.0, +1.0]$ with softmax confidence.</li>
+          <li>Persistent disk cache for fast zero-overhead deterministic replay.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">Explainable Impact Arithmetic</div>
+        <p style="font-size: 18px; margin-bottom: 16px;">Configured in <span class="highlight">config/engine.yaml</span> as a strict linear combination:</p>
+        <div style="background: #0f172a; padding: 20px; border-radius: 12px; font-family: monospace; font-size: 18px; color: #38bdf8; border: 1px solid #334155; margin-bottom: 20px;">
+          Impact = 1.0 + 9.0 * (<br>
+          &nbsp;&nbsp;0.35 * EventSeverity +<br>
+          &nbsp;&nbsp;0.30 * SentimentStrength +<br>
+          &nbsp;&nbsp;0.20 * SourceCredibility +<br>
+          &nbsp;&nbsp;0.15 * VolumeScore<br>
+          )
+        </div>
+        <ul>
+          <li><span class="highlight">Event Severity:</span> Regulatory/Credit = 0.9, Earnings = 0.7, Product = 0.5.</li>
+          <li><span class="highlight">Source Credibility:</span> GDELT/News = 0.85, Verified NewsAPI = 0.80, Tweets = 0.50.</li>
+          <li><span class="highlight">Auditability:</span> Every single score can be broken down in the UI's "Show the math" modal.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>Slide 4 of 8</div>
+  </div>
+</div>
+
+<!-- SLIDE 5: REBALANCING LOGIC -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-tag">Module A Rebalancer</div>
+    <div class="slide-title">Tactical Index Rebalancer: Systematic Rules & Math</div>
+    <div class="slide-subtitle">14-asset US mega-cap index dynamically tilted by sentiment momentum</div>
+  </div>
+  <div class="slide-content">
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">Daily Scoring & Momentum Smoothing</div>
+        <ul>
+          <li><span class="highlight">Daily Aggregation:</span> Scores aggregated across ticker-day using impact-weighted sentiment.</li>
+          <li><span class="highlight">Asymmetric Negative Weighting:</span> Negative news receives 1.25x weight multiplier (loss aversion).</li>
+          <li><span class="highlight">EMA Smoothing:</span> 2-day half-life exponential decay prevents whipsaws:
+            <div style="font-family: monospace; color: #38bdf8; margin-top: 8px;">EMA_t = alpha * Score_t + (1 - alpha) * EMA_{t-1}</div>
+          </li>
+          <li><span class="highlight">Deadband (+/-0.20):</span> Filters out low-conviction noise around neutrality.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Index Universe (14 Mega-Caps)</div>
+        <p style="font-size: 18px; color: #94a3b8;">TSLA, AAPL, MSFT, AMZN, META, GOOGL, NFLX, AMD, PG, KO, DIS, BA, COST, PYPL (Equal Base Weight: 7.14%).</p>
+      </div>
+    </div>
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">Allocation & Risk Controls</div>
+        <ul>
+          <li><span class="highlight">Conviction Tilt ($k = 1.5$):</span>
+            <div style="font-family: monospace; color: #38bdf8; margin: 8px 0;">w_raw = w_base * (1.0 + k * EMA)</div>
+          </li>
+          <li><span class="highlight">Strict Boundary Box:</span> Weights clamped within $[0.5 \times w_{base}, 2.0 \times w_{base}]$:
+            <div style="font-family: monospace; color: #10b981; margin: 8px 0;">3.57% <= Weight_i <= 14.29%</div>
+          </li>
+          <li><span class="highlight">Turnover Cap (10% daily):</span> Prevents transaction cost erosion from high-frequency reallocations.</li>
+          <li><span class="highlight">Transaction Frictions:</span> Institutional 5 bps deducted on all rebalanced turnover.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Operational Safeguards</div>
+        <p style="font-size: 18px;">If market data is missing or signals drop to zero, portfolio gracefully reverts towards equal-weight benchmark.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>Slide 5 of 8</div>
+  </div>
+</div>
+
+<!-- SLIDE 6: VALIDATION EVENT STUDY -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-tag">Empirical Validation</div>
+    <div class="slide-title">Abnormal Return Event Study: Testing Signal Efficacy</div>
+    <div class="slide-subtitle">Rigorous statistical validation against 2,072 ticker-days of price returns</div>
+  </div>
+  <div class="slide-content">
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">Key Statistical Findings</div>
+        <ul>
+          <li><span class="highlight">Spearman Rank Correlation:</span> $\rho = 0.159$ ($p = 3.08 \times 10^{-13}$, 95% CI $[0.122, 0.194]$) between impact score and abnormal price move $|AR_0|$.</li>
+          <li><span class="highlight">Monotonic Quintile Scaling:</span> Absolute abnormal return scales monotonically from <span class="highlight">1.21% (Q1) to 2.36% (Q5)</span>.</li>
+          <li><span class="highlight">Top vs Bottom Spread:</span> $+1.15\%$ (95% CI $[+0.81\%, +1.57\%]$).</li>
+          <li><span class="highlight">Robust to Confounders:</span> Partial correlation remains $0.116$ controlling for volatility; survives TSLA exclusion ($\rho = 0.121$).</li>
+          <li><span class="highlight">Placebo Permutation Test:</span> 1,000 within-ticker shuffles yield empirical $p = 0.001$.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Sentiment Directionality</div>
+        <p style="font-size: 18px;">Negative sentiment signals preceded a <span class="highlight">-1.11%</span> 3-day abnormal return ($CAR(0,2)$), compared to $+0.08\%$ for positive signals (Long-Short spread $+1.19\%$).</p>
+      </div>
+    </div>
+    <div class="col-1 img-card">
+      <img src="validation_impact_quintiles.png" alt="Validation Quintiles" style="max-height: 580px;">
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>Slide 6 of 8</div>
+  </div>
+</div>
+
+<!-- SLIDE 7: BACKTEST RESULTS & HONESTY SUITE -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-tag">Backtest & Honesty Reporting</div>
+    <div class="slide-title">Module A Backtest Results: Honest Reporting</div>
+    <div class="slide-subtitle">1-year simulation (Oct 2021 to Sep 2022) during the tech macro downturn</div>
+  </div>
+  <div class="slide-content">
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">1-Year Performance Comparison</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Strategy</th>
+              <th>Cum. Return</th>
+              <th>Sharpe</th>
+              <th>Max DD</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tactical (5 bps Net)</td>
+              <td>-28.91%</td>
+              <td>-0.92</td>
+              <td>-37.95%</td>
+            </tr>
+            <tr>
+              <td>Equal Weight (Daily)</td>
+              <td>-28.53%</td>
+              <td>-0.91</td>
+              <td>-37.39%</td>
+            </tr>
+            <tr>
+              <td>Equal Weight (B&H)</td>
+              <td>-27.38%</td>
+              <td>-0.93</td>
+              <td>-35.56%</td>
+            </tr>
+            <tr>
+              <td>S&P 500 (SPY)</td>
+              <td>-15.51%</td>
+              <td>-0.71</td>
+              <td>-24.37%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">Honest Diagnostic Takeaways</div>
+        <ul>
+          <li><span class="highlight">No Outperformance Claimed:</span> The strategy tracked equal-weight in a macro bear market (Placebo percentile: 48.5%).</li>
+          <li><span class="highlight">Flat Sensitivity Grid:</span> Across tilt $k \in [0.75, 3.0]$ and half-life $[1, 5]$d, returns remained flat between -28.6% and -29.2%.</li>
+          <li><span class="highlight">No P-Hacking:</span> Parameters pre-declared and frozen prior to evaluation.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-1 img-card">
+      <img src="module_a_performance.png" alt="Module A Performance" style="max-height: 580px;">
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>Slide 7 of 8</div>
+  </div>
+</div>
+
+<!-- SLIDE 8: LIMITATIONS & FUTURE ROADMAP -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-tag">Evaluation & Roadmap</div>
+    <div class="slide-title">Model Limitations, Learnings & Domain Impact</div>
+    <div class="slide-subtitle">Transparent appraisal of current bounds and actionable future extensions</div>
+  </div>
+  <div class="slide-content">
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">Identified Model Limitations</div>
+        <ul>
+          <li><span class="highlight">Benchmark vs Real World Gap:</span> FinBERT achieved 88.9% on FinancialPhraseBank, but dropped to 61.1% on real social chatter (tweets: 53.5%).</li>
+          <li><span class="highlight">Positive Recall Deficit:</span> FinBERT missed subtle positive guidance (positive recall: 0.30 vs negative precision: 0.85).</li>
+          <li><span class="highlight">Single Market Regime:</span> 2021–2022 was dominated by macro rate hikes, dampening single-stock alpha.</li>
+          <li><span class="highlight">Class Imbalance:</span> Credit Event is naturally rare in mega-cap equity feeds (8 signals).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-1">
+      <div class="card">
+        <div class="card-title">Enterprise Domain Impact & Module B</div>
+        <ul>
+          <li><span class="highlight">Immediate Desk Utility:</span> Delivers structured, auditable inputs for risk management and real-time news monitoring.</li>
+          <li><span class="highlight">Module B Readiness:</span> The exact same signal stream directly feeds wholesale loan stress testing (credit migration, LGD shifts).</li>
+          <li><span class="highlight">Production Architecture:</span> Fully containerized with Docker, offline sample dataset, zero lookahead bias, and 173 backend + 4 frontend tests.</li>
+        </ul>
+      </div>
+      <div class="card" style="background: rgba(37, 99, 235, 0.1); border-color: #2563eb;">
+        <div class="card-title" style="color: #60a5fa;">Submission Summary</div>
+        <p style="font-size: 18px; color: #e2e8f0;">Complete codebase, documentation, and prebuilt dashboard submitted for the S&P Global and CRISIL Campus Hackathon 2026.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div>Candidate: Mridul Rajgaria (VIT Bhopal) — Final Round Submission</div>
+    <div>Slide 8 of 8</div>
+  </div>
+</div>
+
+</body>
+</html>
