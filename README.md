@@ -78,7 +78,7 @@ On top of the engine I built **Module A: a tactical index rebalancer**. It keeps
 | Validation and evaluation | scikit-learn, SciPy, matplotlib |
 | API | FastAPI, Uvicorn, Server-Sent Events for replay |
 | Frontend | React 18, TypeScript, Vite, Tailwind CSS, Apache ECharts, Vitest (fonts and charts are bundled, no CDN) |
-| Quality | pytest backend suite (164 tests at the time of writing), 4 frontend tests, deterministic seeds, no look-ahead tests |
+| Quality | pytest backend suite (164 tests at the time of writing), 10 frontend tests, deterministic seeds, no look-ahead tests |
 | Packaging | Docker, docker compose |
 
 ### Repository layout
@@ -126,16 +126,16 @@ All data is public or free-tier. No proprietary data is used. Full notes and cle
 
 ### Option A: Docker
 ```bash
-git clone <REPOSITORY_URL>
-cd <REPOSITORY_FOLDER>
+git clone https://github.com/mridulrajgaria/Vellore-Institute-Of-Technology-Bhopal---Mridul-Rajgaria---hackathon.git
+cd Vellore-Institute-Of-Technology-Bhopal---Mridul-Rajgaria---hackathon
 docker compose up --build
 ```
 Open http://127.0.0.1:8000/ .
 
 ### Option B: Python (Windows PowerShell)
 ```powershell
-git clone <REPOSITORY_URL>
-cd <REPOSITORY_FOLDER>
+git clone https://github.com/mridulrajgaria/Vellore-Institute-Of-Technology-Bhopal---Mridul-Rajgaria---hackathon.git
+cd Vellore-Institute-Of-Technology-Bhopal---Mridul-Rajgaria---hackathon
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements-runtime.txt
