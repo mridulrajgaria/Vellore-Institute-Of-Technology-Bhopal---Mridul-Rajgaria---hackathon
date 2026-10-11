@@ -15,22 +15,22 @@ export const CollapsibleHoldingsTable: React.FC<CollapsibleHoldingsTableProps> =
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <div className="py-2 px-6 max-w-[1600px] mx-auto border-t border-border/30">
+    <div className="mt-6 pt-5 px-6 max-w-[1600px] mx-auto border-t border-border">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-2.5 rounded bg-surface/50 hover:bg-surface-secondary text-xs text-text-secondary hover:text-text-primary transition-colors border border-border/40 font-mono"
+        className="w-full flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-surface-secondary text-xs text-text-secondary hover:text-text-primary transition-colors border border-border font-sans shadow-xs cursor-pointer"
       >
         <div className="flex items-center gap-2">
-          {isOpen ? <ChevronDown className="h-4 w-4 text-accent" /> : <ChevronRight className="h-4 w-4" />}
+          {isOpen ? <ChevronDown className="h-4 w-4 text-accent" /> : <ChevronRight className="h-4 w-4 text-text-muted" />}
           <Table className="h-3.5 w-3.5 text-accent" />
           <span className="font-semibold text-text-primary">
             Full Holdings Table (14 assets) — {snapshot?.date || 'Historical Snapshot'}
           </span>
-          <span className="text-[11px] text-text-secondary/70">
+          <span className="text-[11px] text-text-secondary">
             • Prev Wt, Current Wt, Change (bps), ACTION
           </span>
         </div>
-        <span className="text-[11px] text-text-secondary">
+        <span className="text-[11px] font-medium text-accent">
           {isOpen ? 'Click to hide table' : 'Click to expand full table'}
         </span>
       </button>

@@ -111,12 +111,12 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
   return (
     <div className="min-h-screen bg-background text-text-primary">
       {/* Sticky top nav */}
-      <div className="sticky top-0 z-40 bg-surface/90 backdrop-blur-sm border-b border-border/40 px-6 py-3">
+      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-border px-6 py-3 shadow-xs">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <button
             onClick={onBack}
             data-testid="back-to-dashboard-btn"
-            className="flex items-center gap-1.5 text-xs font-mono text-accent hover:text-accent/80 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-mono font-medium text-accent hover:text-blue-700 transition-colors cursor-pointer"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>← Back to dashboard</span>
@@ -130,7 +130,7 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
       {/* Main Single Scrollable Page */}
       <main className="max-w-4xl mx-auto px-6 py-8 space-y-10 font-sans text-sm leading-relaxed">
         {/* Title */}
-        <div className="border-b border-border/40 pb-5">
+        <div className="border-b border-border pb-5">
           <div className="flex items-center gap-2 mb-2">
             <BookOpen className="h-5 w-5 text-accent" />
             <h1 className="text-xl font-bold text-text-primary tracking-tight">
@@ -148,7 +148,7 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
             <span className="text-accent font-mono text-xs font-bold">A.</span>
             System Architecture in 4 Sentences
           </h2>
-          <div className="p-4 rounded-lg bg-surface border border-border/50 space-y-2 text-xs leading-relaxed text-text-secondary">
+          <div className="p-4 rounded-lg bg-white border border-border space-y-2 text-xs leading-relaxed text-text-secondary shadow-xs">
             <p>
               1. The AI Risk Engine ingests financial headlines and social tweets prior to the 21:00 UTC cutoff and maps them to an index universe of 14 large-cap equities.
             </p>
@@ -171,7 +171,7 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
             Data Sources and Evaluated Periods
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div className="p-3.5 rounded-lg bg-surface border border-border/40 space-y-1.5">
+            <div className="p-4 rounded-lg bg-white border border-border space-y-1.5 shadow-xs">
               <span className="text-[10px] font-mono uppercase text-accent font-bold tracking-wider">
                 Primary Backtest Replay Period
               </span>
@@ -186,7 +186,7 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
               </div>
             </div>
 
-            <div className="p-3.5 rounded-lg bg-surface border border-border/40 space-y-1.5">
+            <div className="p-4 rounded-lg bg-white border border-border space-y-1.5 shadow-xs">
               <span className="text-[10px] font-mono uppercase text-accent font-bold tracking-wider">
                 Out-of-Sample News Validation Period
               </span>
@@ -209,9 +209,9 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
             <span className="text-accent font-mono text-xs font-bold">C.</span>
             How Accurate is the AI?
           </h2>
-          <div className="p-4 rounded-lg bg-surface border border-border/50 space-y-3.5 text-xs text-text-secondary">
+          <div className="p-4 rounded-lg bg-white border border-border space-y-3.5 text-xs text-text-secondary shadow-xs">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-3 rounded bg-surface-secondary/30 border border-border/30">
+              <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
                 <span className="text-[11px] font-semibold text-text-primary block mb-1">
                   Public Benchmark (Financial PhraseBank)
                 </span>
@@ -226,13 +226,13 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
                 </div>
               </div>
 
-              <div className="p-3 rounded bg-surface-secondary/30 border border-border/30">
+              <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
                 <span className="text-[11px] font-semibold text-text-primary block mb-1">
                   Our Hand-Labeled Production Test Set
                 </span>
                 <div
                   data-testid="hand-accuracy"
-                  className="font-mono text-lg font-bold text-amber-400"
+                  className="font-mono text-lg font-bold text-amber-600"
                 >
                   {handAcc} Accuracy
                 </div>
@@ -242,13 +242,13 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
               </div>
             </div>
 
-            <div className="pt-2 border-t border-border/20 text-xs leading-relaxed">
+            <div className="pt-2 border-t border-border text-xs leading-relaxed">
               <span className="font-semibold text-text-primary">Performance Breakdown by Source: </span>
               GDELT news articles reached <span data-testid="hand-gdelt-acc" className="font-mono font-medium text-text-primary">{gdeltAcc}</span> accuracy, NewsAPI headlines achieved <span data-testid="hand-newsapi-acc" className="font-mono font-medium text-text-primary">{newsApiAcc}</span>, while raw Twitter social posts scored <span data-testid="hand-twitter-acc" className="font-mono font-medium text-text-primary">{twitterAcc}</span> (with event categorization achieving a <span data-testid="event-macro-f1" className="font-mono font-medium text-text-primary">{eventMacroF1}</span> macro F1 on N=<span data-testid="event-n">{eventTotal}</span>).
             </div>
 
-            <div className="p-3 rounded bg-accent/5 border border-accent/20 text-xs text-text-primary leading-relaxed font-sans">
-              <strong>Why they differ: </strong>
+            <div className="p-3 rounded-lg bg-blue-50/70 border border-blue-200 text-xs text-slate-800 leading-relaxed font-sans">
+              <strong className="text-blue-900">Why they differ: </strong>
               Social media tweets contain colloquial language, sarcasm, emojis, and stock ticker spam, making them vastly noisier and harder to classify accurately than polished financial news sentences from published research benchmarks.
             </div>
           </div>
@@ -260,40 +260,40 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
             <span className="text-accent font-mono text-xs font-bold">D.</span>
             Do the Signals Mean Anything? (Quintile Price Reactions)
           </h2>
-          <div className="p-4 rounded-lg bg-surface border border-border/50 space-y-3 text-xs text-text-secondary">
+          <div className="p-4 rounded-lg bg-white border border-border space-y-3 text-xs text-text-secondary shadow-xs">
             <p>
               To verify whether impact scores contain true signal or random noise, we stratified all pre-cutoff events into 5 quintiles (Q1 lowest impact to Q5 highest impact) and measured the subsequent absolute price movement:
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-center font-mono">
-              <div className="p-2 rounded bg-surface-secondary/40 border border-border/30">
+              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
                 <div className="text-[10px] text-text-secondary uppercase">Q1 (Low)</div>
                 <div data-testid="quintile-q1-abs" className="text-sm font-bold text-text-primary mt-1">{q1Abs}</div>
                 <div className="text-[10px] text-text-secondary">Impact ~{q1Imp}</div>
               </div>
-              <div className="p-2 rounded bg-surface-secondary/40 border border-border/30">
+              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
                 <div className="text-[10px] text-text-secondary uppercase">Q2</div>
                 <div data-testid="quintile-q2-abs" className="text-sm font-bold text-text-primary mt-1">{q2Abs}</div>
                 <div className="text-[10px] text-text-secondary">Impact ~{q2Imp}</div>
               </div>
-              <div className="p-2 rounded bg-surface-secondary/40 border border-border/30">
+              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
                 <div className="text-[10px] text-text-secondary uppercase">Q3</div>
                 <div data-testid="quintile-q3-abs" className="text-sm font-bold text-text-primary mt-1">{q3Abs}</div>
                 <div className="text-[10px] text-text-secondary">Impact ~{q3Imp}</div>
               </div>
-              <div className="p-2 rounded bg-surface-secondary/40 border border-border/30">
+              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
                 <div className="text-[10px] text-text-secondary uppercase">Q4</div>
                 <div data-testid="quintile-q4-abs" className="text-sm font-bold text-text-primary mt-1">{q4Abs}</div>
                 <div className="text-[10px] text-text-secondary">Impact ~{q4Imp}</div>
               </div>
-              <div className="p-2 rounded bg-surface-secondary/40 border border-border/30">
-                <div className="text-[10px] text-text-secondary uppercase">Q5 (High)</div>
-                <div data-testid="quintile-q5-abs" className="text-sm font-bold text-accent mt-1">{q5Abs}</div>
-                <div className="text-[10px] text-text-secondary">Impact ~{q5Imp}</div>
+              <div className="p-2.5 rounded-lg bg-blue-50/70 border border-blue-200">
+                <div className="text-[10px] text-blue-700 font-semibold uppercase">Q5 (High)</div>
+                <div data-testid="quintile-q5-abs" className="text-sm font-bold text-blue-700 mt-1">{q5Abs}</div>
+                <div className="text-[10px] text-blue-600">Impact ~{q5Imp}</div>
               </div>
             </div>
 
-            <div className="p-3 rounded bg-surface-secondary/20 border border-border/30 text-xs space-y-1.5">
+            <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 text-xs space-y-1.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span>
                   <strong className="text-text-primary">Q5 vs Q1 Volatility Spread: </strong>
@@ -319,56 +319,56 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
             <span className="text-accent font-mono text-xs font-bold">E.</span>
             Did the Portfolio Beat Equal Weight?
           </h2>
-          <div className="p-4 rounded-lg bg-surface border border-border/50 space-y-3 text-xs text-text-secondary">
+          <div className="p-4 rounded-lg bg-white border border-border space-y-3 text-xs text-text-secondary shadow-xs">
             {/* Plain language verdict */}
-            <div className="p-3 rounded bg-red-500/10 border border-red-500/30 text-red-300 leading-relaxed font-sans flex items-start gap-2">
+            <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-red-800 leading-relaxed font-sans flex items-start gap-2.5">
               <TrendingDown className="h-4 w-4 shrink-0 mt-0.5 text-negative" />
               <span>
-                <strong>Plain verdict: The strategy did not outperform. </strong>
-                Over the 1-year replay period, the AI-tilted portfolio achieved a cumulative return of <span data-testid="strat-cum-ret" className="font-mono font-bold">{stratCumRet}</span>, slightly trailing the equal-weight benchmark (<span data-testid="ew-cum-ret" className="font-mono font-bold">{ewCumRet}</span>) while SPY returned <span data-testid="spy-cum-ret" className="font-mono font-bold">{spyCumRet}</span>.
+                <strong className="text-red-900">Plain verdict: The strategy did not outperform. </strong>
+                Over the 1-year replay period, the AI-tilted portfolio achieved a cumulative return of <span data-testid="strat-cum-ret" className="font-mono font-bold text-negative">{stratCumRet}</span>, slightly trailing the equal-weight benchmark (<span data-testid="ew-cum-ret" className="font-mono font-bold text-negative">{ewCumRet}</span>) while SPY returned <span data-testid="spy-cum-ret" className="font-mono font-bold text-negative">{spyCumRet}</span>.
               </span>
             </div>
 
             {/* Performance table */}
             <div className="overflow-x-auto">
-              <table className="w-full text-left font-mono text-[11px] border border-border/40">
-                <thead className="bg-surface-secondary/50 text-text-secondary border-b border-border/40">
+              <table className="w-full text-left font-mono text-[11px] border border-border rounded-md overflow-hidden">
+                <thead className="bg-slate-50 text-slate-600 border-b border-border">
                   <tr>
-                    <th className="p-2">Strategy Variant</th>
-                    <th className="p-2">Cum Return</th>
-                    <th className="p-2">Max Drawdown</th>
-                    <th className="p-2">Sharpe</th>
-                    <th className="p-2">Daily Turnover</th>
+                    <th className="p-2.5 font-semibold">Strategy Variant</th>
+                    <th className="p-2.5 font-semibold">Cum Return</th>
+                    <th className="p-2.5 font-semibold">Max Drawdown</th>
+                    <th className="p-2.5 font-semibold">Sharpe</th>
+                    <th className="p-2.5 font-semibold">Daily Turnover</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/20">
+                <tbody className="divide-y divide-slate-100 bg-white">
                   <tr>
-                    <td className="p-2 font-bold text-accent">AI Rebalancer (5 bps)</td>
-                    <td className="p-2 font-bold text-negative">{stratCumRet}</td>
-                    <td data-testid="strat-max-dd" className="p-2">{stratDd}</td>
-                    <td data-testid="strat-sharpe" className="p-2">{stratSharpe}</td>
-                    <td data-testid="strat-turnover" className="p-2">{avgTurnover}</td>
+                    <td className="p-2.5 font-bold text-accent">AI Rebalancer (5 bps)</td>
+                    <td className="p-2.5 font-bold text-negative">{stratCumRet}</td>
+                    <td data-testid="strat-max-dd" className="p-2.5 text-text-secondary">{stratDd}</td>
+                    <td data-testid="strat-sharpe" className="p-2.5 text-text-secondary">{stratSharpe}</td>
+                    <td data-testid="strat-turnover" className="p-2.5 text-text-secondary">{avgTurnover}</td>
                   </tr>
                   <tr>
-                    <td className="p-2 text-text-primary">Equal-Weight (5 bps)</td>
-                    <td className="p-2 text-negative">{ewCumRet}</td>
-                    <td data-testid="ew-max-dd" className="p-2">{ewDd}</td>
-                    <td data-testid="ew-sharpe" className="p-2">{ewSharpe}</td>
-                    <td className="p-2">—</td>
+                    <td className="p-2.5 font-medium text-text-primary">Equal-Weight (5 bps)</td>
+                    <td className="p-2.5 text-negative">{ewCumRet}</td>
+                    <td data-testid="ew-max-dd" className="p-2.5 text-text-secondary">{ewDd}</td>
+                    <td data-testid="ew-sharpe" className="p-2.5 text-text-secondary">{ewSharpe}</td>
+                    <td className="p-2.5 text-text-muted">—</td>
                   </tr>
                   <tr>
-                    <td className="p-2 text-text-secondary">SPY Benchmark</td>
-                    <td className="p-2 text-negative">{spyCumRet}</td>
-                    <td data-testid="spy-max-dd" className="p-2">{spyDd}</td>
-                    <td data-testid="spy-sharpe" className="p-2">{spySharpe}</td>
-                    <td className="p-2">—</td>
+                    <td className="p-2.5 text-text-secondary">SPY Benchmark</td>
+                    <td className="p-2.5 text-negative">{spyCumRet}</td>
+                    <td data-testid="spy-max-dd" className="p-2.5 text-text-secondary">{spyDd}</td>
+                    <td data-testid="spy-sharpe" className="p-2.5 text-text-secondary">{spySharpe}</td>
+                    <td className="p-2.5 text-text-muted">—</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             {/* Placebo test explanation */}
-            <div className="pt-2 text-xs leading-relaxed">
+            <div className="pt-2 text-xs leading-relaxed text-text-secondary">
               <span className="font-semibold text-text-primary">Placebo Null Hypothesis Test: </span>
               In a <span data-testid="placebo-n">{placeboN}</span>-iteration Monte Carlo permutation test where signals were randomly shuffled across dates and tickers, the actual strategy Sharpe ratio fell in the <strong data-testid="placebo-percentile" className="text-text-primary font-mono">{placeboPct} percentile</strong>. This indicates that portfolio performance was statistically indistinguishable from chance; daily transaction friction ({avgTurnover} turnover) and broad macro market decline outweighed the modest signal edge.
             </div>
@@ -381,35 +381,35 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
             <span className="text-accent font-mono text-xs font-bold">F.</span>
             Key Limitations & Risks
           </h2>
-          <div className="p-4 rounded-lg bg-surface border border-border/50 text-xs text-text-secondary space-y-2.5">
-            <div className="flex items-start gap-2">
-              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400 mt-0.5" />
+          <div className="p-4 rounded-lg bg-white border border-border text-xs text-text-secondary space-y-2.5 shadow-xs">
+            <div className="flex items-start gap-2.5 p-2 rounded bg-amber-50/50 border border-amber-200/60">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
               <div>
-                <strong className="text-text-primary">One year of tweets: </strong>
+                <strong className="text-amber-950">One year of tweets: </strong>
                 Social sentiment data covers only Oct 2021 through Sep 2022, representing an isolated 12-month historical window.
               </div>
             </div>
 
-            <div className="flex items-start gap-2">
-              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400 mt-0.5" />
+            <div className="flex items-start gap-2.5 p-2 rounded bg-amber-50/50 border border-amber-200/60">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
               <div>
-                <strong className="text-text-primary">One market regime: </strong>
+                <strong className="text-amber-950">One market regime: </strong>
                 The backtest took place during a persistent tech bear market marked by rapid Federal Reserve interest rate hikes; the model has not been evaluated in sustained bull or sideways regimes.
               </div>
             </div>
 
-            <div className="flex items-start gap-2">
-              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400 mt-0.5" />
+            <div className="flex items-start gap-2.5 p-2 rounded bg-amber-50/50 border border-amber-200/60">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
               <div>
-                <strong className="text-text-primary">Small hand-labeled sample: </strong>
+                <strong className="text-amber-950">Small hand-labeled sample: </strong>
                 Our ground-truth qualitative evaluation contains 180 verified examples, offering targeted domain inspection rather than large-sample statistical guarantees.
               </div>
             </div>
 
-            <div className="flex items-start gap-2">
-              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400 mt-0.5" />
+            <div className="flex items-start gap-2.5 p-2 rounded bg-amber-50/50 border border-amber-200/60">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
               <div>
-                <strong className="text-text-primary">FinBERT misreads numbers vs expectations: </strong>
+                <strong className="text-amber-950">FinBERT misreads numbers vs expectations: </strong>
                 Standard NLP models evaluate lexical tone without benchmarking against financial consensus. For instance, "Earnings grew 10%" is scored as positive, even if consensus expected 15% and the stock plummeted.
               </div>
             </div>
@@ -417,10 +417,10 @@ export const MethodologyPage: React.FC<MethodologyPageProps> = ({ metrics, onBac
         </section>
 
         {/* Bottom Back Button */}
-        <div className="pt-6 border-t border-border/40 text-center">
+        <div className="pt-6 border-t border-border text-center">
           <button
             onClick={onBack}
-            className="px-5 py-2 rounded-lg bg-surface-secondary hover:bg-border/60 text-text-primary text-xs font-mono font-medium border border-border/50 transition-colors cursor-pointer"
+            className="px-5 py-2.5 rounded-lg bg-white hover:bg-slate-50 text-text-primary text-xs font-mono font-medium border border-border shadow-xs transition-colors cursor-pointer"
           >
             ← Return to Live Index Dashboard
           </button>

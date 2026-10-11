@@ -11,20 +11,20 @@ interface WeightsAreaChartProps {
 // Muted, color-blind-safe categorical palette designed for dark theme.
 // Neighboring bands alternate cool and warm tones for maximum adjacent contrast.
 const TICKER_COLORS: Record<string, string> = {
-  AMD: '#38BDF8',   // Sky blue
-  BA: '#F59E0B',    // Amber
-  KO: '#34D399',    // Emerald
-  COST: '#EC4899',  // Pink / Rose
-  PG: '#60A5FA',    // Light Blue
-  MSFT: '#FB923C',  // Warm Orange
-  TSLA: '#A78BFA',  // Violet
-  DIS: '#2DD4BF',   // Teal
-  PYPL: '#E879F9',  // Fuchsia
-  GOOGL: '#FACC15', // Gold
-  AMZN: '#818CF8',  // Indigo
-  AAPL: '#4ADE80',  // Mint Green
-  META: '#F43F5E',  // Coral / Red
-  NFLX: '#94A3B8',  // Cool Slate
+  AMD: '#2563eb',   // Royal blue
+  BA: '#d97706',    // Amber
+  KO: '#059669',    // Emerald
+  COST: '#db2777',  // Rose
+  PG: '#0284c7',    // Sky blue
+  MSFT: '#ea580c',  // Orange
+  TSLA: '#7c3aed',  // Violet
+  DIS: '#0d9488',   // Teal
+  PYPL: '#c026d3',  // Fuchsia
+  GOOGL: '#ca8a04', // Gold
+  AMZN: '#4f46e5',  // Indigo
+  AAPL: '#16a34a',  // Green
+  META: '#e11d48',  // Crimson
+  NFLX: '#64748b',  // Slate
 };
 
 // Universe ordered by historical average portfolio weight (NFLX lowest up to AMD highest)
@@ -52,7 +52,7 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
     if (!chartRef.current || weightsData.length === 0) return;
 
     if (!chartInstance.current) {
-      chartInstance.current = echarts.init(chartRef.current, 'dark');
+      chartInstance.current = echarts.init(chartRef.current);
       chartInstance.current.on('click', (params: any) => {
         if (params.name && typeof params.name === 'string') {
           onSelectDate(params.name);
@@ -91,13 +91,13 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
       stack: 'Total',
       smooth: true,
       lineStyle: {
-        width: 0.8,
-        color: TICKER_COLORS[tk] || '#94A3B8',
+        width: 1,
+        color: TICKER_COLORS[tk] || '#64748b',
       },
       showSymbol: false,
       areaStyle: {
-        opacity: 0.75,
-        color: TICKER_COLORS[tk] || '#94A3B8',
+        opacity: 0.7,
+        color: TICKER_COLORS[tk] || '#64748b',
       },
       emphasis: {
         focus: 'series',
@@ -113,12 +113,12 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
         left: '16px',
         top: '12px',
         textStyle: {
-          color: '#F1F5F9',
+          color: '#0f172a',
           fontSize: 14,
           fontWeight: 600,
         },
         subtextStyle: {
-          color: '#94A3B8',
+          color: '#64748b',
           fontSize: 11,
         },
       },
@@ -134,26 +134,27 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
         itemGap: 10,
         data: tickers,
         textStyle: {
-          color: '#94A3B8',
+          color: '#64748b',
           fontSize: 11,
-          fontFamily: "'IBM Plex Mono', monospace",
+          fontFamily: "'Geist Mono', monospace",
         },
       },
       tooltip: {
         trigger: 'axis',
-        backgroundColor: '#11161B',
-        borderColor: '#252C34',
+        backgroundColor: '#ffffff',
+        borderColor: '#e2e8f0',
         borderWidth: 1,
-        padding: [8, 12],
+        padding: [10, 14],
+        extraCssText: 'box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04); border-radius: 8px;',
         textStyle: {
-          color: '#F1F5F9',
-          fontFamily: "'IBM Plex Mono', monospace",
+          color: '#0f172a',
+          fontFamily: "'Geist Mono', monospace",
           fontSize: 11,
         },
         axisPointer: {
           type: 'line',
           lineStyle: {
-            color: '#38BDF8',
+            color: '#2563eb',
             width: 1.5,
             type: 'dashed',
           },
@@ -161,12 +162,12 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
         formatter: (params: any) => {
           if (!Array.isArray(params) || params.length === 0) return '';
           const dateStr = params[0].axisValue;
-          let html = `<div style="font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:12px; margin-bottom:6px; color:#38BDF8;">${dateStr}</div>`;
-          html += `<div style="display:grid; grid-template-columns: repeat(2, minmax(110px, 1fr)); gap: 3px 12px; font-family:'IBM Plex Mono', monospace; font-size:11px;">`;
+          let html = `<div style="font-family:'Geist Mono', monospace; font-weight:700; font-size:12px; margin-bottom:6px; color:#2563eb;">${dateStr}</div>`;
+          html += `<div style="display:grid; grid-template-columns: repeat(2, minmax(110px, 1fr)); gap: 3px 12px; font-family:'Geist Mono', monospace; font-size:11px;">`;
           params.forEach((item: any) => {
             html += `<div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="color:${item.color}; font-weight:600;">${item.seriesName}:</span>
-              <span style="color:#F1F5F9; font-weight:500; margin-left:6px;">${Number(item.value).toFixed(2)}%</span>
+              <span style="color:#0f172a; font-weight:600; margin-left:6px;">${Number(item.value).toFixed(2)}%</span>
             </div>`;
           });
           html += `</div>`;
@@ -184,11 +185,11 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
         type: 'category',
         boundaryGap: false,
         data: dates,
-        axisLine: { lineStyle: { color: '#252C34' } },
+        axisLine: { lineStyle: { color: '#e2e8f0' } },
         axisLabel: {
-          color: '#94A3B8',
+          color: '#64748b',
           fontSize: 10,
-          fontFamily: "'IBM Plex Mono', monospace",
+          fontFamily: "'Geist Mono', monospace",
           formatter: (val: string) => val.slice(5), // MM-DD
         },
       },
@@ -196,12 +197,12 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
         type: 'value',
         min: 0,
         max: 100,
-        axisLine: { lineStyle: { color: '#252C34' } },
-        splitLine: { lineStyle: { color: '#171D23' } },
+        axisLine: { lineStyle: { color: '#e2e8f0' } },
+        splitLine: { lineStyle: { color: '#f1f5f9' } },
         axisLabel: {
-          color: '#94A3B8',
+          color: '#64748b',
           fontSize: 10,
-          fontFamily: "'IBM Plex Mono', monospace",
+          fontFamily: "'Geist Mono', monospace",
           formatter: '{value}%',
         },
       },
@@ -211,16 +212,17 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
           show: true,
           bottom: '1%',
           height: 18,
-          borderColor: '#252C34',
-          backgroundColor: '#11161B',
-          fillerColor: 'rgba(56, 189, 248, 0.15)',
+          borderColor: '#e2e8f0',
+          backgroundColor: '#f8fafc',
+          fillerColor: 'rgba(37, 99, 235, 0.12)',
           handleStyle: {
-            color: '#38BDF8',
+            color: '#2563eb',
+            borderColor: '#1d4ed8',
           },
           textStyle: {
-            color: '#94A3B8',
+            color: '#64748b',
             fontSize: 10,
-            fontFamily: "'IBM Plex Mono', monospace",
+            fontFamily: "'Geist Mono', monospace",
           },
         },
       ],
@@ -250,7 +252,7 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
               symbol: ['none', 'none'],
               animation: false,
               lineStyle: {
-                color: '#38BDF8',
+                color: '#2563eb',
                 width: 1.5,
                 type: 'solid',
               },
@@ -269,7 +271,7 @@ export const WeightsAreaChart: React.FC<WeightsAreaChartProps> = ({
   }, [selectedDate, dates]);
 
   return (
-    <div className="rounded-lg border border-border bg-surface p-4 shadow-sm">
+    <div className="rounded-lg border border-border bg-surface p-4 shadow-xs">
       <div ref={chartRef} className="w-full h-[400px]" />
     </div>
   );

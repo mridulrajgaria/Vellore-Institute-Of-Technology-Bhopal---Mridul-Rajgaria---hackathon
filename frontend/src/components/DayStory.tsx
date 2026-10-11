@@ -102,23 +102,25 @@ export const DayStory: React.FC<DayStoryProps> = ({ snapshot }) => {
     sentence = (
       <span>
         Today the system read <span className="font-mono font-semibold text-text-primary">{totalSignals}</span> posts{' '}
-        (<span className="font-mono text-text-primary">{activeDrivingSignals}</span> strong enough to count). The biggest change:{' '}
-        <strong className="text-text-primary">{company} ({maxPos.ticker})</strong> went from{' '}
-        <span className="font-mono text-text-primary">{oldPct}%</span> to{' '}
-        <span className="font-mono text-text-primary">{newPct}%</span> of the portfolio, mostly because of a{' '}
-        <span className={isNeg ? 'text-negative font-medium' : 'text-positive font-medium'}>{sentWord}</span> post about{' '}
-        <span className="font-sans italic text-text-primary">{quote}</span>.
+        (<span className="font-mono text-text-primary font-semibold">{activeDrivingSignals}</span> strong enough to count). The biggest change:{' '}
+        <strong className="text-text-primary font-semibold">{company} ({maxPos.ticker})</strong> went from{' '}
+        <span className="font-mono text-text-primary font-semibold">{oldPct}%</span> to{' '}
+        <span className="font-mono text-text-primary font-semibold">{newPct}%</span> of the portfolio, mostly because of a{' '}
+        <span className={isNeg ? 'text-negative font-semibold' : 'text-positive font-semibold'}>{sentWord}</span> post about{' '}
+        <span className="font-sans italic text-text-primary font-medium">{quote}</span>.
       </span>
     );
   }
 
   return (
-    <div className="py-3 px-6 max-w-[1600px] mx-auto border-t border-b border-border/40 bg-surface/40">
-      <div className="text-sm font-sans leading-relaxed text-text-secondary max-w-5xl">
-        <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary mr-2 font-sans">
-          Day Summary:
-        </span>
-        {sentence}
+    <div className="px-6 max-w-[1600px] mx-auto my-3.5">
+      <div className="p-3.5 rounded-lg border border-border bg-surface shadow-xs">
+        <div className="text-sm font-sans leading-relaxed text-text-primary max-w-5xl">
+          <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary mr-2.5 font-sans bg-surface-secondary px-2 py-0.5 rounded border border-border">
+            Day Summary
+          </span>
+          {sentence}
+        </div>
       </div>
     </div>
   );

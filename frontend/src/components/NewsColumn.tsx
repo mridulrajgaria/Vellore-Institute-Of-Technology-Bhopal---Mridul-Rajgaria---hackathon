@@ -80,12 +80,12 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
         key={`${sig.text_id}-${sig.rank}`}
         ref={isSelected ? selectedCardRef : undefined}
         onClick={() => onSelectSignal(sig)}
-        className={`py-2 px-2.5 rounded transition-all cursor-pointer border scroll-mt-3 ${
+        className={`py-2 px-2.5 rounded-md transition-all cursor-pointer border scroll-mt-3 ${
           isSelected
-            ? 'border-accent bg-accent/10 shadow-sm'
+            ? 'border-accent bg-blue-50/70 shadow-xs ring-1 ring-accent/20'
             : isIgnored
-            ? 'border-transparent opacity-60 hover:opacity-100 hover:bg-surface-secondary/20'
-            : 'border-transparent hover:bg-surface-secondary/30'
+            ? 'bg-slate-50/70 border-slate-200/80 opacity-70 hover:opacity-100 hover:bg-slate-100'
+            : 'bg-white border-border shadow-xs hover:border-slate-300 hover:bg-slate-50/50'
         }`}
       >
         {/* Ticker & metadata top row */}
@@ -103,33 +103,33 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
 
           <div className="flex items-center gap-1 font-mono text-[10px]">
             {isIgnored ? (
-              <span className="text-text-secondary/60 flex items-center gap-0.5">
+              <span className="text-text-secondary flex items-center gap-0.5">
                 <Minus className="h-3 w-3" /> too weak
               </span>
             ) : isNeg ? (
-              <span className="text-negative flex items-center font-medium">
+              <span className="text-negative flex items-center font-semibold">
                 <ArrowDownRight className="h-3 w-3" /> reduce
               </span>
             ) : (
-              <span className="text-positive flex items-center font-medium">
+              <span className="text-positive flex items-center font-semibold">
                 <ArrowUpRight className="h-3 w-3" /> increase
               </span>
             )}
           </div>
         </div>
 
-        {/* Headline: Inter font */}
+        {/* Headline: Geist Sans font */}
         <p className={`text-xs font-sans leading-relaxed line-clamp-2 ${
-          isSelected ? 'text-text-primary font-medium' : 'text-text-secondary hover:text-text-primary'
+          isSelected ? 'text-text-primary font-medium' : 'text-slate-700 hover:text-text-primary'
         }`}>
           {sig.headline}
         </p>
 
-        {/* Bottom metrics: IBM Plex Mono for numbers */}
-        <div className="flex items-center justify-between mt-1.5 pt-1 border-t border-border/20 text-[10px] text-text-secondary">
-          <span className="font-sans">{sig.event_type}</span>
+        {/* Bottom metrics: Geist Mono for numbers */}
+        <div className="flex items-center justify-between mt-1.5 pt-1 border-t border-border/60 text-[10px] text-text-secondary">
+          <span className="font-sans text-text-secondary">{sig.event_type}</span>
           <span className="font-mono">Imp {sig.impact_score.toFixed(1)}/10</span>
-          <span className={`font-mono ${sig.filtered_by_deadband ? 'text-text-secondary' : isNeg ? 'text-negative' : 'text-positive'}`}>
+          <span className={`font-mono ${sig.filtered_by_deadband ? 'text-text-secondary' : isNeg ? 'text-negative font-medium' : 'text-positive font-medium'}`}>
             Sent {sig.sentiment_score > 0 ? '+' : ''}{sig.sentiment_score.toFixed(2)}
           </span>
         </div>
@@ -138,9 +138,9 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-[520px] border-r border-border/30 pr-5">
+    <div className="flex flex-col p-4 bg-surface rounded-lg border border-border shadow-xs">
       {/* Column Header: 1 News + plain caption */}
-      <div className="flex items-baseline justify-between pb-2 mb-2 border-b border-border/30">
+      <div className="flex items-baseline justify-between pb-2.5 mb-2 border-b border-border">
         <div>
           <span className="text-xs font-semibold text-text-secondary tracking-wider uppercase font-sans">
             1 News
@@ -158,7 +158,7 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
       {/* Stream list */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto space-y-1.5 pr-1 pt-2 pb-2"
+        className="space-y-2 pt-1 pb-1 flex-1"
       >
         {signals.length === 0 ? (
           <div className="p-8 text-center text-xs text-text-secondary font-sans italic">
@@ -180,7 +180,7 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
               <div className="pt-1">
                 <button
                   onClick={() => setShowAllDriving(!showAllDriving)}
-                  className="w-full py-1.5 px-2 rounded text-xs font-mono text-accent hover:bg-accent/10 border border-accent/20 transition-colors flex items-center justify-center gap-1"
+                  className="w-full py-1.5 px-2 rounded-md text-xs font-mono text-accent hover:bg-blue-50 border border-blue-200 bg-white transition-colors flex items-center justify-center gap-1 shadow-2xs"
                 >
                   {showAllDriving ? (
                     <>
@@ -202,19 +202,19 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
               <div className="pt-2">
                 <button
                   onClick={() => setShowIgnored(!showIgnored)}
-                  className="w-full flex items-center justify-between p-1.5 rounded text-xs text-text-secondary hover:text-text-primary hover:bg-surface-secondary/20 transition-colors"
+                  className="w-full flex items-center justify-between p-1.5 rounded-md text-xs text-text-secondary hover:text-text-primary hover:bg-slate-100 transition-colors border border-dashed border-border"
                 >
                   <div className="flex items-center gap-1.5 font-mono text-[11px]">
                     {showIgnored ? <ChevronDown className="h-3.5 w-3.5 text-accent" /> : <ChevronRight className="h-3.5 w-3.5" />}
                     <span>Ignored (too weak to count): {ignoredSignals.length}</span>
                   </div>
-                  <span className="text-[10px] text-text-secondary/60 font-sans">
+                  <span className="text-[10px] text-text-muted font-sans">
                     {showIgnored ? 'Collapse' : 'Expand'}
                   </span>
                 </button>
 
                 {showIgnored && (
-                  <div className="space-y-1.5 mt-1 pt-1 border-l border-border/30 pl-2">
+                  <div className="space-y-1.5 mt-1.5 pt-1 border-l-2 border-slate-200 pl-2">
                     {ignoredSignals.map((sig) => renderCard(sig, true))}
                   </div>
                 )}
@@ -222,6 +222,11 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
             )}
           </>
         )}
+      </div>
+
+      {/* Aligned column footer note */}
+      <div className="pt-2 border-t border-border text-[10px] text-text-secondary font-sans leading-snug">
+        Pre-market headlines & social posts ingested before the 21:00 UTC cutoff.
       </div>
     </div>
   );

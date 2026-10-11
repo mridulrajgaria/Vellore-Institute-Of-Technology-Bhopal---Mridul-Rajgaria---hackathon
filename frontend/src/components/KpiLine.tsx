@@ -19,7 +19,7 @@ export const KpiLine: React.FC<KpiLineProps> = ({ metrics, onOpenMethodology }) 
   const avgTurnover = modA ? `${(modA.avg_daily_turnover * 100).toFixed(2)}%` : '4.14%';
 
   return (
-    <div className="py-2.5 px-6 max-w-[1600px] mx-auto border-t border-border/30 text-[11px] font-mono text-text-secondary flex flex-wrap items-center justify-between gap-4">
+    <div className="mt-6 pt-4 pb-6 px-6 max-w-[1600px] mx-auto border-t border-border text-[11px] font-mono text-text-secondary flex flex-wrap items-center justify-between gap-4">
       <div>
         Full Backtest (Oct 2021 – Sep 2022):{' '}
         <span className="text-text-primary font-medium">Cumulative Return {cumRet}</span>{' '}
@@ -32,7 +32,7 @@ export const KpiLine: React.FC<KpiLineProps> = ({ metrics, onOpenMethodology }) 
       <button
         onClick={onOpenMethodology}
         data-testid="see-methodology-btn"
-        className="text-[10px] text-accent/80 hover:text-accent cursor-pointer underline bg-transparent border-none p-0 font-mono"
+        className="text-[11px] text-accent hover:text-blue-700 cursor-pointer font-sans font-medium hover:underline bg-transparent border-none p-0"
       >
         See Methodology & Empirical Validation →
       </button>

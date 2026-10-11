@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { PositionSnapshot } from '../types';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface PortfolioReactionColumnProps {
   positions: PositionSnapshot[];
@@ -13,8 +12,6 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
   highlightedTicker,
   onSelectTicker,
 }) => {
-  const [showAll, setShowAll] = useState<boolean>(false);
-
   // 1. Sort strictly by absolute weight change so the largest mover is first
   const sortedPositions = useMemo(() => {
     return [...positions].sort(
@@ -33,46 +30,43 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
     return Math.max(100, Math.ceil(maxVal / 50) * 50);
   }, [positions]);
 
-  // Top 5 movers vs all 14
-  const displayedPositions = showAll ? sortedPositions : sortedPositions.slice(0, 5);
-
   return (
-    <div className="flex flex-col h-[520px] pl-5">
+    <div className="flex flex-col p-4 bg-surface rounded-lg border border-border shadow-xs">
       {/* Column Header: 3 Portfolio + plain caption */}
-      <div className="flex items-baseline justify-between pb-2 mb-2 border-b border-border/30">
+      <div className="flex items-baseline justify-between pb-2.5 mb-2 border-b border-border">
         <div>
-          <span className="text-xs font-semibold text-text-secondary tracking-wider uppercase">
+          <span className="text-xs font-semibold text-text-secondary tracking-wider uppercase font-sans">
             3 Portfolio
           </span>
           <div className="text-[11px] text-text-secondary mt-0.5 font-sans">
             What the portfolio did about it
           </div>
         </div>
-        <span className="text-xs font-mono text-text-secondary">
+        <span className="text-xs font-mono text-text-secondary font-medium">
           {positions.length} Assets
         </span>
       </div>
 
       {/* Labelled Scale above the bars */}
       <div className="mb-2 px-1">
-        <div className="flex justify-between items-center text-[10px] font-mono text-text-secondary/70">
+        <div className="flex justify-between items-center text-[10px] font-mono text-text-secondary">
           <span className="w-16 text-left">-{maxBps} bps</span>
           <span className="text-center font-semibold text-text-primary">0 (Base 7.14%)</span>
           <span className="w-16 text-right">+{maxBps} bps</span>
         </div>
         {/* Scale hairline ruler */}
-        <div className="relative w-full h-1 mt-0.5 border-b border-border/40">
-          <div className="absolute top-0 bottom-0 left-0 w-0.5 bg-border/60" />
-          <div className="absolute top-0 bottom-0 left-1/4 w-0.5 bg-border/30" />
-          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 bg-text-secondary" />
-          <div className="absolute top-0 bottom-0 left-3/4 w-0.5 bg-border/30" />
-          <div className="absolute top-0 bottom-0 right-0 w-0.5 bg-border/60" />
+        <div className="relative w-full h-1 mt-0.5 border-b border-border">
+          <div className="absolute top-0 bottom-0 left-0 w-0.5 bg-slate-400" />
+          <div className="absolute top-0 bottom-0 left-1/4 w-0.5 bg-slate-300" />
+          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 bg-slate-500" />
+          <div className="absolute top-0 bottom-0 left-3/4 w-0.5 bg-slate-300" />
+          <div className="absolute top-0 bottom-0 right-0 w-0.5 bg-slate-400" />
         </div>
       </div>
 
-      {/* Bar List */}
-      <div className="flex-1 overflow-y-auto space-y-2 pr-1">
-        {displayedPositions.map((pos) => {
+      {/* All 14 Asset Rows */}
+      <div className="space-y-1.5 py-1">
+        {sortedPositions.map((pos) => {
           const isHighlighted = highlightedTicker === pos.ticker;
           const deltaBps = pos.weight_change_bps;
           const isPositive = deltaBps > 0;
@@ -84,18 +78,15 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
           const oldPct = (pos.prev_weight * 100).toFixed(2);
           const newPct = (pos.weight * 100).toFixed(2);
 
-          const hasHighlightActive = Boolean(highlightedTicker);
-          const isDimmed = hasHighlightActive && !isHighlighted;
-
           return (
             <div
               key={pos.ticker}
               onClick={() => onSelectTicker?.(pos.ticker)}
-              className={`py-1 px-1.5 rounded transition-all cursor-pointer border ${
+              className={`py-1.5 px-2 rounded-md transition-all cursor-pointer border ${
                 isHighlighted
-                  ? 'border-accent bg-accent/10 shadow-sm'
-                  : 'border-transparent hover:bg-surface-secondary/30'
-              } ${isDimmed ? 'opacity-40' : 'opacity-100'}`}
+                  ? 'bg-accent-light border-accent-border shadow-xs'
+                  : 'bg-transparent border-transparent hover:bg-surface-secondary'
+              }`}
             >
               {/* Row Header: Ticker, Old -> New, and Bps */}
               <div className="flex items-center justify-between text-xs mb-1 font-mono">
@@ -103,7 +94,7 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
                   <span className={`font-bold ${isHighlighted ? 'text-accent' : 'text-text-primary'}`}>
                     {pos.ticker}
                   </span>
-                  <span className="text-[10px] text-text-secondary/70">
+                  <span className="text-[10px] text-text-secondary">
                     {oldPct}% → {newPct}%
                   </span>
                 </div>
@@ -115,21 +106,21 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
               </div>
 
               {/* Diverging Bar Container */}
-              <div className="relative w-full h-3.5 bg-surface-secondary/40 rounded overflow-hidden">
+              <div className="relative w-full h-3 bg-bar-track rounded-xs overflow-hidden">
                 {/* Thin Zero Axis Line */}
-                <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-border z-10" />
+                <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 bg-slate-400 z-10" />
 
                 {/* Bar */}
                 {isPositive ? (
                   // Positive extends right from center
                   <div
-                    className="absolute top-0 bottom-0 left-1/2 bg-positive rounded-r transition-all duration-300"
+                    className="absolute top-0 bottom-0 left-1/2 bg-positive rounded-r-xs transition-all duration-300"
                     style={{ width: `${barWidthHalfPct}%` }}
                   />
                 ) : (
                   // Negative extends left from center
                   <div
-                    className="absolute top-0 bottom-0 bg-negative rounded-l transition-all duration-300"
+                    className="absolute top-0 bottom-0 bg-negative rounded-l-xs transition-all duration-300"
                     style={{
                       right: '50%',
                       width: `${barWidthHalfPct}%`,
@@ -140,32 +131,10 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
             </div>
           );
         })}
-
-        {/* Expander button: "Show all 14" toggle */}
-        {sortedPositions.length > 5 && (
-          <div className="pt-1">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="w-full py-1.5 px-2 rounded border border-border/40 bg-surface hover:bg-surface-secondary/40 text-[11px] font-mono text-text-secondary hover:text-text-primary transition-colors flex items-center justify-center gap-1.5"
-            >
-              {showAll ? (
-                <>
-                  <ChevronUp className="h-3.5 w-3.5 text-accent" />
-                  <span>Show top 5 only</span>
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="h-3.5 w-3.5 text-accent" />
-                  <span>Show all 14 ({sortedPositions.length - 5} more)</span>
-                </>
-              )}
-            </button>
-          </div>
-        )}
       </div>
 
-      {/* One-line note at bottom */}
-      <div className="pt-2 border-t border-border/30 text-[10px] text-text-secondary font-sans leading-snug">
+      {/* Aligned column footer note */}
+      <div className="pt-2 border-t border-border text-[10px] text-text-secondary font-sans leading-snug">
         Tickers without signals drift slightly because weights re-normalize when others move.
       </div>
     </div>

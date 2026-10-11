@@ -69,7 +69,7 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
           <button
             onClick={() => handleStep(-1)}
             disabled={currentIndex <= 0}
-            className="p-1 rounded text-text-secondary hover:text-text-primary hover:bg-surface-secondary disabled:opacity-30 transition-colors"
+            className="p-1 rounded bg-white border border-border text-text-secondary hover:text-text-primary hover:bg-surface-secondary disabled:opacity-30 transition-colors"
             title="Previous Trading Day (Left Arrow)"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -77,10 +77,10 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
 
           <button
             onClick={onTogglePlay}
-            className={`px-2.5 py-1 rounded text-xs font-mono font-medium flex items-center gap-1.5 transition-colors ${
+            className={`px-3 py-1 rounded text-xs font-mono font-medium flex items-center gap-1.5 transition-colors border ${
               isPlaying
-                ? 'bg-accent text-background font-bold'
-                : 'text-text-primary bg-surface-secondary hover:bg-border/60'
+                ? 'bg-accent text-white border-accent font-semibold shadow-xs'
+                : 'text-text-primary bg-white border-border hover:bg-surface-secondary'
             }`}
             title="Toggle Replay (Spacebar)"
           >
@@ -91,7 +91,7 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
           <button
             onClick={() => handleStep(1)}
             disabled={currentIndex >= dates.length - 1}
-            className="p-1 rounded text-text-secondary hover:text-text-primary hover:bg-surface-secondary disabled:opacity-30 transition-colors"
+            className="p-1 rounded bg-white border border-border text-text-secondary hover:text-text-primary hover:bg-surface-secondary disabled:opacity-30 transition-colors"
             title="Next Trading Day (Right Arrow)"
           >
             <ChevronRight className="h-4 w-4" />
@@ -99,7 +99,7 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
 
           {/* Active Date Counter */}
           <div className="ml-3 flex items-baseline gap-2 font-mono text-xs">
-            <span className="font-bold text-accent">{selectedDate}</span>
+            <span className="font-bold text-accent text-sm">{selectedDate}</span>
             <span className="text-text-secondary text-[11px]">
               ({currentIndex >= 0 ? currentIndex + 1 : 1} of {dates.length > 0 ? dates.length : 252} trading days)
             </span>
@@ -109,7 +109,7 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
         {/* Top 5 High-Impact "Pick a day" chips */}
         {top5Days.length > 0 && (
           <div className="flex items-center gap-1.5 text-xs">
-            <span className="text-[11px] text-text-secondary flex items-center gap-1 font-mono">
+            <span className="text-[11px] text-text-secondary flex items-center gap-1 font-mono font-medium">
               <Zap className="h-3 w-3 text-accent" />
               Biggest days:
             </span>
@@ -120,15 +120,15 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
                   <button
                     key={chip.date}
                     onClick={() => onSelectDate(chip.date)}
-                    className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors border ${
+                    className={`px-2.5 py-0.5 rounded text-[11px] font-mono transition-colors border shadow-xs ${
                       isActive
-                        ? 'border-accent bg-accent/15 text-accent font-semibold'
-                        : 'border-border/60 bg-surface hover:bg-surface-secondary text-text-secondary hover:text-text-primary'
+                        ? 'border-accent bg-accent text-white font-semibold'
+                        : 'border-border bg-white hover:bg-surface-secondary text-text-secondary hover:text-text-primary'
                     }`}
                     title={`${chip.date} • ${chip.ticker} • Impact: ${chip.impact_score.toFixed(1)}/10`}
                   >
                     <span>{chip.date.slice(5)}</span>
-                    <span className="ml-1 text-[10px] text-accent/80 font-semibold">{chip.ticker}</span>
+                    <span className={`ml-1 text-[10px] font-semibold ${isActive ? 'text-blue-100' : 'text-accent'}`}>{chip.ticker}</span>
                   </button>
                 );
               })}
@@ -161,8 +161,8 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
                 <div
                   className={`w-1.5 h-2.5 rounded-full transition-all ${
                     isCurrent
-                      ? 'bg-accent ring-2 ring-accent/30 scale-125'
-                      : 'bg-accent/60 hover:bg-accent hover:scale-125'
+                      ? 'bg-accent ring-2 ring-blue-300 scale-125'
+                      : 'bg-accent/70 hover:bg-accent hover:scale-125'
                   }`}
                 />
               </button>
@@ -183,13 +183,13 @@ export const ReplayTimeline: React.FC<ReplayTimelineProps> = ({
               onSelectDate(dates[idx]);
             }
           }}
-          className="w-full accent-accent h-1 bg-surface-secondary rounded cursor-pointer"
+          className="w-full accent-accent h-1.5 bg-slate-200 rounded cursor-pointer"
         />
 
         {/* Bottom timeline date limits */}
-        <div className="flex justify-between items-center text-[10px] font-mono text-text-secondary/70 mt-1">
+        <div className="flex justify-between items-center text-[10px] font-mono text-text-secondary mt-1">
           <span>{dates[0]}</span>
-          <span className="text-[10px] text-text-secondary/40">Space: play/pause • ←/→: step</span>
+          <span className="text-[10px] text-text-muted">Space: play/pause • ←/→: step</span>
           <span>{dates[dates.length - 1]}</span>
         </div>
       </div>

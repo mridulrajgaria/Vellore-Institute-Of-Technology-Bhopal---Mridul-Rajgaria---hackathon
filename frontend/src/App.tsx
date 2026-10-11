@@ -235,32 +235,36 @@ export const App: React.FC = () => {
 
       {/* Main Container */}
       <main className="flex-1 w-full max-w-[1600px] mx-auto py-4">
-        {/* d. Three Columns Read Left-to-Right as the Pipeline */}
-        <div className="px-6 grid grid-cols-1 lg:grid-cols-12 gap-0 mb-6">
-          {/* Column 1: NEWS (4 cols) */}
-          <div className="lg:col-span-4">
-            <NewsColumn
-              signals={currentSignals}
-              selectedSignal={selectedSignal}
-              onSelectSignal={handleSelectSignal}
-            />
-          </div>
+        {/* d. Three Columns Read Left-to-Right as the Pipeline inside distinct workspace canvas */}
+        <div className="px-6 mb-6">
+          <div className="bg-workspace border border-border rounded-xl p-4">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+              {/* Column 1: NEWS (4 cols) */}
+              <div className="lg:col-span-4">
+                <NewsColumn
+                  signals={currentSignals}
+                  selectedSignal={selectedSignal}
+                  onSelectSignal={handleSelectSignal}
+                />
+              </div>
 
-          {/* Column 2: SIGNAL (4 cols) */}
-          <div className="lg:col-span-4">
-            <SignalColumn
-              signal={selectedSignal}
-              position={selectedTickerPosition}
-            />
-          </div>
+              {/* Column 2: SIGNAL (4 cols) */}
+              <div className="lg:col-span-4">
+                <SignalColumn
+                  signal={selectedSignal}
+                  position={selectedTickerPosition}
+                />
+              </div>
 
-          {/* Column 3: PORTFOLIO REACTION (4 cols) */}
-          <div className="lg:col-span-4">
-            <PortfolioReactionColumn
-              positions={snapshot?.positions || []}
-              highlightedTicker={highlightedTicker}
-              onSelectTicker={handleSelectTicker}
-            />
+              {/* Column 3: PORTFOLIO REACTION (4 cols) */}
+              <div className="lg:col-span-4">
+                <PortfolioReactionColumn
+                  positions={snapshot?.positions || []}
+                  highlightedTicker={highlightedTicker}
+                  onSelectTicker={handleSelectTicker}
+                />
+              </div>
+            </div>
           </div>
         </div>
 

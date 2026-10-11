@@ -18,7 +18,7 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
 }) => {
   if (!snapshot) {
     return (
-      <div className="rounded-lg border border-border bg-surface p-6 text-center text-text-secondary text-sm">
+      <div className="rounded-lg border border-border bg-white p-6 text-center text-text-secondary text-sm">
         Loading portfolio holdings snapshot...
       </div>
     );
@@ -27,15 +27,15 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
   const { positions, hold_threshold_bps, turnover, turnover_constrained, bounds_constrained } = snapshot;
 
   return (
-    <div className="rounded-lg border border-border bg-surface shadow-sm overflow-hidden">
+    <div className="rounded-lg border border-border bg-white shadow-xs overflow-hidden">
       {/* Header bar */}
-      <div className="border-b border-border bg-surface-secondary/40 px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div className="border-b border-border bg-slate-50/70 px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-semibold text-text-primary">
               Asset Holdings & Tactical Allocation Snapshot
             </h2>
-            <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-accent/10 border border-accent/30 text-accent">
+            <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-blue-50 border border-blue-200 text-blue-700">
               {snapshot.date}
             </span>
           </div>
@@ -46,12 +46,12 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
 
         <div className="flex items-center gap-2">
           {turnover_constrained && (
-            <span className="flex items-center gap-1 rounded bg-warning/10 border border-warning/30 px-2.5 py-1 text-[11px] font-medium text-warning">
-              <ShieldAlert className="h-3 w-3" /> Turnover Capped (10%)
+            <span className="flex items-center gap-1 rounded bg-amber-50 border border-amber-200 px-2.5 py-1 text-[11px] font-medium text-amber-800">
+              <ShieldAlert className="h-3 w-3 text-amber-600" /> Turnover Capped (10%)
             </span>
           )}
           {bounds_constrained && (
-            <span className="flex items-center gap-1 rounded bg-accent/10 border border-accent/30 px-2.5 py-1 text-[11px] font-medium text-accent">
+            <span className="flex items-center gap-1 rounded bg-blue-50 border border-blue-200 px-2.5 py-1 text-[11px] font-medium text-blue-700">
               Bounds Active [3.57%, 14.29%]
             </span>
           )}
@@ -61,7 +61,7 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
-          <thead className="border-b border-border bg-surface text-text-secondary uppercase text-[10px] tracking-wider">
+          <thead className="border-b border-border bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider">
             <tr>
               <th className="py-2.5 px-4 font-semibold">Ticker</th>
               <th className="py-2.5 px-3 font-semibold">Prev Wt</th>
@@ -75,7 +75,7 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
               <th className="py-2.5 px-4 font-semibold text-center">Signals</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border/60">
+          <tbody className="divide-y divide-slate-100">
             {positions.map((pos) => {
               const changeBps = pos.weight_change_bps;
               const hasSignals = pos.top_driving_signals && pos.top_driving_signals.length > 0;
@@ -83,7 +83,7 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
               return (
                 <tr
                   key={pos.ticker}
-                  className="hover:bg-surface-secondary/50 transition-colors group"
+                  className="hover:bg-slate-50/80 transition-colors group"
                 >
                   {/* Ticker */}
                   <td className="py-3 px-4 font-bold font-mono text-text-primary text-xs">
@@ -101,7 +101,7 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
                   </td>
 
                   {/* Base Weight */}
-                  <td className="py-3 px-3 font-mono text-text-secondary/70">
+                  <td className="py-3 px-3 font-mono text-text-secondary">
                     {(pos.base_weight * 100).toFixed(2)}%
                   </td>
 
@@ -131,17 +131,17 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
                   {/* Action Badge */}
                   <td className="py-3 px-3 text-center">
                     {pos.action === 'INCREASE' && (
-                      <span className="inline-flex items-center rounded-md border border-positive/30 bg-positive/10 px-2 py-0.5 text-[10px] font-semibold text-positive">
+                      <span className="inline-flex items-center rounded-md border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
                         INCREASE
                       </span>
                     )}
                     {pos.action === 'REDUCE' && (
-                      <span className="inline-flex items-center rounded-md border border-negative/30 bg-negative/10 px-2 py-0.5 text-[10px] font-semibold text-negative">
+                      <span className="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-semibold text-red-700">
                         REDUCE
                       </span>
                     )}
                     {pos.action === 'HOLD' && (
-                      <span className="inline-flex items-center rounded-md border border-border bg-surface-secondary px-2 py-0.5 text-[10px] font-medium text-text-secondary">
+                      <span className="inline-flex items-center rounded-md border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600">
                         HOLD
                       </span>
                     )}
@@ -183,7 +183,7 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
                       <button
                         onClick={() => onSelectTickerSignals(pos.ticker, pos.top_driving_signals)}
                         data-testid={`signals-btn-${pos.ticker}`}
-                        className="inline-flex items-center gap-1.5 rounded border border-accent/20 bg-accent/5 px-2 py-1 text-[11px] font-medium text-accent hover:bg-accent/15 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 rounded-md border border-blue-200 bg-blue-50/70 px-2 py-1 text-[11px] font-medium text-blue-700 hover:bg-blue-100 transition-colors cursor-pointer shadow-xs"
                       >
                         <Eye className="h-3 w-3" />
                         <span>{pos.top_driving_signals.length} Signals</span>
@@ -192,7 +192,7 @@ export const HoldingsTable: React.FC<HoldingsTableProps> = ({
                       <button
                         disabled
                         data-testid={`signals-btn-${pos.ticker}`}
-                        className="inline-flex items-center gap-1.5 rounded border border-border/30 bg-surface-secondary/20 px-2 py-1 text-[11px] font-mono text-text-secondary/40 cursor-not-allowed"
+                        className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] font-mono text-slate-400 cursor-not-allowed"
                       >
                         <span>no signals</span>
                       </button>

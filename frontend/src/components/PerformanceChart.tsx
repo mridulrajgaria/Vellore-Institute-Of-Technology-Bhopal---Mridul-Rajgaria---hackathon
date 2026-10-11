@@ -20,7 +20,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
     if (!chartRef.current || navData.length === 0) return;
 
     if (!chartInstance.current) {
-      chartInstance.current = echarts.init(chartRef.current, 'dark');
+      chartInstance.current = echarts.init(chartRef.current);
       chartInstance.current.on('click', (params: any) => {
         if (params.name && typeof params.name === 'string') {
           onSelectDate(params.name);
@@ -44,12 +44,12 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
         left: '16px',
         top: '12px',
         textStyle: {
-          color: '#F1F5F9',
+          color: '#0f172a',
           fontSize: 14,
           fontWeight: 600,
         },
         subtextStyle: {
-          color: '#94A3B8',
+          color: '#64748b',
           fontSize: 11,
         },
       },
@@ -65,32 +65,33 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
         itemGap: 16,
         data: ['Sentiment Strategy (5 bps)', 'Equal Weight (5 bps)', 'S&P 500 (SPY)'],
         textStyle: {
-          color: '#94A3B8',
+          color: '#64748b',
           fontSize: 11,
-          fontFamily: "'IBM Plex Mono', monospace",
+          fontFamily: "'Geist Mono', monospace",
         },
       },
       tooltip: {
         trigger: 'axis',
-        backgroundColor: '#11161B',
-        borderColor: '#252C34',
+        backgroundColor: '#ffffff',
+        borderColor: '#e2e8f0',
         borderWidth: 1,
-        padding: [8, 12],
+        padding: [10, 14],
+        extraCssText: 'box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04); border-radius: 8px;',
         textStyle: {
-          color: '#F1F5F9',
-          fontFamily: "'IBM Plex Mono', monospace",
+          color: '#0f172a',
+          fontFamily: "'Geist Mono', monospace",
           fontSize: 11,
         },
         formatter: (params: any) => {
           if (!Array.isArray(params) || params.length === 0) return '';
           const dateStr = params[0].axisValue;
-          let html = `<div style="font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:12px; margin-bottom:6px; color:#38BDF8;">${dateStr}</div>`;
+          let html = `<div style="font-family:'Geist Mono', monospace; font-weight:700; font-size:12px; margin-bottom:6px; color:#2563eb;">${dateStr}</div>`;
           params.forEach((item: any) => {
             const val = Number(item.value);
-            const colorClass = val >= 0 ? '#22C55E' : '#EF4444';
-            html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-family:'IBM Plex Mono', monospace; font-size:11px; padding:2px 0;">
+            const colorClass = val >= 0 ? '#16a34a' : '#dc2626';
+            html += `<div style="display:flex; justify-content:space-between; align-items:center; gap:16px; font-family:'Geist Mono', monospace; font-size:11px; padding:2px 0;">
               <span style="color:${item.color}; font-weight:600;">${item.seriesName}:</span>
-              <span style="color:${colorClass}; font-weight:500;">
+              <span style="color:${colorClass}; font-weight:600;">
                 ${val >= 0 ? '+' : ''}${val.toFixed(2)}%
               </span>
             </div>`;
@@ -109,22 +110,22 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
         type: 'category',
         boundaryGap: false,
         data: dates,
-        axisLine: { lineStyle: { color: '#252C34' } },
+        axisLine: { lineStyle: { color: '#e2e8f0' } },
         axisLabel: {
-          color: '#94A3B8',
+          color: '#64748b',
           fontSize: 10,
-          fontFamily: "'IBM Plex Mono', monospace",
+          fontFamily: "'Geist Mono', monospace",
           formatter: (val: string) => val.slice(5),
         },
       },
       yAxis: {
         type: 'value',
-        axisLine: { lineStyle: { color: '#252C34' } },
-        splitLine: { lineStyle: { color: '#171D23' } },
+        axisLine: { lineStyle: { color: '#e2e8f0' } },
+        splitLine: { lineStyle: { color: '#f1f5f9' } },
         axisLabel: {
-          color: '#94A3B8',
+          color: '#64748b',
           fontSize: 10,
-          fontFamily: "'IBM Plex Mono', monospace",
+          fontFamily: "'Geist Mono', monospace",
           formatter: '{value}%',
         },
       },
@@ -137,7 +138,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
           showSymbol: false,
           lineStyle: {
             width: 2.5,
-            color: '#38BDF8', // Sky Blue Accent
+            color: '#2563eb', // Modern Institutional Blue
           },
         },
         {
@@ -149,7 +150,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
           lineStyle: {
             width: 1.8,
             type: 'dashed',
-            color: '#94A3B8', // Slate Benchmark
+            color: '#64748b', // Slate Benchmark
           },
         },
         {
@@ -160,7 +161,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
           showSymbol: false,
           lineStyle: {
             width: 1.8,
-            color: '#F59E0B', // Amber S&P 500
+            color: '#d97706', // Institutional Amber
           },
         },
       ],
@@ -170,16 +171,17 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
           show: true,
           bottom: '1%',
           height: 18,
-          borderColor: '#252C34',
-          backgroundColor: '#11161B',
-          fillerColor: 'rgba(56, 189, 248, 0.15)',
+          borderColor: '#e2e8f0',
+          backgroundColor: '#f8fafc',
+          fillerColor: 'rgba(37, 99, 235, 0.12)',
           handleStyle: {
-            color: '#38BDF8',
+            color: '#2563eb',
+            borderColor: '#1d4ed8',
           },
           textStyle: {
-            color: '#94A3B8',
+            color: '#64748b',
             fontSize: 10,
-            fontFamily: "'IBM Plex Mono', monospace",
+            fontFamily: "'Geist Mono', monospace",
           },
         },
       ],
@@ -208,7 +210,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
               symbol: ['none', 'none'],
               animation: false,
               lineStyle: {
-                color: '#38BDF8',
+                color: '#2563eb',
                 width: 1.5,
                 type: 'solid',
               },
@@ -227,7 +229,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
   }, [selectedDate, navData]);
 
   return (
-    <div className="rounded-lg border border-border bg-surface p-4 shadow-sm">
+    <div className="rounded-lg border border-border bg-surface p-4 shadow-xs">
       <div ref={chartRef} className="w-full h-[400px]" />
     </div>
   );

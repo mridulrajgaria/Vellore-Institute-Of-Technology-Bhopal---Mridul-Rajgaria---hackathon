@@ -34,15 +34,15 @@ export const SlimHeader: React.FC<SlimHeaderProps> = ({ meta: _meta }) => {
   };
 
   return (
-    <header className="border-b border-border/40 bg-surface px-6 py-2.5">
+    <header className="border-b border-border bg-surface px-6 py-2.5">
       <div className="flex flex-wrap items-center justify-between gap-3 max-w-[1600px] mx-auto">
         {/* Left: Index Name & Replay Label */}
         <div className="flex items-center gap-3">
           <span className="font-semibold text-sm tracking-tight text-text-primary">
             AI Risk Signal Index Rebalancer
           </span>
-          <span className="text-border/60">•</span>
-          <span className="text-xs text-text-secondary font-mono">
+          <span className="text-border">•</span>
+          <span className="text-xs text-text-secondary font-mono bg-surface-secondary px-2 py-0.5 rounded border border-border">
             Replay: Oct 2021 – Sep 2022 (historical, not live)
           </span>
         </div>
@@ -62,7 +62,7 @@ export const SlimHeader: React.FC<SlimHeaderProps> = ({ meta: _meta }) => {
 
       {/* Expandable Guide & Glossary */}
       {showGuide && (
-        <div className="mt-2.5 pt-3 border-t border-border/40 max-w-[1600px] mx-auto text-xs text-text-secondary leading-relaxed space-y-4 pb-2">
+        <div className="mt-2.5 pt-3 border-t border-border max-w-[1600px] mx-auto text-xs text-text-secondary leading-relaxed space-y-4 pb-2">
           {/* Top banner with dismiss button */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 font-semibold text-text-primary font-sans">
@@ -81,34 +81,34 @@ export const SlimHeader: React.FC<SlimHeaderProps> = ({ meta: _meta }) => {
 
           {/* 3 Pipeline stages */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="p-2.5 rounded bg-surface-secondary/30 border border-border/30">
-              <div className="font-semibold text-text-primary mb-1 font-mono text-[11px] uppercase tracking-wider text-accent">
+            <div className="p-3 rounded-md bg-surface-secondary/70 border border-border">
+              <div className="font-semibold text-accent mb-1 font-mono text-[11px] uppercase tracking-wider">
                 1 News
               </div>
-              <p>
+              <p className="text-text-secondary">
                 Headlines arriving before 21:00 UTC are attributed to portfolio companies and processed by FinBERT for sentiment (-1 to +1) and an Event Classifier for impact (1 to 10).
               </p>
             </div>
-            <div className="p-2.5 rounded bg-surface-secondary/30 border border-border/30">
-              <div className="font-semibold text-text-primary mb-1 font-mono text-[11px] uppercase tracking-wider text-accent">
+            <div className="p-3 rounded-md bg-surface-secondary/70 border border-border">
+              <div className="font-semibold text-accent mb-1 font-mono text-[11px] uppercase tracking-wider">
                 2 Signal
               </div>
-              <p>
+              <p className="text-text-secondary">
                 Sentiment within ±0.20 deadband is ignored. Valid negative sentiment is multiplied 1.25x based on hand-labeled FinBERT precision (85% on negative text).
               </p>
             </div>
-            <div className="p-2.5 rounded bg-surface-secondary/30 border border-border/30">
-              <div className="font-semibold text-text-primary mb-1 font-mono text-[11px] uppercase tracking-wider text-accent">
+            <div className="p-3 rounded-md bg-surface-secondary/70 border border-border">
+              <div className="font-semibold text-accent mb-1 font-mono text-[11px] uppercase tracking-wider">
                 3 Portfolio
               </div>
-              <p>
+              <p className="text-text-secondary">
                 Exponential tilt shifts weights away from base (7.14%). If needed turnover exceeds 10%, changes are capped. Holdings rebalance daily at close with 5 bps slippage.
               </p>
             </div>
           </div>
 
           {/* "What do these terms mean?" Glossary Popover / Section */}
-          <div className="p-3 rounded bg-surface-secondary/20 border border-border/40">
+          <div className="p-3.5 rounded-md bg-surface-secondary/50 border border-border">
             <div className="font-semibold text-text-primary mb-2 text-xs flex items-center gap-1.5 font-sans">
               <span className="text-accent">●</span>
               <span>What do these terms mean?</span>
