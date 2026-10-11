@@ -1,12 +1,22 @@
+<div align="center">
+  <a href="https://www.spglobal.com"><img src="docs/sp_crisil_logo.png" alt="S&P Global | Crisil" height="60" /></a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/hackathon_logo.png" alt="Code to Connect Hackathon 2026" height="52" />
+</div>
+
 # AI/NLP Risk Engine: From Financial News to Portfolio Signals
 
-**Candidate Name:** Mridul Rajgaria
-**College Email ID:** iammridul222@gmail.com
-**College / Campus:** Vellore Institute of Technology, Bhopal
-**Demo Video Link:** [ADD YOUTUBE UNLISTED LINK]
-**Slide Deck Link:** [docs/presentation.pdf](docs/presentation.pdf)
+**Submission for the S&P Global and CRISIL Campus Hackathon 2026 (Final Round)**
 
-Submission for the S&P Global and Crisil Campus Hackathon 2026 (final round).
+| Parameter | Submission Details |
+|---|---|
+| **Candidate Name** | **Mridul Rajgaria** |
+| **College / Campus** | **Vellore Institute of Technology, Bhopal** |
+| **College Email ID** | `iammridul222@gmail.com` |
+| **Demo Video Link** | [ADD YOUTUBE UNLISTED LINK] |
+| **Slide Deck Link** | [**docs/presentation.pdf**](docs/presentation.pdf) |
+| **Downstream Application** | **Module A: Tactical Index Rebalancer** (14 Large-Cap US Equities) |
+| **Execution Mode** | 100% Offline Reproducible (Deterministic committed data, zero API keys needed) |
 
 ---
 
@@ -44,9 +54,11 @@ On top of the engine I built **Module A: a tactical index rebalancer**. It keeps
 
 ## 2. Architecture and Tech Stack
 
-![Architecture](docs/architecture.png)
+<div align="center">
+  <img src="docs/architecture.png" alt="Architecture Diagram" width="100%" />
+</div>
 
-*(Diagram source: [docs/architecture.mmd](docs/architecture.mmd).)*
+*(Vector version: [docs/architecture.svg](docs/architecture.svg) | Source code: [docs/architecture.mmd](docs/architecture.mmd))*
 
 ### Pipeline
 1. **Ingest and normalize** tweets, NewsAPI articles and GDELT headlines into one schema, removing duplicates, template spam and calendar or table tweets.
