@@ -68,8 +68,8 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
     return { drivingSignals: driving, ignoredSignals: ignored };
   }, [signals]);
 
-  const visibleDrivingSignals = showAllDriving ? drivingSignals : drivingSignals.slice(0, 3);
-  const hiddenDrivingCount = Math.max(0, drivingSignals.length - 3);
+  const visibleDrivingSignals = showAllDriving ? drivingSignals : drivingSignals.slice(0, 4);
+  const hiddenDrivingCount = Math.max(0, drivingSignals.length - 4);
 
   const renderCard = (sig: DrivingSignal, isIgnored: boolean = false) => {
     const isSelected = selectedSignal?.text_id === sig.text_id;
@@ -138,7 +138,7 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
   };
 
   return (
-    <div className="flex flex-col p-4 bg-surface rounded-lg border border-border shadow-xs">
+    <div className="flex flex-col h-full flex-1 p-4 bg-surface rounded-lg border border-border shadow-xs">
       {/* Column Header: 1 News + plain caption */}
       <div className="flex items-baseline justify-between pb-2.5 mb-2 border-b border-border">
         <div>
@@ -185,7 +185,7 @@ export const NewsColumn: React.FC<NewsColumnProps> = ({
                   {showAllDriving ? (
                     <>
                       <ChevronDown className="h-3 w-3 rotate-180" />
-                      <span>Show top 3 only</span>
+                      <span>Show top 4 only</span>
                     </>
                   ) : (
                     <>

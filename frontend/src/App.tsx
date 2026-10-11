@@ -238,9 +238,9 @@ export const App: React.FC = () => {
         {/* d. Three Columns Read Left-to-Right as the Pipeline inside distinct workspace canvas */}
         <div className="px-6 mb-6">
           <div className="bg-workspace border border-border rounded-xl p-4">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
               {/* Column 1: NEWS (4 cols) */}
-              <div className="lg:col-span-4">
+              <div className="lg:col-span-4 flex flex-col h-full">
                 <NewsColumn
                   signals={currentSignals}
                   selectedSignal={selectedSignal}
@@ -249,7 +249,7 @@ export const App: React.FC = () => {
               </div>
 
               {/* Column 2: SIGNAL (4 cols) */}
-              <div className="lg:col-span-4">
+              <div className="lg:col-span-4 flex flex-col h-full">
                 <SignalColumn
                   signal={selectedSignal}
                   position={selectedTickerPosition}
@@ -257,7 +257,7 @@ export const App: React.FC = () => {
               </div>
 
               {/* Column 3: PORTFOLIO REACTION (4 cols) */}
-              <div className="lg:col-span-4">
+              <div className="lg:col-span-4 flex flex-col h-full">
                 <PortfolioReactionColumn
                   positions={snapshot?.positions || []}
                   highlightedTicker={highlightedTicker}

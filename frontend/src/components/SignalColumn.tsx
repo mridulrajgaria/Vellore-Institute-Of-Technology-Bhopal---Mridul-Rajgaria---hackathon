@@ -105,7 +105,7 @@ export const SignalColumn: React.FC<SignalColumnProps> = ({ signal, position }) 
   const plainEnglishSummary = `The AI read this post as ${intensity} ${sentimentWord} (${scoreFormatted}). ${strengthClause}, so ${weightActionClause}.`;
 
   return (
-    <div id="signal-column" className="flex flex-col p-4 bg-surface-secondary/80 rounded-lg border border-border shadow-xs">
+    <div id="signal-column" className="flex flex-col h-full flex-1 p-4 bg-surface-secondary/80 rounded-lg border border-border shadow-xs">
       {/* Column Header: 2 Signal + plain caption */}
       <div className="flex items-baseline justify-between pb-2.5 mb-2 border-b border-border">
         <div>

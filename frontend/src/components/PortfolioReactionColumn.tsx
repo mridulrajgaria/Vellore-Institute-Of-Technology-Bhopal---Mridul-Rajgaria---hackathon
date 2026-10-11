@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { PositionSnapshot } from '../types';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface PortfolioReactionColumnProps {
   positions: PositionSnapshot[];
@@ -12,6 +13,8 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
   highlightedTicker,
   onSelectTicker,
 }) => {
+  const [showAll, setShowAll] = useState<boolean>(false);
+
   // 1. Sort strictly by absolute weight change so the largest mover is first
   const sortedPositions = useMemo(() => {
     return [...positions].sort(
@@ -30,8 +33,11 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
     return Math.max(100, Math.ceil(maxVal / 50) * 50);
   }, [positions]);
 
+  // Top 9 movers vs all 14 (default to top 9 so card height matches NewsColumn with 4 cards)
+  const displayedPositions = showAll ? sortedPositions : sortedPositions.slice(0, 9);
+
   return (
-    <div className="flex flex-col p-4 bg-surface rounded-lg border border-border shadow-xs">
+    <div className="flex flex-col h-full flex-1 p-4 bg-surface rounded-lg border border-border shadow-xs">
       {/* Column Header: 3 Portfolio + plain caption */}
       <div className="flex items-baseline justify-between pb-2.5 mb-2 border-b border-border">
         <div>
@@ -64,9 +70,9 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
         </div>
       </div>
 
-      {/* All 14 Asset Rows */}
-      <div className="space-y-1.5 py-1">
-        {sortedPositions.map((pos) => {
+      {/* Asset Rows Container */}
+      <div className="space-y-1.5 py-1 flex-1">
+        {displayedPositions.map((pos) => {
           const isHighlighted = highlightedTicker === pos.ticker;
           const deltaBps = pos.weight_change_bps;
           const isPositive = deltaBps > 0;
@@ -131,6 +137,28 @@ export const PortfolioReactionColumn: React.FC<PortfolioReactionColumnProps> = (
             </div>
           );
         })}
+
+        {/* Expander button: Show all 14 toggle */}
+        {sortedPositions.length > 9 && (
+          <div className="pt-1">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="w-full py-1.5 px-2 rounded-md text-xs font-mono text-accent hover:bg-blue-50 border border-blue-200 bg-white transition-colors flex items-center justify-center gap-1 shadow-2xs cursor-pointer"
+            >
+              {showAll ? (
+                <>
+                  <ChevronUp className="h-3 w-3" />
+                  <span>Show top 9 only</span>
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-3 w-3" />
+                  <span>Show all 14 ({sortedPositions.length - 9} more)</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Aligned column footer note */}
