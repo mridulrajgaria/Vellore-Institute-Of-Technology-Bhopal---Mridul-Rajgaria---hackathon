@@ -305,7 +305,7 @@
   <div class="footer-row">
     <div>S&P Global & CRISIL Campus Hackathon 2026</div>
     <div>Mridul Rajgaria &bull; VIT Bhopal</div>
-    <div class="mono">02 / 08</div>
+    <div class="mono">02 / 07</div>
   </div>
 </div>
 
@@ -367,7 +367,7 @@
   <div class="footer-row">
     <div>S&P Global & CRISIL Campus Hackathon 2026</div>
     <div>Mridul Rajgaria &bull; VIT Bhopal</div>
-    <div class="mono">03 / 08</div>
+    <div class="mono">03 / 07</div>
   </div>
 </div>
 
@@ -438,7 +438,7 @@
         Classifies the event: earnings, regulatory action, credit event, etc.
       </div>
       <div style="font-size: 11px; color: #73766F; line-height: 1.35;">
-        8 rule-based classes &bull; precision 1.0 on Credit / Regulatory / Earnings triggers
+        8 rule-based classes &bull; precision 1.0 on Credit / Regulatory / Earnings triggers (180 hand-labelled texts; recall 1.00 / 0.68 / 0.23)
       </div>
     </div>
 
@@ -507,7 +507,7 @@
   <div class="footer-row">
     <div>S&P Global & CRISIL Campus Hackathon 2026</div>
     <div>Mridul Rajgaria &bull; VIT Bhopal</div>
-    <div class="mono">04 / 08</div>
+    <div class="mono">04 / 07</div>
   </div>
 </div>
 
@@ -519,113 +519,112 @@
   <div class="slide-title-main" style="margin-bottom: 4px;">
     How a risk score nudges portfolio weights, within limits
   </div>
-  <div class="slide-subtitle-top" style="margin-bottom: 14px;">
+  <div class="slide-subtitle-top" style="margin-bottom: 12px;">
     If all 14 stocks start with equal weights, each is 1 / 14 &approx; 7.14% of the portfolio. Signals tilt that baseline; rules keep the tilt bounded.
   </div>
 
-  <div style="font-size: 14px; font-weight: 700; color: #1a1e1a; margin-bottom: 10px;">
+  <div style="font-size: 13px; font-weight: 700; color: #1a1e1a; margin-bottom: 8px;">
     Equal-weight portfolio &rarr; Risk signal &rarr; Bounded adjustment
   </div>
 
   <!-- Two Column Grid -->
-  <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px; margin-bottom: 10px;">
+  <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px; margin-bottom: 10px;">
     <!-- Left: SVG Chart + Note -->
     <div>
-      <div class="box-card" style="padding: 14px 18px; margin-bottom: 10px;">
-        <svg viewBox="0 0 540 230" style="width: 100%; height: 230px;">
-          <line x1="189" y1="20" x2="189" y2="190" stroke="#73766F" stroke-dasharray="2,2" stroke-width="1"/>
-          <text x="189" y="14" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">floor 3.57%</text>
+      <div class="box-card" style="padding: 12px 16px; margin-bottom: 8px;">
+        <svg viewBox="0 0 540 240" style="width: 100%; height: 235px;">
+          <line x1="189" y1="18" x2="189" y2="200" stroke="#73766F" stroke-dasharray="2,2" stroke-width="1"/>
+          <text x="189" y="12" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">floor 3.57%</text>
 
-          <line x1="457" y1="20" x2="457" y2="190" stroke="#73766F" stroke-dasharray="2,2" stroke-width="1"/>
-          <text x="457" y="14" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">cap 14.29%</text>
+          <line x1="457" y1="18" x2="457" y2="200" stroke="#73766F" stroke-dasharray="2,2" stroke-width="1"/>
+          <text x="457" y="12" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">cap 14.29%</text>
 
-          <line x1="100" y1="190" x2="500" y2="190" stroke="#D0CEC6" stroke-width="1"/>
-          <text x="100" y="205" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">0</text>
-          <text x="150" y="205" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">2</text>
-          <text x="200" y="205" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">4</text>
-          <text x="250" y="205" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">6</text>
-          <text x="300" y="205" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">8</text>
-          <text x="350" y="205" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">10</text>
-          <text x="400" y="205" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">12</text>
-          <text x="450" y="205" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">14</text>
-          <text x="500" y="205" fill="#73766F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">16</text>
-          <text x="300" y="222" fill="#73766F" font-size="10" text-anchor="middle">Portfolio weight (%) &bull; grey = equal-weight start, colour = after rules</text>
+          <line x1="100" y1="200" x2="500" y2="200" stroke="#D0CEC6" stroke-width="1"/>
+          <text x="100" y="214" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">0</text>
+          <text x="150" y="214" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">2</text>
+          <text x="200" y="214" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">4</text>
+          <text x="250" y="214" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">6</text>
+          <text x="300" y="214" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">8</text>
+          <text x="350" y="214" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">10</text>
+          <text x="400" y="214" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">12</text>
+          <text x="450" y="214" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">14</text>
+          <text x="500" y="214" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">16</text>
+          <text x="300" y="230" fill="#73766F" font-size="10" text-anchor="middle">Portfolio weight (%) &bull; grey = equal-weight start, colour = after tilt</text>
 
           <!-- Stock A -->
-          <text x="90" y="42" fill="#424642" font-size="10" text-anchor="end">Stock A</text>
-          <text x="90" y="53" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">EMA +0.30</text>
-          <rect x="100" y="34" width="178.5" height="9" fill="#BDBAB2"/>
-          <text x="284" y="42" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace">7.14%</text>
-          <rect x="100" y="46" width="259" height="9" fill="#32644b"/>
-          <text x="364" y="54" fill="#1a1e1a" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">10.36%</text>
+          <text x="90" y="36" fill="#424642" font-size="10" text-anchor="end">Stock A</text>
+          <text x="90" y="47" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">score +0.40</text>
+          <rect x="100" y="28" width="178.5" height="8" fill="#BDBAB2"/>
+          <text x="284" y="35" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace">7.14%</text>
+          <rect x="100" y="39" width="315" height="8" fill="#32644b"/>
+          <text x="420" y="47" fill="#1a1e1a" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">12.60%</text>
 
           <!-- Stock B -->
-          <text x="90" y="82" fill="#424642" font-size="10" text-anchor="end">Stock B</text>
-          <text x="90" y="93" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">EMA +0.10 (deadband)</text>
-          <rect x="100" y="74" width="178.5" height="9" fill="#BDBAB2"/>
-          <text x="284" y="82" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace">7.14%</text>
-          <rect x="100" y="86" width="178.5" height="9" fill="#4b5d52"/>
-          <text x="284" y="94" fill="#1a1e1a" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">7.14%</text>
+          <text x="90" y="74" fill="#424642" font-size="10" text-anchor="end">Stock B</text>
+          <text x="90" y="85" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">score -0.40</text>
+          <rect x="100" y="66" width="178.5" height="8" fill="#BDBAB2"/>
+          <text x="284" y="73" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace">7.14%</text>
+          <rect x="100" y="77" width="94.75" height="8" fill="#B45353"/>
+          <text x="200" y="85" fill="#B45353" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">3.79%</text>
 
           <!-- Stock C -->
-          <text x="90" y="122" fill="#424642" font-size="10" text-anchor="end">Stock C</text>
-          <text x="90" y="133" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">EMA +0.80</text>
-          <rect x="100" y="114" width="178.5" height="9" fill="#BDBAB2"/>
-          <text x="284" y="122" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace">7.14%</text>
-          <rect x="100" y="126" width="357" height="9" fill="#204d37"/>
-          <text x="462" y="134" fill="#1a1e1a" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">14.29%</text>
+          <text x="90" y="112" fill="#424642" font-size="10" text-anchor="end">Stock C</text>
+          <text x="90" y="123" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">score +0.20</text>
+          <rect x="100" y="104" width="178.5" height="8" fill="#BDBAB2"/>
+          <text x="284" y="111" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace">7.14%</text>
+          <rect x="100" y="115" width="233.25" height="8" fill="#6f8863"/>
+          <text x="338" y="123" fill="#1a1e1a" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">9.33%</text>
 
           <!-- Stock D -->
-          <text x="90" y="162" fill="#424642" font-size="10" text-anchor="end">Stock D</text>
-          <text x="90" y="173" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">EMA -0.40</text>
-          <rect x="100" y="154" width="178.5" height="9" fill="#BDBAB2"/>
-          <text x="284" y="162" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace">7.14%</text>
-          <rect x="100" y="166" width="89" height="9" fill="#B45353"/>
-          <text x="194" y="174" fill="#B45353" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">3.57%</text>
+          <text x="90" y="150" fill="#424642" font-size="10" text-anchor="end">Stock D</text>
+          <text x="90" y="161" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">score -0.20</text>
+          <rect x="100" y="142" width="178.5" height="8" fill="#BDBAB2"/>
+          <text x="284" y="149" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace">7.14%</text>
+          <rect x="100" y="153" width="128" height="8" fill="#C27A7A"/>
+          <text x="233" y="161" fill="#B45353" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">5.12%</text>
+
+          <!-- 10 Other Stocks -->
+          <text x="90" y="184" fill="#424642" font-size="10" text-anchor="end">10 other stocks</text>
+          <text x="90" y="195" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">score 0.00</text>
+          <rect x="100" y="176" width="178.5" height="8" fill="#BDBAB2"/>
+          <text x="284" y="183" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace">7.14%</text>
+          <rect x="100" y="187" width="172.75" height="8" fill="#88987b"/>
+          <text x="278" y="195" fill="#1a1e1a" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">6.91%</text>
         </svg>
       </div>
 
       <div style="font-size: 11px; color: #73766F; line-height: 1.4; border-left: 2px solid #D0CEC6; padding-left: 10px;">
-        Conceptual example, not an application output. Four hypothetical stocks (A&ndash;D). Bars apply the raw formula, deadband and weight bounds only (Stock C is clamped from 15.71% to the 14.29% cap); no renormalisation, turnover cap or negative multiplier. Not an optimal-allocation claim.
+        Conceptual example, not an application output. 14 hypothetical stocks with invented smoothed scores (A +0.40, B &minus;0.40, C +0.20, D &minus;0.20, ten at 0), run through the exponential tilt with k = 1.50. Here neither the weight bounds nor the 10% turnover cap binds (one-way turnover 7.65%); they would limit more extreme scores. Not an optimal-allocation claim.
       </div>
     </div>
 
     <!-- Right: Rules & Formula -->
     <div>
-      <div style="background: #F4F3EE; padding: 10px 16px; border-radius: 4px; font-size: 13px; margin-bottom: 8px;" class="mono">
-        <div><strong>w_raw,i = w_base &times; (1.0 + k &times; EMA_i)</strong></div>
-        <div style="color: #73766F; font-size: 12px; margin-top: 2px;">w_base = 7.14% &bull; k = 1.50</div>
-      </div>
-
       <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
         <tbody>
           <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-weight: 700; width: 35%; padding: 6px 0;">EMA smoothing<br><span style="font-weight: 400; color: #73766F;">half-life 2.0 days</span></td>
-            <td style="color: #424642; line-height: 1.35;">A brief burst of news cannot cause an unstable, immediate change.</td>
+            <td style="font-weight: 700; width: 33%; padding: 6px 0;">1 &bull; Daily score</td>
+            <td style="color: #424642; line-height: 1.35;">Per signal: |s| &lt; 0.20 is ignored (deadband); negative s is multiplied by 1.25. Signals are averaged, weighted by attribution &times; impact / 10.</td>
           </tr>
           <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-weight: 700; padding: 6px 0;">Deadband<br><span style="font-weight: 400; color: #73766F;">&plusmn;0.20</span></td>
-            <td style="color: #424642; line-height: 1.35;">Small signals, likely mostly noise, are zeroed out.</td>
+            <td style="font-weight: 700; padding: 6px 0;">2 &bull; EMA smoothing<br><span style="font-weight: 400; color: #73766F;">half-life 2.0 days</span></td>
+            <td style="color: #424642; line-height: 1.35;">score = (1&minus;&alpha;)&middot;prev + &alpha;&middot;raw, &alpha; = 1 &minus; 2^(&minus;1/2) &approx; 0.293. A brief burst of news cannot cause an immediate swing.</td>
           </tr>
           <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-weight: 700; padding: 6px 0;">Negative multiplier<br><span style="font-weight: 400; color: #73766F;">1.25&times;</span></td>
-            <td style="color: #424642; line-height: 1.35;">Negative headlines get a 25% higher penalty (asymmetric risk aversion).</td>
+            <td style="font-weight: 700; padding: 6px 0;">3 &bull; Exponential tilt<br><span style="font-weight: 400; color: #73766F;">k = 1.50</span></td>
+            <td style="color: #424642; line-height: 1.35;">w &prop; exp(k &times; score), normalised to sum to 1. Positive scores raise a stock above 7.14%; negative scores lower it.</td>
           </tr>
           <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-weight: 700; padding: 6px 0;">Weight bounds<br><span style="font-weight: 400; color: #73766F;">3.57% (0.5&times;) to 14.29% (2.0&times;)</span></td>
-            <td style="color: #424642; line-height: 1.35;">No stock becomes too small or too large (e.g. concentration in TSLA).</td>
+            <td style="font-weight: 700; padding: 6px 0;">4 &bull; Weight bounds<br><span style="font-weight: 400; color: #73766F;">3.57% to 14.29%</span></td>
+            <td style="color: #424642; line-height: 1.35;">Weights are projected into 0.5&times; to 2.0&times; of the 7.14% baseline, with the excess redistributed, so no stock gets too small or too large.</td>
           </tr>
           <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-weight: 700; padding: 6px 0;">Turnover cap<br><span style="font-weight: 400; color: #73766F;">10% / day</span></td>
-            <td style="color: #424642; line-height: 1.35;">Limits how much the portfolio can trade in one day.</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-weight: 700; padding: 6px 0;">Transaction costs<br><span style="font-weight: 400; color: #73766F;">5 bps</span></td>
-            <td style="color: #424642; line-height: 1.35;">Trading is not free: cost is deducted from net NAV.</td>
+            <td style="font-weight: 700; padding: 6px 0;">5 &bull; Turnover cap<br><span style="font-weight: 400; color: #73766F;">10% one-way / day</span></td>
+            <td style="color: #424642; line-height: 1.35;">If the move exceeds the cap, trades are scaled down; weights are then renormalised to exactly 1.0.</td>
           </tr>
           <tr>
-            <td style="font-weight: 700; padding: 6px 0;">Fallback<br><span style="font-weight: 400; color: #73766F;">equal weight</span></td>
-            <td style="color: #424642; line-height: 1.35;">Missing market data reverts weights to 7.14%.</td>
+            <td style="font-weight: 700; padding: 6px 0;">Costs, fallback<br><span style="font-weight: 400; color: #73766F;">5 bps</span></td>
+            <td style="color: #424642; line-height: 1.35;">Backtest deducts 5 bps on turnover from net NAV. Missing market data reverts to equal weight, 7.14%.</td>
           </tr>
         </tbody>
       </table>
@@ -635,259 +634,166 @@
   <div class="footer-row">
     <div>S&P Global & CRISIL Campus Hackathon 2026</div>
     <div>Mridul Rajgaria &bull; VIT Bhopal</div>
-    <div class="mono">05 / 08</div>
+    <div class="mono">05 / 07</div>
   </div>
 </div>
 
 
 <!-- =========================================================================
-     SLIDE 6: HIGHER IMPACT SCORES WENT WITH LARGER EVENT-DAY PRICE MOVES
+     SLIDE 6: EMPIRICAL VALIDATION & BACKTEST RESULTS
      ========================================================================= -->
 <div class="slide">
   <div class="slide-title-main" style="margin-bottom: 4px;">
-    Higher impact scores went with larger event-day price moves
+    System performance: price move association vs. strategy returns
   </div>
-  <div class="slide-subtitle-top" style="margin-bottom: 16px;">
-    Event study across 2,072 ticker-day observations (2021&ndash;2022), with block bootstrap confidence intervals.
+  <div class="slide-subtitle-top" style="margin-bottom: 12px;">
+    Evaluation across 2,072 ticker-days and 252-day backtest (2021&ndash;2022 bear market, 5 bps net friction).
   </div>
 
-  <!-- Two Column Grid -->
-  <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px; margin-bottom: 14px;">
+  <!-- Two Column Grid: Left = Empirical Validation, Right = Portfolio Backtest -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 8px;">
+
+    <!-- Left Column: Empirical Validation -->
     <div>
-      <div class="box-card" style="padding: 16px 20px; margin-bottom: 12px;">
-        <svg viewBox="0 0 520 200" style="width: 100%; height: 200px;">
-          <line x1="45" y1="20" x2="45" y2="160" stroke="#E3E1D9" stroke-width="1"/>
-          <line x1="45" y1="160" x2="500" y2="160" stroke="#D0CEC6" stroke-width="1"/>
-          <text x="40" y="163" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">0.0</text>
-          <text x="40" y="135" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">0.5</text>
-          <text x="40" y="107" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">1.0</text>
-          <text x="40" y="79" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">1.5</text>
-          <text x="40" y="51" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">2.0</text>
-          <text x="40" y="23" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">2.5</text>
-          <text x="18" y="90" fill="#73766F" font-size="10" transform="rotate(-90 18 90)" text-anchor="middle">Mean |AR0| (%)</text>
+      <div style="font-size: 11px; font-weight: 700; color: #73766F; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">
+        1 &bull; EVENT STUDY VALIDATION (|AR0| SHOCKS)
+      </div>
 
-          <line x1="105" y1="22" x2="455" y2="22" stroke="#73766F" stroke-width="1"/>
-          <text x="280" y="16" fill="#1a1e1a" font-size="11" font-weight="600" text-anchor="middle">Q5 &minus; Q1 spread: +1.15 pp</text>
+      <div class="box-card" style="padding: 10px 14px; margin-bottom: 8px;">
+        <svg viewBox="0 0 520 185" style="width: 100%; height: 165px;">
+          <line x1="45" y1="15" x2="45" y2="145" stroke="#E3E1D9" stroke-width="1"/>
+          <line x1="45" y1="145" x2="500" y2="145" stroke="#D0CEC6" stroke-width="1"/>
+          <text x="40" y="148" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">0.0</text>
+          <text x="40" y="122" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">0.5</text>
+          <text x="40" y="96" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">1.0</text>
+          <text x="40" y="70" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">1.5</text>
+          <text x="40" y="44" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">2.0</text>
+          <text x="40" y="18" fill="#73766F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">2.5</text>
+          <text x="18" y="80" fill="#73766F" font-size="10" transform="rotate(-90 18 80)" text-anchor="middle">Mean |AR0| (%)</text>
 
-          <rect x="80" y="92" width="50" height="68" fill="#8f9c80"/>
-          <text x="105" y="86" fill="#1a1e1a" font-size="11" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">1.21%</text>
-          <text x="105" y="174" fill="#73766F" font-size="10" text-anchor="middle">Q1</text>
-          <text x="105" y="186" fill="#73766F" font-size="9" text-anchor="middle">lowest</text>
+          <line x1="105" y1="16" x2="455" y2="16" stroke="#73766F" stroke-width="1"/>
+          <text x="280" y="12" fill="#1a1e1a" font-size="10" font-weight="700" text-anchor="middle">Q5 &minus; Q1 spread: +1.15 pp (95% CI [0.81%, 1.57%])</text>
 
-          <rect x="165" y="84" width="50" height="76" fill="#88987b"/>
-          <text x="190" y="78" fill="#1a1e1a" font-size="11" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">1.35%</text>
-          <text x="190" y="174" fill="#73766F" font-size="10" text-anchor="middle">Q2</text>
+          <rect x="80" y="83" width="50" height="62" fill="#8f9c80"/>
+          <text x="105" y="77" fill="#1a1e1a" font-size="10" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">1.21%</text>
+          <text x="105" y="158" fill="#73766F" font-size="9" text-anchor="middle">Q1 (2.70)</text>
 
-          <rect x="250" y="78" width="50" height="82" fill="#72886a"/>
-          <text x="275" y="72" fill="#1a1e1a" font-size="11" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">1.46%</text>
-          <text x="275" y="174" fill="#73766F" font-size="10" text-anchor="middle">Q3</text>
+          <rect x="165" y="75" width="50" height="70" fill="#88987b"/>
+          <text x="190" y="69" fill="#1a1e1a" font-size="10" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">1.35%</text>
+          <text x="190" y="158" fill="#73766F" font-size="9" text-anchor="middle">Q2 (3.50)</text>
 
-          <rect x="335" y="64" width="50" height="96" fill="#587756"/>
-          <text x="360" y="58" fill="#1a1e1a" font-size="11" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">1.71%</text>
-          <text x="360" y="174" fill="#73766F" font-size="10" text-anchor="middle">Q4</text>
+          <rect x="250" y="69" width="50" height="76" fill="#72886a"/>
+          <text x="275" y="63" fill="#1a1e1a" font-size="10" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">1.46%</text>
+          <text x="275" y="158" fill="#73766F" font-size="9" text-anchor="middle">Q3 (4.63)</text>
 
-          <rect x="420" y="28" width="50" height="132" fill="#204d37"/>
-          <text x="445" y="22" fill="#1a1e1a" font-size="11" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">2.36%</text>
-          <text x="445" y="174" fill="#73766F" font-size="10" text-anchor="middle">Q5</text>
-          <text x="445" y="186" fill="#73766F" font-size="9" text-anchor="middle">highest</text>
+          <rect x="335" y="56" width="50" height="89" fill="#587756"/>
+          <text x="360" y="50" fill="#1a1e1a" font-size="10" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">1.71%</text>
+          <text x="360" y="158" fill="#73766F" font-size="9" text-anchor="middle">Q4 (5.15)</text>
+
+          <rect x="420" y="23" width="50" height="122" fill="#204d37"/>
+          <text x="445" y="17" fill="#1a1e1a" font-size="10" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">2.36%</text>
+          <text x="445" y="158" fill="#73766F" font-size="9" text-anchor="middle">Q5 (6.36)</text>
         </svg>
-        <div style="font-size: 11px; color: #73766F; text-align: center; margin-top: 2px;">
-          Impact-score quintile (N = 2,072; about 414 per bucket)
+        <div style="font-size: 10px; color: #73766F; text-align: center;">
+          Mean impact scores per quintile shown in parentheses (N = 2,072; ~414 per bucket)
         </div>
       </div>
 
-      <table class="editorial-table mono" style="font-size: 12px; width: 100%; border-collapse: collapse; background: #FFFFFF; border: 1px solid #E3E1D9;">
-        <thead>
-          <tr style="background: #F7F6F2;">
-            <th style="font-family: 'Geist Sans'; padding: 8px 12px; border-bottom: 1px solid #E3E1D9;"></th>
-            <th style="padding: 8px 12px; border-bottom: 1px solid #E3E1D9;">Q1</th>
-            <th style="padding: 8px 12px; border-bottom: 1px solid #E3E1D9;">Q2</th>
-            <th style="padding: 8px 12px; border-bottom: 1px solid #E3E1D9;">Q3</th>
-            <th style="padding: 8px 12px; border-bottom: 1px solid #E3E1D9;">Q4</th>
-            <th style="padding: 8px 12px; border-bottom: 1px solid #E3E1D9;">Q5</th>
-            <th style="padding: 8px 12px; border-bottom: 1px solid #E3E1D9;">Q5 &minus; Q1</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-family: 'Geist Sans'; font-weight: 600; padding: 8px 12px;">Count</td>
-            <td style="padding: 8px 12px;">415</td>
-            <td style="padding: 8px 12px;">414</td>
-            <td style="padding: 8px 12px;">415</td>
-            <td style="padding: 8px 12px;">414</td>
-            <td style="padding: 8px 12px;">414</td>
-            <td style="padding: 8px 12px;">2,072</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-family: 'Geist Sans'; font-weight: 600; padding: 8px 12px;">Mean impact</td>
-            <td style="padding: 8px 12px;">2.70</td>
-            <td style="padding: 8px 12px;">3.50</td>
-            <td style="padding: 8px 12px;">4.63</td>
-            <td style="padding: 8px 12px;">5.15</td>
-            <td style="padding: 8px 12px;">6.36</td>
-            <td style="padding: 8px 12px;">+3.66</td>
-          </tr>
-          <tr>
-            <td style="font-family: 'Geist Sans'; font-weight: 600; padding: 8px 12px;">Mean |CAR(0,2)|</td>
-            <td style="padding: 8px 12px;">2.46%</td>
-            <td style="padding: 8px 12px;">2.52%</td>
-            <td style="padding: 8px 12px;">2.81%</td>
-            <td style="padding: 8px 12px;">3.10%</td>
-            <td style="padding: 8px 12px;" class="text-green">3.89%</td>
-            <td style="padding: 8px 12px;" class="text-green">+1.43%</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Right: Narrative -->
-    <div style="display: flex; flex-direction: column; gap: 14px;">
-      <div>
-        <div style="font-size: 13px; font-weight: 700; color: #1a1e1a;">What was compared</div>
-        <div style="font-size: 13px; color: #424642; margin-top: 2px; line-height: 1.4;">
-          We grouped observations into five buckets, lowest to highest impact score, and compared the average absolute abnormal price move (|AR0|: the event-day move beyond what the market explains) in each.
-        </div>
-      </div>
-
-      <div>
-        <div style="font-size: 13px; font-weight: 700; color: #1a1e1a;">What appeared</div>
-        <div style="font-size: 13px; color: #424642; margin-top: 2px; line-height: 1.4;">
-          Q1 averaged 1.21%, Q5 2.36%. Higher impact-score groups had larger average absolute event-day abnormal moves in this sample.
-        </div>
-      </div>
-
-      <div>
-        <div style="font-size: 13px; font-weight: 700; color: #1a1e1a; margin-bottom: 6px;">How strong</div>
-        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
-          <div style="display: grid; grid-template-columns: 85px 1fr; gap: 8px;">
+      <div style="background: #FFFFFF; border: 1px solid #E3E1D9; border-radius: 4px; padding: 10px 14px; margin-bottom: 8px;">
+        <div style="font-size: 11px; font-weight: 700; color: #1a1e1a; margin-bottom: 4px;">Statistical Evidence & Robustness</div>
+        <div style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
+          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 8px;">
             <div class="mono" style="font-weight: 700;">&rho; = 0.159</div>
-            <div style="color: #424642;">Spearman rank correlation, p = 3.08e-13: a positive but modest monotonic association.</div>
+            <div style="color: #424642;">Spearman rank correlation, 95% CI [0.122, 0.194], p = 3.08e-13.</div>
           </div>
-          <div style="display: grid; grid-template-columns: 85px 1fr; gap: 8px;">
+          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 8px;">
             <div class="mono" style="font-weight: 700;">&rho; = 0.116</div>
-            <div style="color: #424642;">Partial correlation (p = 1.05e-07), controlling for recent 20-day historical volatility.</div>
+            <div style="color: #424642;">Partial correlation (p = 1.05e-07), controlling for trailing 20d volatility.</div>
           </div>
-          <div style="display: grid; grid-template-columns: 85px 1fr; gap: 8px;">
+          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 8px;">
             <div class="mono" style="font-weight: 700;">p = 0.0010</div>
-            <div style="color: #424642;">Placebo test: 1,000 within-ticker shuffles of the scores.</div>
+            <div style="color: #424642;">Placebo test: 1,000 within-ticker shuffles (null mean &rho; = 0.028).</div>
           </div>
         </div>
       </div>
 
-      <div>
-        <div style="font-size: 13px; font-weight: 700; color: #1a1e1a;">What it does not establish</div>
-        <div style="font-size: 13px; color: #636660; margin-top: 2px; line-height: 1.4;">
-          Correlation is not causation. The score does not predict each price move, and |AR0| measures size, not direction.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer-row">
-    <div>S&P Global & CRISIL Campus Hackathon 2026</div>
-    <div>Mridul Rajgaria &bull; VIT Bhopal</div>
-    <div class="mono">06 / 08</div>
-  </div>
-</div>
-
-
-<!-- =========================================================================
-     SLIDE 7: THE STRATEGY LOST MONEY AND TRAILED EVERY BENCHMARK
-     ========================================================================= -->
-<div class="slide">
-  <div class="slide-title-main" style="margin-bottom: 4px;">
-    The strategy lost money and trailed every benchmark
-  </div>
-  <div class="slide-subtitle-top" style="margin-bottom: 14px;">
-    252 trading days, Oct 2021 to Sep 2022, during the tech-sector downturn. 5 bps net transaction friction.
-  </div>
-
-  <!-- Two Columns -->
-  <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px; margin-bottom: 14px;">
-    <div>
-      <div class="box-card" style="padding: 14px 18px; margin-bottom: 12px;">
-        <div style="font-size: 11px; color: #73766F; margin-bottom: 6px;">
-          Cumulative performance, normalised NAV (start = 1.0), full axis range shown
-        </div>
-        <img src="module_a_performance.png" alt="Backtest Performance" style="width: 100%; max-height: 270px; object-fit: contain;">
-      </div>
-
-      <div style="background: #FAF9F5; border: 1px solid #E3E1D9; border-radius: 4px; padding: 14px 18px; font-size: 13px; color: #424642; line-height: 1.45;">
-        The strategy was tested during a difficult historical period. It did not outperform the reported benchmarks in this backtest. Its result sat near the middle of the placebo distribution (48.5th percentile), so this experiment did not establish a robust advantage over randomised alternatives.
+      <div style="font-size: 11px; color: #73766F; line-height: 1.35; border-left: 2px solid #D0CEC6; padding-left: 8px;">
+        <strong>Finding:</strong> Impact score successfully ranks market surprise magnitude. However, correlation is not causation: |AR0| measures size of price move, not direction or tradeability.
       </div>
     </div>
 
+    <!-- Right Column: Backtest Results & Honesty -->
     <div>
-      <table style="width: 100%; border-collapse: collapse; font-size: 12px; background: #FFFFFF; border: 1px solid #E3E1D9; margin-bottom: 6px;" class="mono">
+      <div style="font-size: 11px; font-weight: 700; color: #73766F; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;">
+        2 &bull; TACTICAL REBALANCING BACKTEST (MODULE A)
+      </div>
+
+      <div class="box-card" style="padding: 10px 14px; margin-bottom: 8px;">
+        <div style="font-size: 10px; color: #73766F; margin-bottom: 4px;">
+          Cumulative normalized NAV (252 trading days, Oct 2021 &ndash; Sep 2022)
+        </div>
+        <img src="module_a_performance.png" alt="Backtest Performance" style="width: 100%; max-height: 155px; object-fit: contain;">
+      </div>
+
+      <table style="width: 100%; border-collapse: collapse; font-size: 11px; background: #FFFFFF; border: 1px solid #E3E1D9; margin-bottom: 8px;" class="mono">
         <thead>
           <tr style="background: #F7F6F2; font-family: 'Geist Sans';">
-            <th style="padding: 8px 12px; text-align: left; border-bottom: 1px solid #E3E1D9;">Strategy</th>
-            <th style="padding: 8px 12px; text-align: left; border-bottom: 1px solid #E3E1D9;">Return</th>
-            <th style="padding: 8px 12px; text-align: left; border-bottom: 1px solid #E3E1D9;">Sharpe</th>
-            <th style="padding: 8px 12px; text-align: left; border-bottom: 1px solid #E3E1D9;">Max DD</th>
+            <th style="padding: 5px 8px; text-align: left; border-bottom: 1px solid #E3E1D9;">Strategy</th>
+            <th style="padding: 5px 8px; text-align: left; border-bottom: 1px solid #E3E1D9;">Return</th>
+            <th style="padding: 5px 8px; text-align: left; border-bottom: 1px solid #E3E1D9;">Sharpe</th>
+            <th style="padding: 5px 8px; text-align: left; border-bottom: 1px solid #E3E1D9;">Max DD</th>
           </tr>
         </thead>
         <tbody>
           <tr style="font-weight: 700; border-bottom: 1px solid #E3E1D9;">
-            <td style="font-family: 'Geist Sans'; padding: 8px 12px;">Tactical (5 bps)</td>
-            <td style="padding: 8px 12px;" class="text-red">-28.91%</td>
-            <td style="padding: 8px 12px;" class="text-red">-0.9209</td>
-            <td style="padding: 8px 12px;" class="text-red">-37.95%</td>
+            <td style="font-family: 'Geist Sans'; padding: 5px 8px;">Tactical (5 bps)</td>
+            <td style="padding: 5px 8px;" class="text-red">-28.91%</td>
+            <td style="padding: 5px 8px;" class="text-red">-0.9209</td>
+            <td style="padding: 5px 8px;" class="text-red">-37.95%</td>
           </tr>
           <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-family: 'Geist Sans'; padding: 8px 12px;">Equal-wt daily</td>
-            <td style="padding: 8px 12px;" class="text-red">-28.53%</td>
-            <td style="padding: 8px 12px;" class="text-red">-0.9092</td>
-            <td style="padding: 8px 12px;" class="text-red">-37.39%</td>
+            <td style="font-family: 'Geist Sans'; padding: 5px 8px;">Equal-wt daily</td>
+            <td style="padding: 5px 8px;" class="text-red">-28.53%</td>
+            <td style="padding: 5px 8px;" class="text-red">-0.9092</td>
+            <td style="padding: 5px 8px;" class="text-red">-37.39%</td>
           </tr>
           <tr style="border-bottom: 1px solid #E3E1D9;">
-            <td style="font-family: 'Geist Sans'; padding: 8px 12px;">Equal-wt buy & hold</td>
-            <td style="padding: 8px 12px;" class="text-red">-27.38%</td>
-            <td style="padding: 8px 12px;" class="text-red">-0.9323</td>
+            <td style="font-family: 'Geist Sans'; padding: 5px 8px;">Equal-wt buy & hold</td>
+            <td style="padding: 5px 8px;" class="text-red">-27.38%</td>
+            <td style="padding: 5px 8px;" class="text-red">-0.9323</td>
             <td style="padding: 8px 12px;" class="text-red">-35.56%</td>
           </tr>
           <tr>
-            <td style="font-family: 'Geist Sans'; padding: 8px 12px;">SPY (S&P 500)</td>
-            <td style="padding: 8px 12px;" class="text-red">-15.51%</td>
-            <td style="padding: 8px 12px;" class="text-red">-0.7085</td>
-            <td style="padding: 8px 12px;" class="text-red">-24.37%</td>
+            <td style="font-family: 'Geist Sans'; padding: 5px 8px;">SPY (S&P 500)</td>
+            <td style="padding: 5px 8px;" class="text-red">-15.51%</td>
+            <td style="padding: 5px 8px;" class="text-red">-0.7085</td>
+            <td style="padding: 5px 8px;" class="text-red">-24.37%</td>
           </tr>
         </tbody>
       </table>
-      <div style="font-size: 11px; color: #73766F; line-height: 1.35; margin-bottom: 14px;">
-        Sharpe: return per unit of volatility (risk-free rate = 0). Max DD: largest peak-to-trough fall.
-      </div>
 
-      <div style="border-top: 1px solid #E3E1D9; padding-top: 10px;">
-        <div style="font-size: 13px; font-weight: 700; color: #1a1e1a; margin-bottom: 8px;">Honesty diagnostics</div>
-        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
-          <div style="display: grid; grid-template-columns: 85px 1fr; gap: 10px;">
-            <div style="font-weight: 700; color: #1a1e1a;">Placebo<br><span style="font-weight: 400; color: #73766F;">200 runs</span></div>
-            <div style="color: #424642; line-height: 1.35;">48.5th percentile: near the centre of the random distribution.</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 85px 1fr; gap: 10px;">
-            <div style="font-weight: 700; color: #1a1e1a;">TSLA exclusion</div>
-            <div style="color: #424642; line-height: 1.35;">-28.65% net. Dropping the stock with ~70% of tweet volume does not change the result.</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 85px 1fr; gap: 10px;">
-            <div style="font-weight: 700; color: #1a1e1a;">Sensitivity grid<br><span style="font-weight: 400; color: #73766F;">9 cells</span></div>
-            <div style="color: #424642; line-height: 1.35;">-28.56% to -29.20% across tilt k &isin; [0.75, 3.0] and half-life [1, 5] days: flat.</div>
-          </div>
-        </div>
+      <div style="background: #FAF9F5; border: 1px solid #E3E1D9; border-radius: 4px; padding: 8px 12px; font-size: 11px; color: #424642; line-height: 1.35;">
+        <strong>Honesty diagnostics:</strong>
+        <span style="display: block; margin-top: 2px;">
+          &bull; <strong>200-run Placebo:</strong> Sharpe sits at 48.5th percentile (near centre of random distribution).<br>
+          &bull; <strong>TSLA exclusion:</strong> -28.65% net return (dropping ~70% of tweets does not change result).<br>
+          &bull; <strong>Sensitivity grid (9 cells):</strong> Returns remain flat (-28.56% to -29.20%) across k &isin; [0.75, 3.0].
+        </span>
       </div>
     </div>
+
   </div>
 
   <div class="footer-row">
     <div>S&P Global & CRISIL Campus Hackathon 2026</div>
     <div>Mridul Rajgaria &bull; VIT Bhopal</div>
-    <div class="mono">07 / 08</div>
+    <div class="mono">06 / 07</div>
   </div>
 </div>
 
 
 <!-- =========================================================================
-     SLIDE 8: WHERE THE MODEL IS WEAK, AND WHAT COULD COME NEXT
+     SLIDE 7: WHERE THE MODEL IS WEAK, AND WHAT COULD COME NEXT
      ========================================================================= -->
 <div class="slide">
   <div class="slide-title-main" style="margin-bottom: 16px;">
@@ -1001,7 +907,7 @@
   <div class="footer-row" style="margin-top: 8px; padding-top: 8px;">
     <div>S&P Global & CRISIL Campus Hackathon 2026</div>
     <div>Mridul Rajgaria &bull; VIT Bhopal</div>
-    <div class="mono">08 / 08</div>
+    <div class="mono">07 / 07</div>
   </div>
 </div>
 
