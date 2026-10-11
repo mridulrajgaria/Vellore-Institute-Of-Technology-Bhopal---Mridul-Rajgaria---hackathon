@@ -14,8 +14,8 @@
     padding: 0;
   }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: #0f172a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #0b0f19;
     color: #f8fafc;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
@@ -26,8 +26,8 @@
     page-break-after: always;
     display: flex;
     flex-direction: column;
-    padding: 80px 100px;
-    background: #0f172a;
+    padding: 60px 80px 40px 80px;
+    background: #0b0f19;
     position: relative;
     overflow: hidden;
   }
@@ -37,563 +37,948 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 8px;
-    background: linear-gradient(90deg, #2563eb, #38bdf8, #10b981);
+    height: 6px;
+    background: linear-gradient(90deg, #dc2626, #2563eb, #38bdf8);
+  }
+  .top-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1e293b;
+  }
+  .top-logos {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .logo-img-main {
+    height: 52px;
+    object-fit: contain;
+  }
+  .logo-img-hackathon {
+    height: 48px;
+    object-fit: contain;
+  }
+  .top-badge {
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid #2563eb;
+    color: #60a5fa;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
   .slide-header {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
   }
   .slide-tag {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #38bdf8;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
   }
   .slide-title {
-    font-size: 48px;
+    font-size: 40px;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.5px;
   }
   .slide-subtitle {
-    font-size: 24px;
+    font-size: 20px;
     color: #94a3b8;
-    margin-top: 10px;
+    margin-top: 4px;
   }
-  .slide-content {
+  .slide-body {
     flex: 1;
     display: flex;
-    gap: 50px;
+    gap: 40px;
+    align-items: stretch;
   }
-  .col-1 { flex: 1; }
-  .col-2 { flex: 2; }
-  .card {
+  .col-1 { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+  .col-2 { flex: 2; display: flex; flex-direction: column; gap: 20px; }
+  
+  /* Clean Financial Table Styling */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  table.data-table th {
     background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 16px;
-    padding: 32px;
-    margin-bottom: 24px;
-  }
-  .card-title {
-    font-size: 24px;
+    color: #38bdf8;
+    font-size: 15px;
     font-weight: 700;
-    color: #38bdf8;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid #334155;
   }
-  p, li {
-    font-size: 20px;
-    line-height: 1.6;
+  table.data-table td {
+    padding: 13px 18px;
+    font-size: 16px;
     color: #cbd5e1;
+    border-bottom: 1px solid #1f2937;
+    line-height: 1.5;
   }
-  ul {
-    list-style-type: none;
+  table.data-table tr:last-child td {
+    border-bottom: none;
   }
-  li {
-    margin-bottom: 14px;
-    position: relative;
-    padding-left: 28px;
+  table.data-table tr:nth-child(even) td {
+    background: rgba(30, 41, 59, 0.4);
   }
-  li::before {
-    content: "•";
-    position: absolute;
-    left: 8px;
-    color: #38bdf8;
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 1.2;
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 15px;
   }
-  .highlight {
+  .text-highlight {
     color: #f8fafc;
     font-weight: 600;
   }
-  .badge {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 16px;
+  .text-accent {
+    color: #38bdf8;
+    font-weight: 600;
+  }
+  .text-positive {
+    color: #34d399;
     font-weight: 700;
   }
-  .badge-blue { background: rgba(37, 99, 235, 0.2); color: #60a5fa; border: 1px solid #2563eb; }
-  .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
-  .badge-amber { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
-  .metric-box {
-    display: flex;
-    gap: 24px;
-    margin-top: 20px;
+  .text-negative {
+    color: #f87171;
+    font-weight: 700;
   }
-  .metric-card {
-    flex: 1;
-    background: #0f172a;
-    border: 1px solid #334155;
+  .tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .tag-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #0284c7; }
+  .tag-green { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid #059669; }
+  .tag-amber { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid #d97706; }
+  .tag-red { background: rgba(248, 113, 113, 0.15); color: #f87171; border: 1px solid #dc2626; }
+
+  .card-box {
+    background: #111827;
+    border: 1px solid #1f2937;
     border-radius: 12px;
-    padding: 24px;
-    text-align: center;
-  }
-  .metric-value {
-    font-size: 40px;
-    font-weight: 800;
-    color: #38bdf8;
-    font-family: monospace;
-  }
-  .metric-label {
-    font-size: 16px;
-    color: #94a3b8;
-    margin-top: 8px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .img-card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 16px;
     padding: 20px;
+  }
+  .card-box-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 12px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
-  .img-card img {
-    max-width: 100%;
-    max-height: 600px;
-    border-radius: 8px;
-    object-fit: contain;
-  }
+
   .slide-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 16px;
+    font-size: 14px;
     color: #64748b;
-    border-top: 1px solid #334155;
-    padding-top: 20px;
-    margin-top: auto;
+    border-top: 1px solid #1e293b;
+    padding-top: 16px;
+    margin-top: 20px;
   }
 
-  /* Cover Slide */
-  .cover {
+  /* Cover Slide Layout */
+  .cover-slide {
     justify-content: center;
     align-items: center;
     text-align: center;
-    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    padding: 60px 120px;
+    background: radial-gradient(circle at 50% 40%, #1e293b 0%, #0b0f19 80%);
+  }
+  .cover-logos-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    margin-bottom: 36px;
+    background: rgba(17, 24, 39, 0.8);
+    padding: 16px 48px;
+    border-radius: 16px;
+    border: 1px solid #1f2937;
   }
   .cover-title {
-    font-size: 64px;
+    font-size: 58px;
     font-weight: 900;
     color: #ffffff;
-    margin-bottom: 24px;
     letter-spacing: -1px;
+    margin-bottom: 16px;
     max-width: 1400px;
   }
   .cover-sub {
-    font-size: 32px;
+    font-size: 26px;
     color: #38bdf8;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     font-weight: 600;
   }
-  .cover-meta {
-    display: flex;
-    gap: 40px;
-    background: rgba(30, 41, 59, 0.7);
-    padding: 30px 60px;
-    border-radius: 20px;
-    border: 1px solid #334155;
-  }
-  .cover-meta-item {
-    text-align: left;
-  }
-  .cover-meta-label {
-    font-size: 16px;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .cover-meta-value {
-    font-size: 22px;
-    color: #ffffff;
-    font-weight: 700;
-    margin-top: 6px;
-  }
-  table {
-    width: 100%;
+  table.candidate-table {
+    width: 1100px;
     border-collapse: collapse;
-    margin-top: 16px;
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 0 auto;
   }
-  th, td {
-    padding: 16px;
+  table.candidate-table th {
+    background: #1e293b;
+    color: #38bdf8;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 16px 20px;
     text-align: left;
     border-bottom: 1px solid #334155;
+  }
+  table.candidate-table td {
+    padding: 16px 20px;
     font-size: 18px;
-  }
-  th {
-    color: #38bdf8;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 16px;
-    letter-spacing: 1px;
-  }
-  td {
-    color: #cbd5e1;
-    font-family: monospace;
+    color: #f8fafc;
+    border-bottom: 1px solid #1f2937;
+    text-align: left;
   }
 </style>
 </head>
 <body>
 
 <!-- SLIDE 1: COVER -->
-<div class="slide cover">
-  <div class="badge badge-blue" style="margin-bottom: 24px; font-size: 20px; padding: 10px 24px;">S&P Global & CRISIL Campus Hackathon 2026</div>
+<div class="slide cover-slide">
+  <div class="cover-logos-row">
+    <img src="sp_crisil_logo.png" alt="S&P Global | Crisil" style="height: 56px; object-fit: contain;">
+    <div style="width: 2px; height: 44px; background: #334155;"></div>
+    <img src="hackathon_logo.png" alt="Code to Connect Hackathon 2026" style="height: 52px; object-fit: contain;">
+  </div>
+  
   <div class="cover-title">AI/NLP Risk Engine: From Financial News to Portfolio Signals</div>
   <div class="cover-sub">End-to-End Tactical Index Rebalancing with Transparent Explainability</div>
   
-  <div class="cover-meta">
-    <div class="cover-meta-item">
-      <div class="cover-meta-label">Candidate Name</div>
-      <div class="cover-meta-value">Mridul Rajgaria</div>
-    </div>
-    <div class="cover-meta-item">
-      <div class="cover-meta-label">Campus / College</div>
-      <div class="cover-meta-value">Vellore Institute of Technology, Bhopal</div>
-    </div>
-    <div class="cover-meta-item">
-      <div class="cover-meta-label">Email ID</div>
-      <div class="cover-meta-value">iammridul222@gmail.com</div>
-    </div>
-    <div class="cover-meta-item">
-      <div class="cover-meta-label">Downstream Application</div>
-      <div class="cover-meta-value">Module A (Tactical Index Rebalancer)</div>
-    </div>
-  </div>
+  <table class="candidate-table">
+    <thead>
+      <tr>
+        <th style="width: 28%;">Parameter</th>
+        <th style="width: 72%;">Submission Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="text-accent">Candidate Name</td>
+        <td class="text-highlight">Mridul Rajgaria</td>
+      </tr>
+      <tr>
+        <td class="text-accent">Campus / College</td>
+        <td class="text-highlight">Vellore Institute of Technology, Bhopal</td>
+      </tr>
+      <tr>
+        <td class="text-accent">Email ID</td>
+        <td class="mono">iammridul222@gmail.com</td>
+      </tr>
+      <tr>
+        <td class="text-accent">Hackathon Event</td>
+        <td><span class="tag tag-blue">Code to Connect Hackathon 2026</span> &bull; Final Round Submission</td>
+      </tr>
+      <tr>
+        <td class="text-accent">Implemented Downstream</td>
+        <td><span class="tag tag-green">Module A (Tactical Index Rebalancer)</span> &bull; 14 Large-Cap Equities</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
-<!-- SLIDE 2: PROBLEM & APPROACH -->
+<!-- SLIDE 2: PROBLEM & APPROACH IN TABULAR FORMAT -->
 <div class="slide">
+  <div class="top-banner">
+    <div class="top-logos">
+      <img src="sp_crisil_logo.png" class="logo-img-main">
+      <img src="hackathon_logo.png" class="logo-img-hackathon">
+    </div>
+    <div class="top-badge">Problem & Scope</div>
+  </div>
+  
   <div class="slide-header">
-    <div class="slide-tag">Problem Statement & Scope</div>
-    <div class="slide-title">Turning Unstructured Financial Noise into Machine Signals</div>
-    <div class="slide-subtitle">Bridging financial NLP directly into systematic risk management and portfolio decisions</div>
+    <div class="slide-tag">Executive Problem Statement & Scope</div>
+    <div class="slide-title">Systematic Conversion of Unstructured Text to Portfolio Risk</div>
+    <div class="slide-subtitle">Bridging financial NLP directly into quantitative risk constraints and index weights</div>
   </div>
-  <div class="slide-content">
+
+  <div class="slide-body">
     <div class="col-1">
-      <div class="card">
-        <div class="card-title">The Industry Challenge</div>
-        <ul>
-          <li><span class="highlight">Information Overload:</span> Thousands of headlines, SEC filings, and tweets are generated daily; humans cannot digest them in time.</li>
-          <li><span class="highlight">Black-Box Dilemma:</span> Quantitative risk desks reject raw LLM/transformer outputs without explainable decomposition.</li>
-          <li><span class="highlight">Execution Latency:</span> Portfolio adjustments must be systematically disciplined by deadbands, bounds, and turnover caps.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-title">Core Approach in Four Pillars</div>
-        <ul>
-          <li><span class="highlight">Explainable by Design:</span> Impact score (1–10) is a weighted sum of 4 named components.</li>
-          <li><span class="highlight">Measured, Not Assumed:</span> Evaluated on 4,838 PhraseBank headlines and 180 hand-labeled texts.</li>
-          <li><span class="highlight">Empirically Validated:</span> Backtested against actual stock price returns using event studies.</li>
-          <li><span class="highlight">100% Offline Reproducibility:</span> Bundled deterministic sample datasets require zero API keys.</li>
-        </ul>
-      </div>
+      <div class="card-box-title">Problem vs. Engineering Solution Matrix</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 32%;">Industry Challenge</th>
+            <th style="width: 68%;">AI Risk Engine Solution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-highlight">Information Overload</td>
+            <td>Multi-source ingestion pipeline processes <span class="text-accent">tweets, NewsAPI, and GDELT</span> into a unified schema with cross-label deduplication.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Black-Box LLM Distrust</td>
+            <td>Explainable linear impact score ($1.0$ to $10.0$) built from <span class="text-accent">4 audit-ready named components</span> configurable via YAML.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Execution Drag & Noise</td>
+            <td>Tactical rebalancer governed by <span class="text-accent">$\pm 0.20$ deadbands, 2-day EMA smoothing, and 10% daily turnover cap</span> to preserve net returns.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Offline Reproducibility</td>
+            <td>Deterministic committed sample datasets (<5 MB) allowing full audit and replay with <span class="text-positive">zero API keys or live downloads</span>.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
     <div class="col-1">
-      <div class="card" style="height: 100%;">
-        <div class="card-title">Signal Specification Output</div>
-        <p style="margin-bottom: 20px;">Every processed news article or tweet emits a structured <span class="highlight">RiskSignal</span>:</p>
-        <div class="metric-box" style="flex-direction: column; gap: 16px;">
-          <div class="metric-card" style="text-align: left; padding: 20px;">
-            <div style="color: #38bdf8; font-weight: 700; font-size: 20px;">1. Sentiment Score [-1.0, +1.0]</div>
-            <div style="color: #94a3b8; font-size: 16px; margin-top: 6px;">Domain-tuned FinBERT inference with confidence score</div>
-          </div>
-          <div class="metric-card" style="text-align: left; padding: 20px;">
-            <div style="color: #10b981; font-weight: 700; font-size: 20px;">2. Event Classification (8 Classes)</div>
-            <div style="color: #94a3b8; font-size: 16px; margin-top: 6px;">Geopolitical, Macro, Credit, M&A, Product, Regulatory, Earnings, Other</div>
-          </div>
-          <div class="metric-card" style="text-align: left; padding: 20px;">
-            <div style="color: #fbbf24; font-weight: 700; font-size: 20px;">3. Severity Impact Score [1 to 10]</div>
-            <div style="color: #94a3b8; font-size: 16px; margin-top: 6px;">Event severity (35%) + Sentiment strength (30%) + Source credibility (20%) + Volume (15%)</div>
-          </div>
-        </div>
-      </div>
+      <div class="card-box-title">Emitted Signal Schema Specification</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>Type / Range</th>
+            <th>Operational Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono text-accent">sentiment_score</td>
+            <td class="mono">[-1.0, +1.0]</td>
+            <td>FinBERT signed score measuring tone (<span class="text-negative">negative</span> to <span class="text-positive">positive</span>).</td>
+          </tr>
+          <tr>
+            <td class="mono text-accent">confidence</td>
+            <td class="mono">[0.0, 1.0]</td>
+            <td>Softmax model conviction over target sentiment classification.</td>
+          </tr>
+          <tr>
+            <td class="mono text-accent">event_type</td>
+            <td class="mono">8 Classes</td>
+            <td>Rule-based: <span class="tag tag-blue">Earnings</span>, <span class="tag tag-red">Credit Event</span>, <span class="tag tag-amber">Regulatory</span>, Macro, M&A, etc.</td>
+          </tr>
+          <tr>
+            <td class="mono text-accent">impact_score</td>
+            <td class="mono">[1.0, 10.0]</td>
+            <td>Severity rank: Event (35%) + Sentiment (30%) + Credibility (20%) + Volume (15%).</td>
+          </tr>
+          <tr>
+            <td class="mono text-accent">trading_action</td>
+            <td class="mono">Discrete</td>
+            <td>Downstream suggestion: <span class="text-positive">BUY</span>, <span class="text-negative">REDUCE</span>, or <span class="text-highlight">HOLD</span>.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
   <div class="slide-footer">
-    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>S&P Global & CRISIL Campus Hackathon 2026 &bull; Candidate: Mridul Rajgaria (VIT Bhopal)</div>
     <div>Slide 2 of 8</div>
   </div>
 </div>
 
-<!-- SLIDE 3: SYSTEM ARCHITECTURE -->
+<!-- SLIDE 3: ARCHITECTURE (CRISP VECTOR SVG + TABULAR LAYERS) -->
 <div class="slide">
+  <div class="top-banner">
+    <div class="top-logos">
+      <img src="sp_crisil_logo.png" class="logo-img-main">
+      <img src="hackathon_logo.png" class="logo-img-hackathon">
+    </div>
+    <div class="top-badge">Architecture & Flow</div>
+  </div>
+
   <div class="slide-header">
-    <div class="slide-tag">Architecture & Data Flow</div>
-    <div class="slide-title">End-to-End System Architecture</div>
-    <div class="slide-subtitle">From multi-source ingestion to FastAPI replay and interactive React dashboard</div>
+    <div class="slide-tag">End-to-End System Pipeline</div>
+    <div class="slide-title">System Architecture: High-Resolution Data Pipeline</div>
+    <div class="slide-subtitle">Modular architecture connecting raw financial text sources to downstream tactical index weights</div>
   </div>
-  <div class="slide-content">
-    <div class="col-2 img-card" style="background: #111827;">
-      <img src="architecture.png" alt="Architecture Diagram" style="width: 100%; max-height: 640px;">
+
+  <div class="slide-body" style="flex-direction: column; gap: 20px;">
+    <!-- Architecture Diagram Display (High-Resolution White Card) -->
+    <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 20px; display: flex; justify-content: center; align-items: center; height: 400px;">
+      <img src="architecture.png" alt="Architecture Flowchart" style="width: 100%; height: 100%; object-fit: contain;">
     </div>
-    <div class="col-1">
-      <div class="card">
-        <div class="card-title">Pipeline Architecture</div>
-        <ul>
-          <li><span class="highlight">Ingestion:</span> Twitter Kaggle (2021–22), NewsAPI (2026), GDELT 2.0, yfinance daily prices.</li>
-          <li><span class="highlight">Core NLP Engine:</span> Normalization, deduplication, cashtag entity linking, FinBERT, event classification.</li>
-          <li><span class="highlight">Downstream Module A:</span> Daily EMA aggregation, conviction tilt, turnover cap, weight boundaries.</li>
-          <li><span class="highlight">FastAPI & SSE Replay:</span> Asynchronous event-driven streaming with chronological ordering.</li>
-          <li><span class="highlight">Vite + React UI:</span> 3-column workspace (News Stream, Signal Inspector, Portfolio Reaction).</li>
-        </ul>
-      </div>
-    </div>
+
+    <!-- Tabular Breakdown of Layers -->
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 22%;">Layer</th>
+          <th style="width: 38%;">Component Technology</th>
+          <th style="width: 40%;">Primary Responsibility</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-highlight">1. Data Sources</td>
+          <td>Kaggle Stock Tweets (2021–22), NewsAPI, GDELT 2.0, yfinance</td>
+          <td>Ingest structured prices and raw text streams covering 14 core + 7 news-only equities.</td>
+        </tr>
+        <tr>
+          <td class="text-highlight">2. NLP Risk Engine</td>
+          <td>Normalization, Cashtag Linking, FinBERT (CPU), Event Classifier</td>
+          <td>Deduplicate cross-label chatter, attribute symbols, score sentiment and 1–10 impact severity.</td>
+        </tr>
+        <tr>
+          <td class="text-highlight">3. Module A Rebalancer</td>
+          <td>EMA Smoothing, Tilt k=1.5, Asymmetric Negative Multiplier (1.25x)</td>
+          <td>Map daily signals into bounded constituent weights [3.57%, 14.29%] with 10% turnover cap.</td>
+        </tr>
+        <tr>
+          <td class="text-highlight">4. Delivery & Dashboard</td>
+          <td>FastAPI, Server-Sent Events (SSE), React 18, Apache ECharts</td>
+          <td>Interactive 3-column replay workspace (News Stream &bull; Signal Inspector &bull; Portfolio Reaction).</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+
   <div class="slide-footer">
-    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>S&P Global & CRISIL Campus Hackathon 2026 &bull; Candidate: Mridul Rajgaria (VIT Bhopal)</div>
     <div>Slide 3 of 8</div>
   </div>
 </div>
 
-<!-- SLIDE 4: NLP RISK PIPELINE -->
+<!-- SLIDE 4: NLP PIPELINE IN TABULAR FORMAT -->
 <div class="slide">
+  <div class="top-banner">
+    <div class="top-logos">
+      <img src="sp_crisil_logo.png" class="logo-img-main">
+      <img src="hackathon_logo.png" class="logo-img-hackathon">
+    </div>
+    <div class="top-badge">NLP Risk Pipeline</div>
+  </div>
+
   <div class="slide-header">
-    <div class="slide-tag">NLP Risk Pipeline Details</div>
-    <div class="slide-title">Entity Linking, Sentiment & Explainable Impact Scoring</div>
-    <div class="slide-subtitle">Strict entity resolution, domain FinBERT, and auditable linear impact scoring</div>
+    <div class="slide-tag">NLP Risk Pipeline Specification</div>
+    <div class="slide-title">Entity Linking, Sentiment Scoring & Impact Formula</div>
+    <div class="slide-subtitle">Deterministic text normalization, domain-tuned FinBERT inference, and auditable scoring arithmetic</div>
   </div>
-  <div class="slide-content">
+
+  <div class="slide-body">
     <div class="col-1">
-      <div class="card">
-        <div class="card-title">Entity Linking & Attribution</div>
-        <ul>
-          <li><span class="highlight">Cashtag & Alias Matching:</span> Disambiguates symbols (e.g. $DIS, $AAPL) and company aliases.</li>
-          <li><span class="highlight">Cross-Label Deduplication:</span> Resolves scraped duplicate tweets across tickers (preserving clean attribution).</li>
-          <li><span class="highlight">Broadcast Tweet Handling:</span> Identifies multi-ticker tweets and scales impact proportionally.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-title">FinBERT Sentiment Analysis</div>
-        <ul>
-          <li>Pretrained <span class="highlight">ProsusAI/finbert</span> fine-tuned on financial phraseology.</li>
-          <li>Generates signed score $s \in [-1.0, +1.0]$ with softmax confidence.</li>
-          <li>Persistent disk cache for fast zero-overhead deterministic replay.</li>
-        </ul>
+      <div class="card-box-title">Core NLP Stages & Operations</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>Algorithm / Method</th>
+            <th>Output / Performance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-highlight">Text Cleaning</td>
+            <td>Regex stripping of template spam, URL normalization, HTML entity decoding.</td>
+            <td>Single unified record schema across all sources.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Entity Linking</td>
+            <td>Cashtags (<span class="mono">$DIS</span>, <span class="mono">$AAPL</span>), aliases, company name dictionaries, broadcast splitting.</td>
+            <td>Clean ticker attribution; multi-ticker weight division.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">FinBERT Sentiment</td>
+            <td>Pretrained <span class="mono">ProsusAI/finbert</span> with persistent SQLite disk cache.</td>
+            <td>Score $s \in [-1.0, +1.0]$, softmax confidence $c \in [0.0, 1.0]$.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Event Classification</td>
+            <td>Rule-based pattern matcher across 8 financial taxonomy classes.</td>
+            <td>Precision 1.0 on Credit/Regulatory/Earnings triggers.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-1">
+      <div class="card-box-title">Impact Arithmetic: Linear Component Breakdown</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Weight</th>
+            <th>Scale Formula & Config Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-accent">Event Severity</td>
+            <td class="mono">35%</td>
+            <td>Regulatory/Credit: <span class="mono">0.9</span>, Earnings: <span class="mono">0.7</span>, Product: <span class="mono">0.5</span>, Other: <span class="mono">0.3</span></td>
+          </tr>
+          <tr>
+            <td class="text-accent">Sentiment Strength</td>
+            <td class="mono">30%</td>
+            <td>$|s| \times c$ (Absolute sentiment magnitude weighted by confidence)</td>
+          </tr>
+          <tr>
+            <td class="text-accent">Source Credibility</td>
+            <td class="mono">20%</td>
+            <td>GDELT: <span class="mono">0.85</span>, NewsAPI: <span class="mono">0.80</span>, Kaggle Tweets: <span class="mono">0.50</span></td>
+          </tr>
+          <tr>
+            <td class="text-accent">Mention Volume</td>
+            <td class="mono">15%</td>
+            <td>Log-scaled ticker tweet density relative to rolling median</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Final Severity Score</td>
+            <td class="mono text-positive">100%</td>
+            <td class="mono text-positive">Impact = 1.0 + 9.0 &times; &sum;(w_i &times; Component_i) &isin; [1.0, 10.0]</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size: 15px; color: #94a3b8; margin-top: 10px; background: #111827; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
+        <span class="text-highlight">Auditability Note:</span> Every single impact score displayed on the dashboard can be unpacked via "Show the math" into its 4 raw component values.
       </div>
     </div>
-    <div class="col-1">
-      <div class="card">
-        <div class="card-title">Explainable Impact Arithmetic</div>
-        <p style="font-size: 18px; margin-bottom: 16px;">Configured in <span class="highlight">config/engine.yaml</span> as a strict linear combination:</p>
-        <div style="background: #0f172a; padding: 20px; border-radius: 12px; font-family: monospace; font-size: 18px; color: #38bdf8; border: 1px solid #334155; margin-bottom: 20px;">
-          Impact = 1.0 + 9.0 * (<br>
-          &nbsp;&nbsp;0.35 * EventSeverity +<br>
-          &nbsp;&nbsp;0.30 * SentimentStrength +<br>
-          &nbsp;&nbsp;0.20 * SourceCredibility +<br>
-          &nbsp;&nbsp;0.15 * VolumeScore<br>
-          )
-        </div>
-        <ul>
-          <li><span class="highlight">Event Severity:</span> Regulatory/Credit = 0.9, Earnings = 0.7, Product = 0.5.</li>
-          <li><span class="highlight">Source Credibility:</span> GDELT/News = 0.85, Verified NewsAPI = 0.80, Tweets = 0.50.</li>
-          <li><span class="highlight">Auditability:</span> Every single score can be broken down in the UI's "Show the math" modal.</li>
-        </ul>
-      </div>
-    </div>
   </div>
+
   <div class="slide-footer">
-    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>S&P Global & CRISIL Campus Hackathon 2026 &bull; Candidate: Mridul Rajgaria (VIT Bhopal)</div>
     <div>Slide 4 of 8</div>
   </div>
 </div>
 
-<!-- SLIDE 5: REBALANCING LOGIC -->
+<!-- SLIDE 5: MODULE A REBALANCER IN TABULAR FORMAT -->
 <div class="slide">
+  <div class="top-banner">
+    <div class="top-logos">
+      <img src="sp_crisil_logo.png" class="logo-img-main">
+      <img src="hackathon_logo.png" class="logo-img-hackathon">
+    </div>
+    <div class="top-badge">Module A: Rebalancer</div>
+  </div>
+
   <div class="slide-header">
-    <div class="slide-tag">Module A Rebalancer</div>
-    <div class="slide-title">Tactical Index Rebalancer: Systematic Rules & Math</div>
-    <div class="slide-subtitle">14-asset US mega-cap index dynamically tilted by sentiment momentum</div>
+    <div class="slide-tag">Tactical Index Rebalancer Logic</div>
+    <div class="slide-title">Module A: Quantitative Rules, Parameters & Bounds</div>
+    <div class="slide-subtitle">Dynamic conviction tilting across 14 large-cap US equities with institutional execution safeguards</div>
   </div>
-  <div class="slide-content">
+
+  <div class="slide-body">
     <div class="col-1">
-      <div class="card">
-        <div class="card-title">Daily Scoring & Momentum Smoothing</div>
-        <ul>
-          <li><span class="highlight">Daily Aggregation:</span> Scores aggregated across ticker-day using impact-weighted sentiment.</li>
-          <li><span class="highlight">Asymmetric Negative Weighting:</span> Negative news receives 1.25x weight multiplier (loss aversion).</li>
-          <li><span class="highlight">EMA Smoothing:</span> 2-day half-life exponential decay prevents whipsaws:
-            <div style="font-family: monospace; color: #38bdf8; margin-top: 8px;">EMA_t = alpha * Score_t + (1 - alpha) * EMA_{t-1}</div>
-          </li>
-          <li><span class="highlight">Deadband (+/-0.20):</span> Filters out low-conviction noise around neutrality.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-title">Index Universe (14 Mega-Caps)</div>
-        <p style="font-size: 18px; color: #94a3b8;">TSLA, AAPL, MSFT, AMZN, META, GOOGL, NFLX, AMD, PG, KO, DIS, BA, COST, PYPL (Equal Base Weight: 7.14%).</p>
-      </div>
+      <div class="card-box-title">Rebalancer Mathematical Parameters (<span class="mono">rebalancer.yaml</span>)</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Financial Rationale & Formulation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-accent mono">w_base</td>
+            <td class="mono">7.14%</td>
+            <td>Equal-weight anchor across 14 stocks ($1 / 14 = 7.14\%$).</td>
+          </tr>
+          <tr>
+            <td class="text-accent mono">tilt_factor (k)</td>
+            <td class="mono">1.50</td>
+            <td>Conviction scalar: $w_{\text{raw}, i} = w_{\text{base}} \times (1.0 + k \times \text{EMA}_i)$.</td>
+          </tr>
+          <tr>
+            <td class="text-accent mono">ema_half_life</td>
+            <td class="mono">2.0 Days</td>
+            <td>Exponential memory filter preventing high-frequency noise churn.</td>
+          </tr>
+          <tr>
+            <td class="text-accent mono">deadband</td>
+            <td class="mono">&plusmn;0.20</td>
+            <td>Threshold filter: scores inside $[-0.20, +0.20]$ zeroed out.</td>
+          </tr>
+          <tr>
+            <td class="text-accent mono">negative_multiplier</td>
+            <td class="mono">1.25&times;</td>
+            <td>Asymmetric risk aversion: negative headlines receive $25\%$ higher penalty.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
     <div class="col-1">
-      <div class="card">
-        <div class="card-title">Allocation & Risk Controls</div>
-        <ul>
-          <li><span class="highlight">Conviction Tilt ($k = 1.5$):</span>
-            <div style="font-family: monospace; color: #38bdf8; margin: 8px 0;">w_raw = w_base * (1.0 + k * EMA)</div>
-          </li>
-          <li><span class="highlight">Strict Boundary Box:</span> Weights clamped within $[0.5 \times w_{base}, 2.0 \times w_{base}]$:
-            <div style="font-family: monospace; color: #10b981; margin: 8px 0;">3.57% <= Weight_i <= 14.29%</div>
-          </li>
-          <li><span class="highlight">Turnover Cap (10% daily):</span> Prevents transaction cost erosion from high-frequency reallocations.</li>
-          <li><span class="highlight">Transaction Frictions:</span> Institutional 5 bps deducted on all rebalanced turnover.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-title">Operational Safeguards</div>
-        <p style="font-size: 18px;">If market data is missing or signals drop to zero, portfolio gracefully reverts towards equal-weight benchmark.</p>
-      </div>
+      <div class="card-box-title">Portfolio Risk Boundaries & Friction Safeguards</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Constraint</th>
+            <th>Boundary</th>
+            <th>Implementation Safeguard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-highlight">Lower Weight Bound</td>
+            <td class="mono text-negative">3.57% (0.5&times;)</td>
+            <td>Floor prevents complete asset divestment or short exposures.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Upper Weight Bound</td>
+            <td class="mono text-positive">14.29% (2.0&times;)</td>
+            <td>Ceiling limits single-stock concentration risk (e.g. TSLA).</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Turnover Cap</td>
+            <td class="mono">10% / Day</td>
+            <td>Clamps daily two-way volume to eliminate excessive transaction drag.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Transaction Frictions</td>
+            <td class="mono">5 bps</td>
+            <td>Institutional execution cost deducted on all turnover in net NAV.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Fallback Behavior</td>
+            <td class="mono">Equal Weight</td>
+            <td>Missing market data gracefully reverts allocations back to $7.14\%$.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
   <div class="slide-footer">
-    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>S&P Global & CRISIL Campus Hackathon 2026 &bull; Candidate: Mridul Rajgaria (VIT Bhopal)</div>
     <div>Slide 5 of 8</div>
   </div>
 </div>
 
-<!-- SLIDE 6: VALIDATION EVENT STUDY -->
+<!-- SLIDE 6: VALIDATION EVENT STUDY (TABLE + CHART) -->
 <div class="slide">
+  <div class="top-banner">
+    <div class="top-logos">
+      <img src="sp_crisil_logo.png" class="logo-img-main">
+      <img src="hackathon_logo.png" class="logo-img-hackathon">
+    </div>
+    <div class="top-badge">Empirical Validation</div>
+  </div>
+
   <div class="slide-header">
-    <div class="slide-tag">Empirical Validation</div>
-    <div class="slide-title">Abnormal Return Event Study: Testing Signal Efficacy</div>
-    <div class="slide-subtitle">Rigorous statistical validation against 2,072 ticker-days of price returns</div>
+    <div class="slide-tag">Abnormal Return Event Study</div>
+    <div class="slide-title">Empirical Validation: Impact Score vs. Real Price Moves</div>
+    <div class="slide-subtitle">Event study across 2,072 ticker-day observations (2021–2022) with block bootstrap confidence intervals</div>
   </div>
-  <div class="slide-content">
+
+  <div class="slide-body">
     <div class="col-1">
-      <div class="card">
-        <div class="card-title">Key Statistical Findings</div>
-        <ul>
-          <li><span class="highlight">Spearman Rank Correlation:</span> $\rho = 0.159$ ($p = 3.08 \times 10^{-13}$, 95% CI $[0.122, 0.194]$) between impact score and abnormal price move $|AR_0|$.</li>
-          <li><span class="highlight">Monotonic Quintile Scaling:</span> Absolute abnormal return scales monotonically from <span class="highlight">1.21% (Q1) to 2.36% (Q5)</span>.</li>
-          <li><span class="highlight">Top vs Bottom Spread:</span> $+1.15\%$ (95% CI $[+0.81\%, +1.57\%]$).</li>
-          <li><span class="highlight">Robust to Confounders:</span> Partial correlation remains $0.116$ controlling for volatility; survives TSLA exclusion ($\rho = 0.121$).</li>
-          <li><span class="highlight">Placebo Permutation Test:</span> 1,000 within-ticker shuffles yield empirical $p = 0.001$.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-title">Sentiment Directionality</div>
-        <p style="font-size: 18px;">Negative sentiment signals preceded a <span class="highlight">-1.11%</span> 3-day abnormal return ($CAR(0,2)$), compared to $+0.08\%$ for positive signals (Long-Short spread $+1.19\%$).</p>
-      </div>
+      <div class="card-box-title">Impact Score Quintiles on Event-Day Abnormal Move (|AR0|)</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Quintile</th>
+            <th>Count</th>
+            <th>Mean Impact</th>
+            <th>Mean |AR0|</th>
+            <th>Mean |CAR(0,2)|</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono text-accent">Q1 (Lowest)</td>
+            <td class="mono">415</td>
+            <td class="mono">2.70</td>
+            <td class="mono">1.21%</td>
+            <td class="mono">2.46%</td>
+          </tr>
+          <tr>
+            <td class="mono text-accent">Q2</td>
+            <td class="mono">414</td>
+            <td class="mono">3.50</td>
+            <td class="mono">1.35%</td>
+            <td class="mono">2.52%</td>
+          </tr>
+          <tr>
+            <td class="mono text-accent">Q3</td>
+            <td class="mono">415</td>
+            <td class="mono">4.63</td>
+            <td class="mono">1.46%</td>
+            <td class="mono">2.81%</td>
+          </tr>
+          <tr>
+            <td class="mono text-accent">Q4</td>
+            <td class="mono">414</td>
+            <td class="mono">5.15</td>
+            <td class="mono">1.71%</td>
+            <td class="mono">3.10%</td>
+          </tr>
+          <tr>
+            <td class="mono text-accent">Q5 (Highest)</td>
+            <td class="mono">414</td>
+            <td class="mono">6.36</td>
+            <td class="mono text-positive">2.36%</td>
+            <td class="mono text-positive">3.89%</td>
+          </tr>
+          <tr style="background: rgba(37, 99, 235, 0.2);">
+            <td class="text-highlight">Spread (Q5 - Q1)</td>
+            <td class="mono">2,072</td>
+            <td class="mono text-accent">+3.66</td>
+            <td class="mono text-positive">+1.15%</td>
+            <td class="mono text-positive">+1.43%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="data-table" style="margin-top: 14px;">
+        <thead>
+          <tr>
+            <th>Statistical Metric</th>
+            <th>Result</th>
+            <th>Interpretation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-highlight">Spearman &rho; (Impact vs |AR0|)</td>
+            <td class="mono text-positive">&rho; = 0.159 (p = 3.08e-13)</td>
+            <td>Statistically significant monotonic correlation.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Volatility Control (Partial &rho;)</td>
+            <td class="mono text-accent">&rho; = 0.116 (p = 1.05e-07)</td>
+            <td>Survives control for recent 20-day historical vol.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Placebo Permutation (1,000x)</td>
+            <td class="mono text-positive">p = 0.0010</td>
+            <td>1,000 within-ticker shuffles confirm non-randomness.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="col-1 img-card">
-      <img src="validation_impact_quintiles.png" alt="Validation Quintiles" style="max-height: 580px;">
+
+    <div class="col-1" style="display: flex; justify-content: center; align-items: center; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 12px;">
+      <img src="validation_impact_quintiles.png" alt="Validation Quintiles Chart" style="max-height: 480px; width: 100%; object-fit: contain;">
     </div>
   </div>
+
   <div class="slide-footer">
-    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>S&P Global & CRISIL Campus Hackathon 2026 &bull; Candidate: Mridul Rajgaria (VIT Bhopal)</div>
     <div>Slide 6 of 8</div>
   </div>
 </div>
 
-<!-- SLIDE 7: BACKTEST RESULTS & HONESTY SUITE -->
+<!-- SLIDE 7: BACKTEST RESULTS (TABLE + CHART) -->
 <div class="slide">
+  <div class="top-banner">
+    <div class="top-logos">
+      <img src="sp_crisil_logo.png" class="logo-img-main">
+      <img src="hackathon_logo.png" class="logo-img-hackathon">
+    </div>
+    <div class="top-badge">Backtest & Honesty Suite</div>
+  </div>
+
   <div class="slide-header">
-    <div class="slide-tag">Backtest & Honesty Reporting</div>
-    <div class="slide-title">Module A Backtest Results: Honest Reporting</div>
-    <div class="slide-subtitle">1-year simulation (Oct 2021 to Sep 2022) during the tech macro downturn</div>
+    <div class="slide-tag">Module A Empirical Results</div>
+    <div class="slide-title">1-Year Historical Backtest & Honesty Diagnostics</div>
+    <div class="slide-subtitle">Performance over 252 trading days (Oct 2021 to Sep 2022) during the tech sector market downturn</div>
   </div>
-  <div class="slide-content">
+
+  <div class="slide-body">
     <div class="col-1">
-      <div class="card">
-        <div class="card-title">1-Year Performance Comparison</div>
-        <table>
-          <thead>
-            <tr>
-              <th>Strategy</th>
-              <th>Cum. Return</th>
-              <th>Sharpe</th>
-              <th>Max DD</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Tactical (5 bps Net)</td>
-              <td>-28.91%</td>
-              <td>-0.92</td>
-              <td>-37.95%</td>
-            </tr>
-            <tr>
-              <td>Equal Weight (Daily)</td>
-              <td>-28.53%</td>
-              <td>-0.91</td>
-              <td>-37.39%</td>
-            </tr>
-            <tr>
-              <td>Equal Weight (B&H)</td>
-              <td>-27.38%</td>
-              <td>-0.93</td>
-              <td>-35.56%</td>
-            </tr>
-            <tr>
-              <td>S&P 500 (SPY)</td>
-              <td>-15.51%</td>
-              <td>-0.71</td>
-              <td>-24.37%</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card">
-        <div class="card-title">Honest Diagnostic Takeaways</div>
-        <ul>
-          <li><span class="highlight">No Outperformance Claimed:</span> The strategy tracked equal-weight in a macro bear market (Placebo percentile: 48.5%).</li>
-          <li><span class="highlight">Flat Sensitivity Grid:</span> Across tilt $k \in [0.75, 3.0]$ and half-life $[1, 5]$d, returns remained flat between -28.6% and -29.2%.</li>
-          <li><span class="highlight">No P-Hacking:</span> Parameters pre-declared and frozen prior to evaluation.</li>
-        </ul>
-      </div>
+      <div class="card-box-title">Strategy Comparison Matrix (5 bps Net Friction)</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Strategy</th>
+            <th>Cum. Return</th>
+            <th>Sharpe (rf=0)</th>
+            <th>Max Drawdown</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-highlight">Tactical Strategy (5 bps)</td>
+            <td class="mono text-accent">-28.91%</td>
+            <td class="mono">-0.9209</td>
+            <td class="mono">-37.95%</td>
+          </tr>
+          <tr>
+            <td>Equal Weight (Daily Rebal)</td>
+            <td class="mono">-28.53%</td>
+            <td class="mono">-0.9092</td>
+            <td class="mono">-37.39%</td>
+          </tr>
+          <tr>
+            <td>Equal Weight (Buy & Hold)</td>
+            <td class="mono">-27.38%</td>
+            <td class="mono">-0.9323</td>
+            <td class="mono">-35.56%</td>
+          </tr>
+          <tr>
+            <td>S&P 500 (SPY Benchmark)</td>
+            <td class="mono">-15.51%</td>
+            <td class="mono">-0.7085</td>
+            <td class="mono">-24.37%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="card-box-title" style="margin-top: 14px;">Honesty Diagnostics & Placebo Percentiles</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Diagnostic Test</th>
+            <th>Finding</th>
+            <th>Honest Conclusion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-highlight">Placebo Permutation (200x)</td>
+            <td class="mono text-accent">48.5th Percentile</td>
+            <td>Strategy sits near center of random noise distribution.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">TSLA Exclusion Test</td>
+            <td class="mono">-28.65% Net</td>
+            <td>Removing 70% tweet volume stock does not change result.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Sensitivity Grid (9 cells)</td>
+            <td class="mono">-28.56% to -29.20%</td>
+            <td>Flat returns across tilt $k \in [0.75, 3.0]$ and half-life $[1, 5]$d.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="col-1 img-card">
-      <img src="module_a_performance.png" alt="Module A Performance" style="max-height: 580px;">
+
+    <div class="col-1" style="display: flex; justify-content: center; align-items: center; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 12px;">
+      <img src="module_a_performance.png" alt="Backtest Performance Chart" style="max-height: 480px; width: 100%; object-fit: contain;">
     </div>
   </div>
+
   <div class="slide-footer">
-    <div>AI/NLP Risk Engine — S&P Global / CRISIL Submission</div>
+    <div>S&P Global & CRISIL Campus Hackathon 2026 &bull; Candidate: Mridul Rajgaria (VIT Bhopal)</div>
     <div>Slide 7 of 8</div>
   </div>
 </div>
 
-<!-- SLIDE 8: LIMITATIONS & FUTURE ROADMAP -->
+<!-- SLIDE 8: LIMITATIONS & MODULE B IN TABULAR FORMAT -->
 <div class="slide">
+  <div class="top-banner">
+    <div class="top-logos">
+      <img src="sp_crisil_logo.png" class="logo-img-main">
+      <img src="hackathon_logo.png" class="logo-img-hackathon">
+    </div>
+    <div class="top-badge">Limitations & Roadmap</div>
+  </div>
+
   <div class="slide-header">
-    <div class="slide-tag">Evaluation & Roadmap</div>
-    <div class="slide-title">Model Limitations, Learnings & Domain Impact</div>
-    <div class="slide-subtitle">Transparent appraisal of current bounds and actionable future extensions</div>
+    <div class="slide-tag">Evaluation Gaps & Future Extensions</div>
+    <div class="slide-title">Model Limitations, Learnings & Module B Readiness</div>
+    <div class="slide-subtitle">Transparent appraisal of production boundaries and enterprise wholesale stress-testing extension</div>
   </div>
-  <div class="slide-content">
+
+  <div class="slide-body">
     <div class="col-1">
-      <div class="card">
-        <div class="card-title">Identified Model Limitations</div>
-        <ul>
-          <li><span class="highlight">Benchmark vs Real World Gap:</span> FinBERT achieved 88.9% on FinancialPhraseBank, but dropped to 61.1% on real social chatter (tweets: 53.5%).</li>
-          <li><span class="highlight">Positive Recall Deficit:</span> FinBERT missed subtle positive guidance (positive recall: 0.30 vs negative precision: 0.85).</li>
-          <li><span class="highlight">Single Market Regime:</span> 2021–2022 was dominated by macro rate hikes, dampening single-stock alpha.</li>
-          <li><span class="highlight">Class Imbalance:</span> Credit Event is naturally rare in mega-cap equity feeds (8 signals).</li>
-        </ul>
+      <div class="card-box-title">Benchmark vs. Real-World Social Evaluation Gap</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Dataset Source</th>
+            <th>Sample Size</th>
+            <th>FinBERT Accuracy</th>
+            <th>Macro F1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-highlight">Public FinancialPhraseBank</td>
+            <td class="mono">4,838 Headlines</td>
+            <td class="mono text-positive">88.9%</td>
+            <td class="mono text-positive">0.88</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Independent Hand Labels (All)</td>
+            <td class="mono">180 Texts</td>
+            <td class="mono text-accent">61.1%</td>
+            <td class="mono text-accent">0.60</td>
+          </tr>
+          <tr>
+            <td>&bull; GDELT Curated Headlines</td>
+            <td class="mono">50 Articles</td>
+            <td class="mono">74.0%</td>
+            <td class="mono">0.72</td>
+          </tr>
+          <tr>
+            <td>&bull; NewsAPI Articles</td>
+            <td class="mono">44 Articles</td>
+            <td class="mono">61.4%</td>
+            <td class="mono">0.61</td>
+          </tr>
+          <tr>
+            <td>&bull; Twitter Social Chatter</td>
+            <td class="mono">86 Tweets</td>
+            <td class="mono text-negative">53.5%</td>
+            <td class="mono text-negative">0.51</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size: 14px; color: #94a3b8; margin-top: 10px; background: #111827; padding: 10px; border-radius: 8px; border: 1px solid #1f2937;">
+        <span class="text-highlight">Domain Learning:</span> FinBERT exhibits high precision on bad news (<span class="text-positive">0.85</span>), making it reliable for risk detection, but misses subtle positive analyst targets (positive recall: <span class="text-negative">0.30</span>).
       </div>
     </div>
+
     <div class="col-1">
-      <div class="card">
-        <div class="card-title">Enterprise Domain Impact & Module B</div>
-        <ul>
-          <li><span class="highlight">Immediate Desk Utility:</span> Delivers structured, auditable inputs for risk management and real-time news monitoring.</li>
-          <li><span class="highlight">Module B Readiness:</span> The exact same signal stream directly feeds wholesale loan stress testing (credit migration, LGD shifts).</li>
-          <li><span class="highlight">Production Architecture:</span> Fully containerized with Docker, offline sample dataset, zero lookahead bias, and 173 backend + 4 frontend tests.</li>
-        </ul>
-      </div>
-      <div class="card" style="background: rgba(37, 99, 235, 0.1); border-color: #2563eb;">
-        <div class="card-title" style="color: #60a5fa;">Submission Summary</div>
-        <p style="font-size: 18px; color: #e2e8f0;">Complete codebase, documentation, and prebuilt dashboard submitted for the S&P Global and CRISIL Campus Hackathon 2026.</p>
-      </div>
+      <div class="card-box-title">Module B: Wholesale Loan Stress Testing Roadmap</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Module B Pillar</th>
+            <th>Risk Engine Integration</th>
+            <th>Enterprise Risk Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-highlight">Signal Feed Reuse</td>
+            <td>Zero engine modification: consumes the exact same <span class="mono text-accent">RiskSignal</span> feed.</td>
+            <td>Shared intelligence across both market equity desks and commercial credit risk teams.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Credit Migration (PD)</td>
+            <td>Severe <span class="tag tag-red">Credit Event</span> / <span class="tag tag-amber">Regulatory</span> triggers bump Probability of Default.</td>
+            <td>Early warning rating downgrade detection ahead of public agency revisions.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Loss Given Default (LGD)</td>
+            <td>Macro event severities scale industry sector recovery rates down.</td>
+            <td>Dynamic collateral hair-cuts and wholesale portfolio provisions.</td>
+          </tr>
+          <tr>
+            <td class="text-highlight">Expected Loss (EL)</td>
+            <td>$EL = EAD \times PD_{\text{adjusted}} \times LGD_{\text{adjusted}}$</td>
+            <td>Instant capital adequacy and regulatory stress reporting during sudden news shocks.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
   <div class="slide-footer">
-    <div>Candidate: Mridul Rajgaria (VIT Bhopal) — Final Round Submission</div>
+    <div>S&P Global & CRISIL Campus Hackathon 2026 &bull; Candidate: Mridul Rajgaria (VIT Bhopal)</div>
     <div>Slide 8 of 8</div>
   </div>
 </div>
